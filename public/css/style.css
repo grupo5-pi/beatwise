@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+
+.login-cadastro {
+    height: 100vh;
+    background-image: url(../assets/imgs/fundoLogin.jpeg);
+    background-size: cover;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+    height: 15%;
+    border-bottom: solid purple 5px;
+}
+
+header ul {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 70%;
+}
+
+header ul li a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 25px;
+    color: white;
+}
+
+header img {
+    height: 100%;
+}
+
+.login-cadastro main {
+    display: flex;
+    height: 84%;
+}
+
+.login-cadastro .divisao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 50%;
+    border: solid 1px black;
+}
+
+
+.login-cadastro .divisao .formulario {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+}
+
+.login-cadastro .divisao .formulario input {
+    background-color: transparent;
+    border: solid transparent;
+    border-bottom: solid 2px rgba(0, 0, 0, 0.452);
+    color: black;
+    height: 15%;
+    width: 80%;
+    font-size: 20px;
+    padding: 0 0 0 25px;
+    margin-bottom: 20px;
+}
+
+.login-cadastro .divisao .formulario input::placeholder {
+    color: black;
+}
+
+.login-cadastro .divisao button {
+    background: linear-gradient(90deg, rgba(197, 157, 255, 1) 0%, rgba(84, 36, 187, 1) 50%, rgba(0, 0, 0, 1) 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    height: 15%;
+    width: 25%;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.login-cadastro .divisao .centro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+    width: 100%;
+    color: white;
+    font-size: 40px;
+}
+
+.login-cadastro .divisao .centro h6{
+    margin: 110px 0 0 0;
+}
+
+.login-cadastro .divisao .centro h5{
+    margin: 15px 0 0 0;
+}
+
