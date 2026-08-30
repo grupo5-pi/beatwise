@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Myriad Pro Semi Extended';
+  src: url('fontes/myriad-pro-semi-extended.woff2') format('woff2'),
+       url('fontes/myriad-pro-semi-extended.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -16,7 +25,6 @@ header {
     justify-content: space-between;
     background-color: black;
     height: 15%;
-    border-bottom: solid purple 5px;
 }
 
 header ul {
@@ -30,6 +38,7 @@ header ul li a {
     text-decoration: none;
     font-weight: bold;
     font-size: 25px;
+    font-family: 'Myriad Pro Semi Extended', sans-serif;
     color: white;
 }
 
@@ -37,9 +46,14 @@ header img {
     height: 100%;
 }
 
+.header-border {
+    height: 0.7%;
+    background: linear-gradient(90deg, rgba(197, 157, 255, 1) 0%, rgba(84, 36, 187, 1) 45%, rgba(0, 0, 0, 1) 100%);
+}
+
 .login-cadastro main {
     display: flex;
-    height: 84%;
+    height: 83%;
 }
 
 .login-cadastro .divisao {
@@ -48,9 +62,7 @@ header img {
     align-items: center;
     height: 100%;
     width: 50%;
-    border: solid 1px black;
 }
-
 
 .login-cadastro .divisao .formulario {
     display: flex;
@@ -66,11 +78,11 @@ header img {
 .login-cadastro .divisao .formulario input {
     background-color: transparent;
     border: solid transparent;
-    border-bottom: solid 2px rgba(0, 0, 0, 0.452);
-    color: black;
+    border-bottom: solid 3px rgba(0, 0, 0, 0.452);
+    color: rgba(0, 0, 0, 0.458);
     height: 15%;
     width: 80%;
-    font-size: 20px;
+    font-size: 23px;
     padding: 0 0 0 25px;
     margin-bottom: 20px;
 }
@@ -86,9 +98,10 @@ header img {
     color: white;
     height: 15%;
     width: 25%;
+    min-width: 200px;
     font-size: 20px;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .login-cadastro .divisao .centro {
