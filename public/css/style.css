@@ -14,10 +14,12 @@
     text-decoration: none;
 }
 
-.login-cadastro {
+/* Estilo Header */
+
+body{
     height: 100vh;
-    background-image: url(../assets/imgs/fundoLogin.jpeg);
     background-size: cover;
+    background-color: black;
 }
 
 header {
@@ -34,9 +36,16 @@ header ul {
     width: 70%;
 }
 
+header li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 header ul li a {
     text-decoration: none;
     font-weight: bold;
+    width: auto;
     font-size: 25px;
     font-family: 'Myriad Pro Semi Extended', sans-serif;
     color: white;
@@ -46,9 +55,36 @@ header img {
     height: 100%;
 }
 
+header a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8%;
+}
+
+.button-login{
+    height: 60px;
+}
+
 .header-border {
     height: 0.7%;
     background: linear-gradient(90deg, rgba(197, 157, 255, 1) 0%, rgba(84, 36, 187, 1) 45%, rgba(0, 0, 0, 1) 100%);
+}
+
+/* Estilo Banner */
+.banner{
+    margin-top: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilo Login */
+
+.login-cadastro {
+    height: 100vh;
+    background-image: url(../assets/imgs/fundoLogin.jpeg);
+    background-size: cover;
 }
 
 .login-cadastro main {
