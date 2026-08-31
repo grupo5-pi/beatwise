@@ -48,12 +48,29 @@ header li {
 }
 
 header ul li a {
+    position: relative;
     text-decoration: none;
     font-weight: bold;
     width: auto;
     font-size: 25px;
     font-family: 'Myriad Pro Semi Extended', sans-serif;
     color: white;
+    transition: width 0.5s ease-in-out;
+}
+
+header ul li a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 0%;
+    height: 3px;
+    background-color: var(--roxo-claro);
+    transition: width 0.4s ease-in-out;
+}
+
+header ul li a:hover::after {
+    width: 100%;
 }
 
 header img {
@@ -170,7 +187,7 @@ header a {
 .login-cadastro .divisao button:hover {
     background-position: right;
     border: solid 1px white;
-    transition: 1s ease-in-out;
+    transition: 0.7s ease-in-out;
 }
 
 .login-cadastro .divisao .centro {
