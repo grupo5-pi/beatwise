@@ -79,7 +79,7 @@ header a{
     justify-content: center;
 }
 
-/* Estilo Login */
+/* Estilo Login e Cadastro*/
 
 .login-cadastro {
     height: 100vh;
@@ -125,6 +125,19 @@ header a{
 
 .login-cadastro .divisao .formulario input::placeholder {
     color: black;
+}
+
+.login-cadastro .divisao a button {
+    background: linear-gradient(90deg, rgba(197, 157, 255, 1) 0%, rgba(84, 36, 187, 1) 50%, rgba(0, 0, 0, 1) 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    height: 100%;
+    width: 25%;
+    min-width: 200px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 25px;
 }
 
 .login-cadastro .divisao button {
