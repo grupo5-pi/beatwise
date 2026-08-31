@@ -1,28 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página Inicial / BeatWise</title>
+  <title>BeatWise</title>
+
   <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="./css/home.css">
 </head>
+
 <body>
   <header>
-        <img src="../public/assets/imgs/logo_B.jpeg" alt="">
-        <ul>
-            <li><a href="home.html">HOME</a></li>
-            <li><a href="quemSomos.html">QUEM SOMOS</a></li>
-            <li><a href="dashboard.html">DASHBOARD</a></li>
-            <li><a href="contato.html">CONTATO</a></li>
-        </ul>
-        <a href="./login.html"><img src="../public/assets/imgs/user.png" class="button-login" alt=""></a>
-      </header>
-    <div class="header-border"></div>
+    <img src="../public/assets/imgs/logo_B.jpeg" alt="BeatWise">
 
-    <main>
-      <div class="banner">
-        <img src="./assets/imgs/banner.jpeg" alt="">
+    <ul>
+      <li><a href="#home">HOME</a></li>
+      <li><a href="#quem-somos">QUEM SOMOS</a></li>
+      <li><a href="dashboard.html">DASHBOARD</a></li>
+      <li><a href="#contato">CONTATO</a></li>
+    </ul>
+
+    <a href="./login.html">
+      <img src="../public/assets/imgs/user.png" class="button-login" alt="Login">
+    </a>
+  </header>
+
+  <div class="header-border"></div>
+
+  <main>
+
+    <section id="home" class="banner">
+      <img src="./assets/imgs/banner.jpeg" alt="Banner BeatWise">
+    </section>
+
+
+    <section id="quem-somos" class="slide">
+
+      <div class="top-line"></div>
+      <div class="bottom-line"></div>
+
+      <h1>QUEM SOMOS</h1>
+      <div class="divider"></div>
+
+      <div class="content">
+
+        <div class="text-col">
+          <p>
+            A BeatWise nasceu da vontade de aproximar dados e música —
+            de dar à indústria musical uma forma mais clara de enxergar
+            o próprio público.
+          </p>
+
+          <p>
+            Nosso objetivo é simples: ajudar quem vive de música a tomar
+            decisões mais seguras, trocando o achismo pela evidência,
+            sem nunca abrir mão da criatividade que move essa indústria.
+          </p>
+        </div>
+
+        <div class="image-col">
+          <div class="circle-frame">
+            <img src="./assets/imgs/beatwise-headphone.png" alt="BeatWise">
+          </div>
+        </div>
+
       </div>
-    </main>
+    </section>
+
+
+
+    <section id="valores" class="slide slide-valores">
+
+      <div class="bottom-line"></div>
+
+      <h1 class="titulo-direita">Valores</h1>
+
+      <div class="divider divider-curta divider-direita"></div>
+
+      <div class="valores-grid">
+
+        <div class="valor-card">
+          <img
+            class="valor-icon"
+            src="./assets/imgs/valor-icon-1.svg"
+            alt="Ícone de informação">
+
+          <p>
+            Informação só tem valor quando é fácil de entender.
+            Transformamos dados complexos em algo simples de interpretar.
+          </p>
+        </div>
+
+
+        <div class="valor-card">
+          <img
+            class="valor-icon"
+            src="./assets/imgs/valor-icon-2.svg"
+            alt="Ícone de dados">
+
+          <p>
+            Acreditamos que boas decisões nascem de dados reais,
+            não de suposições ou "sempre foi assim".
+          </p>
+        </div>
+
+
+        <div class="valor-card">
+          <img
+            class="valor-icon"
+            src="./assets/imgs/valor-icon-3.svg"
+            alt="Ícone de criatividade">
+
+          <p>
+            Dados são uma bússola, não uma regra. Nunca substituem
+            a sensibilidade artística, só a orientam.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+
+    <section id="contato" class="slide slide-contato">
+
+      <h1>Contato</h1>
+
+      <div class="divider divider-curta divider-esquerda"></div>
+
+      <div class="contato-box">
+
+        <div class="contato-texto">
+
+          <p>
+            Estamos por aqui para ajudar no que precisar.
+          </p>
+
+          <p>
+            Em caso de:
+          </p>
+
+          <ul>
+            <li>Feedback ou Sugestões</li>
+            <li>Saber mais</li>
+            <li>Dúvidas</li>
+          </ul>
+
+          <button class="btn-contato">
+            Entre em Contato
+          </button>
+
+        </div>
+
+
+        <div class="contato-logo">
+          <img
+            src="./assets/imgs/beatwise-logo.png"
+            alt="BeatWise">
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <div class="section-divider"></div>
+
+
+
+  <footer class="footer">
+
+    <div class="footer-logo">
+      <img
+        src="./assets/imgs/beatwise-logo.png"
+        alt="BeatWise">
+    </div>
+
+
+    <div class="footer-divider"></div>
+
+
+    <div class="footer-tagline">
+      <p>
+        DADOS QUE TRANSFORMAM<br>
+        DECISÕES EM <span>MÚSICA.</span>
+      </p>
+    </div>
+
+
+    <nav class="footer-nav">
+
+      <h4>Explore mais</h4>
+
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#quem-somos">Quem Somos</a></li>
+        <li><a href="#valores">Valores</a></li>
+        <li><a href="#contato">Contato</a></li>
+        <li><a href="./cadastro.html">Cadastro</a></li>
+        <li><a href="./login.html">Login</a></li>
+        <li><a href="./dashboard.html">Dashboard</a></li>
+      </ul>
+
+    </nav>
+
+  </footer>
+
 </body>
 </html>
