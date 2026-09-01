@@ -95,6 +95,7 @@ header a {
 }
 
 /* Estilo Banner */
+
 .banner {
     margin-top: 100px;
     display: flex;
@@ -128,10 +129,12 @@ header a {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 60%;
+    height: fit-content;
+    min-height: 60%;
     width: 80%;
     background-color: rgba(255, 255, 255, 0.4);
     border-radius: 20px;
+    padding: 20px 0;
 }
 
 .login-cadastro .divisao .formulario input {
@@ -140,10 +143,11 @@ header a {
     border-bottom: solid 3px rgba(0, 0, 0, 0.452);
     color: rgba(0, 0, 0, 0.458);
     height: 15%;
+    min-height: 55px;
     width: 80%;
     font-size: 23px;
     padding: 0 0 0 25px;
-    margin-bottom: 20px;
+    margin: 5px 0 10px 0;
     transition: 0.6s ease;
 }
 
@@ -170,6 +174,8 @@ header a {
     border-radius: 10px;
     color: white;
     height: 15%;
+    min-height: 50px;
+    max-height: 50px;
     width: 25%;
     min-width: 200px;
     font-size: 20px;
@@ -208,4 +214,69 @@ header a {
 
 .login-cadastro .divisao .centro h5 {
     margin: 15px 0 0 0;
+}
+
+/* Resposividade */
+@media (max-width: 600px) {
+    .login-cadastro {
+        height: 100vh;
+        width: 100%;
+        background-image: url(../assets/imgs/fundoLoginMobile.png);
+    }
+
+    .login-cadastro main {
+        display: block;
+    }
+
+    .login-cadastro .divisao {
+        display: flex;
+        justify-content: center;
+        height: 85%;
+        width: 100%;
+    }
+
+    .login-cadastro .divisao .formulario {
+        height: fit-content;
+        width: 75%;
+        min-height: 240px;
+        min-width: 300px;
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 20px;
+        padding: 20px;
+    }
+
+    .login-cadastro .divisao .formulario input {
+        min-height: 45px;
+        width: 90%;
+        font-size: 19px;
+        margin: 5px 0 10px 0;
+        padding: 0 0 0 5%;
+    }
+
+    .login-cadastro .divisao .formulario button {
+        min-height: 50px;
+    }
+
+    .login-cadastro .divisao .centro {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 60%;
+        width: 100%;
+        color: white;
+    }
+
+    .login-cadastro .divisao .centro h1 {
+        font-size: 42px;
+    }
+
+    .login-cadastro .divisao .centro h6 {
+        margin: 50px 0 0 0;
+        font-size: 24px;
+    }
+
+    .login-cadastro .divisao .centro h5 {
+        font-size: 24px;
+    }
 }
