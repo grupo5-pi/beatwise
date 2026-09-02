@@ -1,58 +1,62 @@
--- Arquivo de apoio, caso você queira criar tabelas como as aqui criadas para a API funcionar.
--- Você precisa executar os comandos no banco de dados para criar as tabelas,
--- ter este arquivo aqui não significa que a tabela em seu BD estará como abaixo!
-
-/*
-comandos para mysql server
-*/
-
-CREATE DATABASE aquatech;
-
-USE aquatech;
+CREATE DATABASE beatwise;
+USE beatwise;
 
 CREATE TABLE empresa (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	razao_social VARCHAR(50),
-	cnpj CHAR(14),
-	codigo_ativacao VARCHAR(50)
+    idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
+    nomeEmpresa VARCHAR(45),
+    emailEmpresa VARCHAR(45),
+    cnpj CHAR(14),
+    telefone CHAR(11),
+    senha VARCHAR(100)
 );
 
-CREATE TABLE usuario (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	nome VARCHAR(50),
-	email VARCHAR(50),
-	senha VARCHAR(50),
-	fk_empresa INT,
-	FOREIGN KEY (fk_empresa) REFERENCES empresa(id)
+CREATE TABLE acesso (
+    idAcesso INT PRIMARY KEY AUTO_INCREMENT,
+    tipoAcesso VARCHAR(45)
 );
 
-CREATE TABLE aviso (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	titulo VARCHAR(100),
-	descricao VARCHAR(150),
-	fk_usuario INT,
-	FOREIGN KEY (fk_usuario) REFERENCES usuario(id)
+CREATE TABLE funcionario (
+    idFuncionario INT PRIMARY KEY AUTO_INCREMENT,
+    nomeFuncionario VARCHAR(45),
+    areaFuncionario VARCHAR(9),
+    CONSTRAINT chAreaFuncionario CHECK (areaFuncionario = 'marketing' OR areaFuncionario = 'produtora'),
+    emailFuncionario VARCHAR(45),
+    telefone CHAR(11),
+    senha VARCHAR(100),
+    fkEmpresa INT,
+    fkAcesso INT,
+    CONSTRAINT constFkEmpresa FOREIGN KEY (fkEmpresa) REFERENCES empresa (idEmpresa),
+    CONSTRAINT constFkAcesso FOREIGN KEY (fkAcesso) REFERENCES acesso (idAcesso)
 );
 
-create table aquario (
-/* em nossa regra de negócio, um aquario tem apenas um sensor */
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	descricao VARCHAR(300),
-	fk_empresa INT,
-	FOREIGN KEY (fk_empresa) REFERENCES empresa(id)
+CREATE TABLE musicas (
+    idMusica INT PRIMARY KEY AUTO_INCREMENT,
+    artista VARCHAR(45),
+    nomeMusica VARCHAR(45),
+    nomeAlbum VARCHAR(45),
+    tipoAlbum VARCHAR(6),
+    CONSTRAINT chTipoAlbum CHECK (tipoAlbum = 'single' OR tipoAlbum = 'album'),
+    urlSpotify VARCHAR(255),
+    dancabilidade DECIMAL(4,3),
+    energia DECIMAL(4,3),
+    tonalidade DECIMAL(3,1),
+    intensidadeSonora DECIMAL(5,4),
+    acustica DECIMAL(7,6),
+    instrumentalidade DECIMAL(6,5),
+    vivicidade DECIMAL(5,4),
+    valenciaPositividade DECIMAL(4,3),
+    tempoBPM DECIMAL(6,3),
+    duracaoMs DECIMAL(6,1),
+    urlYoutube VARCHAR(30),
+    titulo VARCHAR(30),
+    canal VARCHAR(30),
+    visitas DECIMAL(10,1),
+    curtidas DECIMAL(9,1),
+    comentarios DECIMAL(7,1),
+    descricao VARCHAR(255),
+    licenciado VARCHAR(10),
+    CONSTRAINT chLicenciado CHECK (licenciado = 'VERDADEIRO' OR licenciado = 'FALSO'),
+    videoOficial VARCHAR(10),
+    CONSTRAINT chVideoOficial CHECK (videoOficial = 'VERDADEIRO' OR videoOficial = 'FALSO'),
+    fluxo VARCHAR(15)
 );
-
-/* esta tabela deve estar de acordo com o que está em INSERT de sua API do arduino - dat-acqu-ino */
-
-create table medida (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	temperatura DECIMAL,
-	momento DATETIME,
-	fk_aquario INT,
-	FOREIGN KEY (fk_aquario) REFERENCES aquario(id)
-);
-
-insert into empresa (razao_social, codigo_ativacao) values ('Empresa 1', 'ED145B');
-insert into empresa (razao_social, codigo_ativacao) values ('Empresa 2', 'A1B2C3');
-insert into aquario (descricao, fk_empresa) values ('Aquário de Estrela-do-mar', 1);
-insert into aquario (descricao, fk_empresa) values ('Aquário de Peixe-dourado', 2);

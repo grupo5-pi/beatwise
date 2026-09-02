@@ -34,16 +34,52 @@
 
         <div class="divisao">
             <div class="formulario">
-                <input type="text" id="input_email" placeholder="Empresa:">
+                <input type="text" id="input_nome" placeholder="Empresa:">
                 <input type="text" id="input_email" placeholder="Email:">
-                <input type="text" id="input_email" placeholder="CNPJ:">
-                <input type="text" id="input_email" placeholder="Telefone:">
+                <input type="text" id="input_cnpj" placeholder="CNPJ:">
+                <input type="text" id="input_telefone" placeholder="Telefone:">
                 <input type="password" id="input_senha" placeholder="Senha:">
-                <input type="password" id="input_senha" placeholder="Confirmar senha:">
-                <button>CADASTRAR</button>
+                <input type="password" id="input_confirmar_senha" placeholder="Confirmar senha:">
+                <button onclick="cadastrar()">CADASTRAR</button>
             </div>
         </div>
     </main>
 
 </body>
 </html>
+<script>
+    function cadastrar(){
+        let nome = input_nome.value;
+        let email = input_email.value;
+        let cnpj = input_cnpj.value;
+        let telefone = input_telefone.value;
+        let senha = input_senha.value;
+        let confirmarSenha = input_confirmar_senha.value;
+    
+    
+        fetch ("/usuario/cadastrar", {
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                nomeServer: nome,
+                emailServer: email,
+                cnpjServer: cnpj,
+                telefoneServer: telefone,
+                senhaServer: senha,
+            }),
+        })
+        .then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if(resposta.ok){
+                alert("Seu cadastro foi realizado com sucesso!")
+                limparFormulario();
+
+            } else {
+                throw "Houve um erro ao tentar realizar o cadastro!";
+            }
+        });
+    }        
+    
+    </script>
