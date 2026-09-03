@@ -218,6 +218,10 @@ header a {
 
 /* Resposividade */
 @media (max-width: 600px) {
+    header {
+        display: none;
+    }
+
     .login-cadastro {
         height: 100vh;
         width: 100%;
@@ -231,13 +235,13 @@ header a {
     .login-cadastro .divisao {
         display: flex;
         justify-content: center;
-        height: 85%;
+        position: absolute;
+        height: 100%;
         width: 100%;
+        pointer-events: none;
     }
 
     .login-cadastro .divisao .formulario {
-        height: fit-content;
-        width: 75%;
         min-height: 240px;
         min-width: 300px;
         background-color: rgba(255, 255, 255, 0.4);
@@ -246,9 +250,9 @@ header a {
     }
 
     .login-cadastro .divisao .formulario input {
-        min-height: 45px;
-        width: 90%;
-        font-size: 19px;
+        min-height: 40px;
+        width: 92%;
+        font-size: 18px;
         margin: 5px 0 10px 0;
         padding: 0 0 0 5%;
     }
@@ -262,21 +266,40 @@ header a {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 60%;
+        height: 100%;
         width: 100%;
         color: white;
+    }
+
+    .login-cadastro .divisao button {
+        pointer-events: auto; /* Div da frente não bloquia o click*/
     }
 
     .login-cadastro .divisao .centro h1 {
         font-size: 42px;
     }
 
-    .login-cadastro .divisao .centro h6 {
-        margin: 50px 0 0 0;
+    .login-cadastro .divisao .centro h5 {
         font-size: 24px;
     }
 
-    .login-cadastro .divisao .centro h5 {
+    /*Estilo pagina-login*/
+
+    .pagina-login .divisao .centro h6 {
+        margin: 340px 0 0 0;
         font-size: 24px;
+        bottom: 0;
+    }
+
+    .pagina-login .divisao .centro h1 {
+        font-size: 40px;
+    }
+
+     /*Estilo pagina-cadastro*/
+
+    .pagina-cadastro .divisao .centro h6 {
+        margin: 500px 0 0 0;
+        font-size: 24px;
+        bottom: 0;
     }
 }
