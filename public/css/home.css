@@ -28,24 +28,27 @@ main {
 
 .slide {
   width: 100%;
-  min-height: 660px;
-  max-width: 1200px;
   background: #000;
   position: relative;
-  padding: 50px 60px;
   border-radius: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 60px;
 }
 
 /* linhas */
 .top-line {
   position: absolute;
-  top: 0;
   left: 0;
   width: 220px;
-  height: 4px;
+  height: 2px;
   background: linear-gradient(90deg, rgba(123, 47, 247, 0.9), rgba(124, 47, 247, 0.2));
-  border-radius: 0 3px 3px 0;
+}
+
+.top-line-right{
+  position: absolute;
+  right: 0;
+  width: 220px;
+  height: 2px;
+  background: linear-gradient(to left, rgba(123, 47, 247, 0.9), rgba(124, 47, 247, 0.2));
 }
 
 .bottom-line {
@@ -61,10 +64,12 @@ main {
 h1 {
   font-family: 'Playfair Display', serif;
   color: #fff;
-  font-size: 48px;
+  font-size: 42px;
   font-weight: 700;
-  margin-top: 10px;
   letter-spacing: 1px;
+  margin-left: 5%;
+  padding-bottom: 20px;
+  padding-top: 20px;
 }
 
 /* divisórias */
@@ -73,7 +78,12 @@ h1 {
   width: 100%;
   height: 2px;
   background: linear-gradient(90deg, rgba(124, 47, 247, 0.044), rgba(123, 47, 247, 0.9));
-  margin: 22px 0 60px 0;
+}
+
+.divider-right{
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to left, rgba(124, 47, 247, 0.044), rgba(123, 47, 247, 0.9));
 }
 
 .divider-curta {
@@ -93,14 +103,15 @@ h1 {
 .content {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   gap: 40px;
+  margin-top: 60px;
 }
 
 .text-col {
   flex: 1;
-  min-width: 300px;
+  max-width: 40%;
   display: flex;
   flex-direction: column;
   gap: 26px;
@@ -108,17 +119,9 @@ h1 {
 
 .text-col p {
   color: #cdefff;
-  font-size: 18px;
+  font-size: 22px;
   line-height: 1.7;
   font-weight: 400;
-}
-
-.image-col {
-  flex: 1;
-  min-width: 250px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .circle-frame {
@@ -148,12 +151,9 @@ h1 {
 
 /* tela valores */
 
-.slide-valores {
-  padding-top: 40px;
-}
-
 .titulo-direita {
   text-align: right;
+  margin-right: 5%;
 }
 
 .valores-grid {
@@ -161,7 +161,7 @@ h1 {
   flex-wrap: wrap;
   justify-content: center;
   gap: 30px;
-  margin-top: 50px;
+  margin-top: 40px;
 }
 
 .valor-card {
@@ -189,7 +189,7 @@ h1 {
 
 .valor-card p {
   color: #fff;
-  font-size: 17px;
+  font-size: 20px;
   line-height: 1.6;
 }
 
@@ -222,7 +222,7 @@ h1 {
 
 .contato-texto p {
   color: #fff;
-  font-size: 17px;
+  font-size: 20px;
   margin-bottom: 6px;
 }
 
@@ -233,7 +233,7 @@ h1 {
 
 .contato-texto ul li {
   color: #fff;
-  font-size: 17px;
+  font-size: 18px;
   margin-bottom: 4px;
 }
 
@@ -242,18 +242,27 @@ h1 {
 }
 
 .btn-contato {
-  background: linear-gradient(90deg, #a06ee1, #5a2fb0);
-  color: #fff;
+  background: linear-gradient(90deg, var(--roxo-claro) 0%, var(--roxo-escuro) 50%, rgba(0, 0, 0, 1) 100%);
+  background-position: left;
+  background-size: 200% 100%;
   border: none;
-  padding: 12px 28px;
-  border-radius: 30px;
-  font-size: 15px;
-  font-weight: 700;
+  border-radius: 20px;
+  color: white;
+  height: 15%;
+  min-height: 45px;
+  max-height: 45px;
+  width: 25%;
+  min-width: 200px;
+  font-size: 18px;
+  font-weight: bold;  
   cursor: pointer;
+  transition: 0.9s ease;
 }
 
 .btn-contato:hover {
-  opacity: 0.85;
+  background-position: right;
+  border: solid 1px white;
+  transition: 0.7s ease-in-out;
 }
 
 .contato-logo img {
@@ -262,36 +271,24 @@ h1 {
   flex-shrink: 0;
 }
 
+/* Footer */
+
 .footer {
-  background: linear-gradient(90deg, #0a0510, #1c1030);
-  padding: 40px 60px;
+  background-image: url(../assets/imgs/fundo-cortado.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding: 80px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 30px;
 }
 
-.footer-logo img {
-  width: 100px;
-  height: 100px;
-}
-
 .footer-divider {
   width: 1px;
   height: 50px;
   background: rgba(160, 110, 225, 0.4);
-}
-
-.footer-tagline p {
-  color: #cdefff;
-  font-size: 13px;
-  letter-spacing: 1px;
-  line-height: 1.7;
-}
-
-.footer-tagline span {
-  color: #a06ee1;
-  font-weight: 700;
 }
 
 .footer-nav {
@@ -315,7 +312,7 @@ h1 {
 
 .footer-nav ul li a {
   color: #cdefff;
-  font-size: 14px;
+  font-size: 17px;
   text-decoration: none;
 }
 
