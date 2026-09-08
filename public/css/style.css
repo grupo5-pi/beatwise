@@ -93,8 +93,35 @@ header a {
     width: 8%;
 }
 
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    cursor: pointer;
+    z-index: 1100;
+}
+
+.hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+}
+
+.menu-toggle {
+    display: none;
+}
+
 .button-login {
     height: 50px;
+}
+
+.login-item {
+    display: none;
 }
 
 /* Scrool */
@@ -123,7 +150,7 @@ header a {
 /* Estilo Login e Cadastro*/
 
 .login-cadastro {
-    margin-top: 150px;
+    margin-top: 170px;
     height: 80vh;
     background-image: url(../assets/imgs/fundoLogin.jpeg);
     background-size: cover; 
@@ -237,14 +264,66 @@ header a {
 
 /* Resposividade */
 @media (max-width: 600px) {
-    header {
+    header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 150px;
+    }
+
+    .banner img{
+        display: flex;
+        margin-top: 100px;
+        margin-bottom: 80px;
+        width: 380px;
+    }
+    
+    .logo-header{
+        width: 100px;
+        height: 100px;
+    }
+    
+    .hamburger {
+        display: flex;
+        margin: 30px;
+    }
+
+    .button-login-desktop {
         display: none;
     }
 
+    .login-item {
+        display: flex;
+        justify-content: center;
+    }
+
+    header ul {
+        position: fixed;
+        top: 14%;
+        left: 0;
+        width: 100%;
+        height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        background-color: black;
+        transition: height 0.4s ease-in-out;
+    }
+
+    .menu-toggle:checked ~ ul {
+        height: 40vh;
+    }
+
+    header ul li {
+        width: 100%;
+        padding: 20px 0;
+    }
+
     .login-cadastro {
+        margin-top: 90px;
         height: 100vh;
         width: 100%;
         background-image: url(../assets/imgs/fundoLoginMobile.png);
+        overflow: scroll;
     }
 
     .login-cadastro main {
