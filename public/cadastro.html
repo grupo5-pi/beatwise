@@ -20,10 +20,10 @@
     </label>
 
     <ul id="nav-menu">
-      <li><a href="home.html#home">HOME</a></li>
-      <li><a href="home.html#quem-somos">QUEM SOMOS</a></li>
-      <li><a href="home.html#valores">VALORES</a></li>
-      <li><a href="home.html#contato">CONTATO</a></li>
+      <li><a href="index.html#home">HOME</a></li>
+      <li><a href="index.html#quem-somos">QUEM SOMOS</a></li>
+      <li><a href="index.html#valores">VALORES</a></li>
+      <li><a href="index.html#contato">CONTATO</a></li>
       <li class="login-item">
         <a href="./login.html">
           <img src="../public/assets/imgs/user.png" class="button-login" alt="Login">
@@ -63,38 +63,127 @@
 </body>
 </html>
 <script>
+
+    let validacaoEmail = false;
+    let validacaoRazaoSocial = false;
+    let validacaoCNPJ = false;
+    let validacaoTelefone = false;
+    let validacaoSenha = false;
+    let validacaoConfirmSenha = false;
+
+    function validarRazaoSocial() {
+        let empresa = input_nome.value;
+
+        if (empresa.length >= 3) {
+            validacaoEmpresa = true;
+            div_empresa.innerHTML = "";
+        } else {
+            validacaoEmpresa = false;
+            div_empresa.innerHTML = 'Digite uma razão social válida (mínimo 3 caracteres)';
+        }
+    }
+
+    function validarEmail() {
+        let email = input_email.value;
+
+        if (email.includes("@") && email.includes(".")) {
+            validacaoEmail = true;
+            div_email.innerHTML = "";
+        } else {
+            validacaoEmail = false;
+            div_email.innerHTML = 'Digite um email válido';
+        }
+    }
+
+    function validarCNPJ() {
+        let cnpj = input_cnpj.value;
+
+        if(cnpj.length == 18 && cnpj.includes(".") && cnpj.includes("/") && cnpj.includes("-")) {
+            validacaoCNPJ = true;
+            div_cnpj.innerHTML = "";
+        } else {
+            validacaoCNPJ = false;
+            div_cnpj.innerHTML = 'Digite um CNPJ válido (Ex: 12.345.678/0001-90)';
+        }
+    }
+
+    function validarTelefone(){
+        let telefone = input_telefone.value
+        if(telefone.length !=   11){
+            validacaoTelefone = false;
+            div_telefone = "Digite um telefone válido (Ex: 11987632455)"
+        } else {
+            validacaoTelefone = true;
+            div_telefone = ""
+        }
+    }
+
+    function validarSenha() {
+        let especial = ["@", "#", "$", "%", "&", "*", "!", "?", "_", "-"];
+        let num = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+        let maiscula = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        let minuscula = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+        let senha = input_senha.value;
+        if (senha.length >= 8   &&  senha.includes()) {
+            validacaoSenha = true;
+            div_senha.innerHTML = "";
+        } else {
+            validacaoSenha = false;
+            div_nome.innerHTML = `A senha deve ter no mínimo: 
+            - 8 caractéres; 
+            - Caractér especial;
+            - Letra maiúscula;
+            - Letra maiúscula;
+            - Número.`;
+        }
+    }
+
+    function validarConfirmSenha(){
+        let senha = input_senha.value;
+        let confirSenha = input_confirmar_senha.value;
+
+        if(senha == confirSenha){
+            div_confirmacao_senha.innerHTML = "";
+            validacaoConfirmSenha = true;
+        } else {
+            div_confirmacao_senha.innerHTML = "As senhas não estão iguais!";
+            validacaoConfirmSenha = false;
+        }
+    }
+
+
     function cadastrar(){
+
         let nome = input_nome.value;
         let email = input_email.value;
         let cnpj = input_cnpj.value;
         let telefone = input_telefone.value;
         let senha = input_senha.value;
         let confirmarSenha = input_confirmar_senha.value;
-    
-    
-        fetch ("/usuario/cadastrar", {
-            method:"POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                nomeServer: nome,
-                emailServer: email,
-                cnpjServer: cnpj,
-                telefoneServer: telefone,
-                senhaServer: senha,
-            }),
-        })
-        .then(function (resposta) {
-            console.log("resposta: ", resposta);
-            if(resposta.ok){
-                alert("Seu cadastro foi realizado com sucesso!")
-                limparFormulario();
 
-            } else {
-                throw "Houve um erro ao tentar realizar o cadastro!";
-            }
-        });
-    }        
+            fetch ("/usuario/cadastrar", {
+                method:"POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nomeServer: nome,
+                    emailServer: email,
+                    cnpjServer: cnpj,
+                    telefoneServer: telefone,
+                    senhaServer: senha,
+                }),
+            })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+                if(resposta.ok){
+                    alert("Seu cadastro foi realizado com sucesso!")
+                    limparFormulario();
+
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            });      
+    }
     
-    </script>
+</script>
