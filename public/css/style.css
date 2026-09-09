@@ -132,10 +132,16 @@ header a {
 /* Estilo Banner */
 
 .banner {
-    margin-top: 100px;
+    margin-top: 150px;
+    margin-bottom: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+}
+
+.banner img{
+    width: 60%;
 }
 
 /* Estilo Login e Cadastro*/

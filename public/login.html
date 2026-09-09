@@ -24,6 +24,11 @@
       <li><a href="index.html#quem-somos">QUEM SOMOS</a></li>
       <li><a href="index.html#valores">VALORES</a></li>
       <li><a href="index.html#contato">CONTATO</a></li>
+       <li class="login-item">
+        <a href="./login.html">
+          <img src="/assets/imgs/user.png" class="button-login" alt="Login">
+        </a>
+      </li>
     </ul>
 
     <a href="./login.html" class="button-login-desktop">
@@ -49,11 +54,48 @@
                 <button>ENTRAR</button>
             </div>
         </div>
-
     </main>
-
-
-
 </body>
-
 </html>
+<script>
+    function autenticar(){
+        let email = input_email.value;
+        let senha = input_senha.value;
+
+        fetch("/usuarios/autenticar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            emailServer: email,
+            senhaServer: senha
+        })
+    }).then(function (resposta) {
+        console.log("ESTOU NO THEN DO entrar()!")
+
+        if (resposta.ok) {
+            console.log(resposta);
+
+            resposta.json().then(json => {
+                console.log(json);
+                console.log(JSON.stringify(json));
+                console.log("JSON COMPLETO:", json)
+                sessionStorage.EMAIL_USUARIO = json.email;
+                sessionStorage.NOME_USUARIO = json.nome;
+                sessionStorage.setItem("ID_USUARIO", json.id_usuario);
+                sessionStorage.setItem("ID_CARGO", json.id_cargo);
+                sessionStorage.setItem("ID_EMPRESA", json.id_empresa); 
+        
+                alert("Autenticado!");
+            });
+
+        } else {
+            console.log("Houve um erro ao tentar realizar o login!");
+        }
+
+    }).catch(function (erro) {
+        console.log(erro);
+    });
+    }
+</script>
