@@ -1,12 +1,3 @@
-@font-face {
-    font-family: 'Myriad Pro Semi Extended';
-    src: url('fontes/myriad-pro-semi-extended.woff2') format('woff2'),
-        url('fontes/myriad-pro-semi-extended.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
 :root {
     --roxo-claro: rgba(197, 157, 255, 1);
     --roxo-escuro: rgba(84, 36, 187, 1);
@@ -229,6 +220,7 @@ header a {
     margin-top: 25px;
     cursor: pointer;
     transition: 0.9s ease;
+    margin: 10px;
 }
 
 .login-cadastro .divisao a button {
@@ -399,5 +391,9 @@ header a {
         margin: 500px 0 0 0;
         font-size: 24px;
         bottom: 0;
+    }
+
+    .div_button{
+        display: flex;
     }
 }
