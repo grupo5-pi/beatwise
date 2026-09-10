@@ -1,10 +1,11 @@
 @font-face {
-  font-family: "Myriad Pro SemiExtended";
-  src: url("MyriadPro-SemiExtended.woff2") format("woff2"),
-       url("MyriadPro-SemiExtended.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
+    font-family: "Myriad Pro SemiExtended";
+    src: url("MyriadPro-SemiExtended.woff2") format("woff2"),
+        url("MyriadPro-SemiExtended.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
 }
+
 @import url('https://googleapis.com');
 
 :root {
@@ -34,8 +35,8 @@ header {
     justify-content: space-between;
     background-color: black;
     top: 0;
-    left: 0;     
-    width: 100%; 
+    left: 0;
+    width: 100%;
     z-index: 1000;
     height: 14%;
     position: fixed;
@@ -126,16 +127,16 @@ header a {
 
 /* Scrool */
 ::-webkit-scrollbar {
-  width: 11px;
+    width: 11px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: rgb(37, 0, 71);
+    background-color: rgb(37, 0, 71);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--roxo-escuro);
-  border-radius: 5px;
+    background: var(--roxo-escuro);
+    border-radius: 5px;
 }
 
 /* Estilo Banner */
@@ -149,7 +150,7 @@ header a {
     width: 100%;
 }
 
-.banner img{
+.banner img {
     width: 60%;
 }
 
@@ -159,7 +160,7 @@ header a {
     margin-top: 170px;
     height: 80vh;
     background-image: url(../assets/imgs/fundoLogin.jpeg);
-    background-size: cover; 
+    background-size: cover;
     overflow: hidden;
 }
 
@@ -193,7 +194,7 @@ header a {
     background-color: transparent;
     border: solid transparent;
     border-bottom: solid 3px rgba(0, 0, 0, 0.452);
-    color: rgba(0, 0, 0, 0.458);
+    color: rgb(0, 0, 0);
     height: 15%;
     min-height: 55px;
     width: 80%;
@@ -209,7 +210,7 @@ header a {
 }
 
 .login-cadastro .divisao .formulario input::placeholder {
-    color: black;
+    color: rgba(0, 0, 0, 0.478);
     transition: 0.6s ease;
 }
 
@@ -267,27 +268,53 @@ header a {
     font-family: 'Poppins', sans-serif;
 }
 
+/* Estilização das mensagens de alerta ao usuário */
+#mensagem1,
+#mensagem2 {
+    margin: 6px;
+    max-width: 540px;
+    text-align: center;
+    line-height: 30px;
+}
+
+.erro {
+    padding: 7px 10px;
+    background-color: rgb(137, 131, 131);
+    color: white;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.realizado {
+    padding: 7px 10px;
+    background-color: rgb(77, 108, 77);
+    color: white;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+
 /* Resposividade */
 @media (max-width: 600px) {
-    header{
+    header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         height: 110px;
     }
 
-    .banner img{
+    .banner img {
         display: flex;
         margin-top: 100px;
         margin-bottom: 80px;
         width: 350px;
     }
-    
-    .logo-header{
+
+    .logo-header {
         width: 90px;
         height: 90px;
     }
-    
+
     .hamburger {
         display: flex;
         margin: 30px;
@@ -314,7 +341,7 @@ header a {
         transition: height 0.4s ease-in-out;
     }
 
-    .menu-toggle:checked ~ ul {
+    .menu-toggle:checked~ul {
         height: 40vh;
     }
 
@@ -358,9 +385,10 @@ header a {
         font-size: 18px;
         margin: 5px 0 10px 0;
         padding: 0 0 0 5%;
-        pointer-events: auto; /* Div da frente não bloqueia o click*/
+        pointer-events: auto;
+        /* Div da frente não bloqueia o click*/
     }
-    
+
     .login-cadastro .divisao .centro {
         display: flex;
         flex-direction: column;
@@ -372,7 +400,8 @@ header a {
     }
 
     .login-cadastro .divisao button {
-        pointer-events: auto; /* Div da frente não bloqueia o click*/
+        pointer-events: auto;
+        /* Div da frente não bloqueia o click*/
         max-height: 36px;
         max-width: 160px;
         font-size: 18px;
@@ -398,16 +427,33 @@ header a {
         font-size: 40px;
     }
 
-     /*Estilo pagina-cadastro*/
+    /*Estilo pagina-cadastro*/
 
     .pagina-cadastro .divisao .centro h6 {
-        margin: 430px 0 10px 0;
+        margin: 470px 0 10px 0;
         font-size: 24px;
         bottom: 0;
     }
 
-    .div_button{
+    .div_button {
         display: flex;
         flex-direction: column;
+    }
+
+    /* Estilização das mensagens de alerta ao usuário */
+    #mensagem1,
+    #mensagem2 {
+        line-height: 20px;
+        min-width: 300px;
+    }
+
+    .erro {
+        background-color: transparent;
+        font-size: 16px;
+    }
+
+    .realizado {
+        background-color: transparent;
+        font-size: 16px;
     }
 }
