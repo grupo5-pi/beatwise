@@ -5,44 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
     <link rel="stylesheet" href="/css/style.css">
     <script src="./js/cadastro.js" defer></script>
 </head>
 
 <body class="login-cadastro  pagina-cadastro">
     <header>
-    <img class="logo-header" src="./assets/imgs/logo_B.png" alt="BeatWise">
+        <img class="logo-header" src="./assets/imgs/logo_B.png" alt="BeatWise">
 
-    <input type="checkbox" id="menu-toggle" class="menu-toggle">
-    <label for="menu-toggle" class="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </label>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
 
-    <ul id="nav-menu">
-      <li><a href="index.html#home">HOME</a></li>
-      <li><a href="index.html#quem-somos">QUEM SOMOS</a></li>
-      <li><a href="index.html#valores">VALORES</a></li>
-      <li><a href="index.html#contato">CONTATO</a></li>
-       <li class="login-item">
-        <a href="./login.html">
-          <img src="/assets/imgs/user.png" class="button-login" alt="Login">
+        <ul id="nav-menu">
+            <li><a href="index.html#home">HOME</a></li>
+            <li><a href="index.html#quem-somos">QUEM SOMOS</a></li>
+            <li><a href="index.html#valores">VALORES</a></li>
+            <li><a href="index.html#contato">CONTATO</a></li>
+            <li class="login-item">
+                <a href="./login.html">
+                    <img src="/assets/imgs/user.png" class="button-login" alt="Login">
+                </a>
+            </li>
+        </ul>
+
+        <a href="./login.html" class="button-login-desktop">
+            <img src="/assets/imgs/user.png" class="button-login" alt="Login">
         </a>
-      </li>
-    </ul>
-
-    <a href="./login.html" class="button-login-desktop">
-      <img src="/assets/imgs/user.png" class="button-login" alt="Login">
-    </a>
-  </header>
+    </header>
 
     <main>
         <div class="divisao">
             <div class="centro">
                 <h1>Bem-vindo!</h1>
                 <h5>Faça o Cadastro para continuar</h5>
-                
+
                 <h6>Caso já tenha um cadastro</h6>
                 <a href="login.html" on><button>LOGIN</button></a>
             </div>
@@ -62,8 +64,8 @@
                 <input type="password" id="input_senha" placeholder="Senha:" onchange="validarSenha()">
                 <input type="password" id="input_confirmar_senha" placeholder="Confirmar senha:" onchange="validarConfirmSenha()">
                 <div class="div_button">
-                <button onclick="voltar()">VOLTAR</button>
-                <button onclick="cadastrar()">CADASTRAR</button>
+                    <button onclick="voltar()">VOLTAR</button>
+                    <button onclick="cadastrar()">CADASTRAR</button>
                 </div>
             </div>
         </div>
