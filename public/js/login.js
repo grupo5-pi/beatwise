@@ -27,13 +27,14 @@
                     sessionStorage.setItem("ID_CARGO", json.id_cargo);
                     sessionStorage.setItem("ID_EMPRESA", json.id_empresa); 
             
-                    alert("Autenticado!");
+                    mensagem1.innerHTML = `<span class="realizado">Seu cadastro foi realizado com sucesso!`
                     setTimeout(function () {
                         window.location = "dashboard.html";
                     }, 1000)
             });
 
             } else {
+                mensagem1.innerHTML = `<span class="erro">Senha ou login inválidos!`
                 console.log("Houve um erro ao tentar realizar o login!");
                     resposta.text().then(texto => {
                     console.error(texto);

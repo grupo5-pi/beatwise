@@ -41,31 +41,34 @@ function validarRazaoSocial() {
 
     if (razaoSocial.length >= 3) {
         validacaoRazaoSocial = true;
+        mensagem1.innerHTML = '';
     } else {
         validacaoRazaoSocial = false;
-        alert('Digite uma razão social válida (mínimo 3 caracteres');
+        mensagem1.innerHTML = '<span class="erro">Digite uma razão social válida (mínimo 3 caracteres';
     }
 }
 
 function validarEmailEmpresa() {
     let email = input_email_empresa.value;
 
-    if (email.includes("@") && email.includes(".com")) {
+    if (email.includes('@') && email.indexOf('@') > 0 && email.lastIndexOf('.') > email.indexOf('@') + 1 && email.lastIndexOf('.') < email.length - 1) {
         validacaoEmailEmpresa = true;
+        mensagem1.innerHTML = '';
     } else {
         validacaoEmailEmpresa = false;
-        alert('Digite um email válido (Ex: beatwise@mail.com');
+        mensagem1.innerHTML = '<span class="erro">Digite um email válido (Ex: beatwise@mail.com';
     }
 }
 
 function validarCNPJ() {
     let cnpj = input_cnpj.value;
 
-    if (cnpj.length == 18) {
-        validacaoCNPJ = true;
-    } else {
+    if (cnpj.length < 18) {
         validacaoCNPJ = false;
-        div_cnpj.innerHTML = 'Digite um CNPJ válido (Ex: 12.345.678/0001-90)';
+        mensagem1.innerHTML = '<span class="erro">Digite um CNPJ válido (Ex: 12.345.678/0001-90)';
+    } else {
+        validacaoCNPJ = true;
+        mensagem1.innerHTML = '';
     }
 }
 
@@ -73,9 +76,10 @@ function validarTelefone() {
     let telefone = input_telefone.value
     if (telefone.length < 14) {
         validacaoTelefone = false;
-        alert("Digite um telefone válido (Ex: (11) 12345-6789)");
+        mensagem1.innerHTML = `<span class="erro">Digite um telefone válido (Ex: (11) 12345-6789)`;
     } else {
         validacaoTelefone = true;
+        mensagem1.innerHTML = '';
     }
 }
 
@@ -84,24 +88,24 @@ function validarNome() {
 
     if (nome.length >= 3) {
         validacaoNome = true;
+        mensagem2.innerHTML = '';
     } else {
         validacaoNome = false;
-        alert('Digite um nome válido (mínimo 3 caracteres');
+        mensagem2.innerHTML = '<span class="erro">Digite um nome válido (mínimo 3 caracteres';
     }
 }
 
 function validarEmail() {
     let email = input_email.value;
 
-    if (email.includes("@") && email.includes(".com")) {
+    if (email.includes('@') && email.indexOf('@') > 0 && email.lastIndexOf('.') > email.indexOf('@') + 1 && email.lastIndexOf('.') < email.length - 1) {
         validacaoEmail = true;
+        mensagem2.innerHTML = '';
     } else {
         validacaoEmail = false;
-        alert('Digite um email válido (Ex: fulano@mail.com');
+        mensagem2.innerHTML = '<span class="erro">Digite um email válido (Ex: fulano@mail.com';
     }
 }
-
-
 
 function validarSenha() {
     let senha = input_senha.value;
@@ -124,14 +128,10 @@ function validarSenha() {
     }
     if (senha.length >= 8 && temEspecial && temNum && temMaiuscula && temMinuscula) {
         validacaoSenha = true;
+        mensagem2.innerHTML = '';
     } else {
         validacaoSenha = false;
-        alert(`A senha deve ter no mínimo:
-            - 8 caracteres;
-            - Caractere especial;
-            - Letra maiúscula;
-            - Letra minúscula;
-            - Número.`)
+        mensagem2.innerHTML = `<span class="erro">A senha deve ter no mínimo 8 caracteres, caractere especial, um número, letra maiúscula e minúscula.`
     }
 }
 
@@ -141,23 +141,25 @@ function validarConfirmSenha() {
 
     if (senha == confirSenha) {
         validacaoConfirmSenha = true;
+        mensagem2.innerHTML = '';
     } else {
-        alert("As senhas não estão iguais!");
+        mensagem2.innerHTML = `<span class="erro">As senhas não estão iguais!`;
         validacaoConfirmSenha = false;
     }
 }
+
 function cadastrar() {
 
-    if(validacaoRazaoSocial && validacaoEmailEmpresa && validacaoCNPJ && validacaoTelefone && validacaoNome && validacaoEmail && validacaoSenha && validacaoConfirmSenha){
+    if (validacaoRazaoSocial && validacaoEmailEmpresa && validacaoCNPJ && validacaoTelefone && validacaoNome && validacaoEmail && validacaoSenha && validacaoConfirmSenha) {
         let nome = input_nome.value;
         let email = input_email.value;
         let senha = input_senha.value;
-    
+
         let razaoSocial = input_razao_social.value;
         let emailEmpresa = input_email_empresa.value;
         let cnpj = input_cnpj.value;
         let telefone = input_telefone.value;
-    
+
         fetch("/usuarios/cadastrar", {
             method: "POST",
             headers: {
@@ -176,14 +178,12 @@ function cadastrar() {
             .then(function (resposta) {
                 console.log("resposta: ", resposta);
                 if (resposta.ok) {
-                    alert("Seu cadastro foi realizado com sucesso!")
+                    mensagem2.innerHTML = `<span class="realizado">Seu cadastro foi realizado com sucesso!`
                     window.location.href = 'login.html';
-    
+
                 } else {
                     throw "Houve um erro ao tentar realizar o cadastro!";
                 }
             });
-    } else {
-        alert("Validação necessária!")
     }
 }

@@ -52,17 +52,19 @@
 
         <div class="divisao">
             <div class="formulario" id="formulario1" style="display: flex;">
-                <input type="text" id="input_razao_social" placeholder="Razão Social:" onchange="validarRazaoSocial()">
-                <input type="text" id="input_email_empresa" placeholder="Email (empresa):" onchange="validarEmailEmpresa()">
-                <input type="text" id="input_cnpj" placeholder="CNPJ:" maxlength="18" oninput="mascaraCNPJ(this)" onchange="validarCNPJ()">
-                <input type="text" id="input_telefone" placeholder="Telefone (empresa):" maxlength="15" oninput="mascaraTelefone(this)" onchange="validarTelefone()">
+                <input type="text" id="input_razao_social" placeholder="Razão Social:" oninput="validarRazaoSocial()">
+                <input type="text" id="input_email_empresa" placeholder="Email (empresa):" oninput="validarEmailEmpresa()">
+                <input type="text" id="input_cnpj" placeholder="CNPJ:" maxlength="18" oninput="mascaraCNPJ(this), validarCNPJ()">
+                <input type="text" id="input_telefone" placeholder="Telefone (empresa):" maxlength="15" oninput="mascaraTelefone(this), validarTelefone()">
+                <div id="mensagem1"></div>
                 <button onclick="continuar()">CONTINUAR</button>
             </div>
             <div class="formulario" id="formulario2" style="display: none;">
-                <input type="text"  id="input_nome" placeholder="Nome:" onchange="validarNome()">
-                <input type="text" id="input_email" placeholder="Email:" onchange="validarEmail()">
-                <input type="password" id="input_senha" placeholder="Senha:" onchange="validarSenha()">
-                <input type="password" id="input_confirmar_senha" placeholder="Confirmar senha:" onchange="validarConfirmSenha()">
+                <input type="text"  id="input_nome" placeholder="Nome:" oninput="validarNome()">
+                <input type="text" id="input_email" placeholder="Email:" oninput="validarEmail()">
+                <input type="password" id="input_senha" placeholder="Senha:" oninput="validarSenha()">
+                <input type="password" id="input_confirmar_senha" placeholder="Confirmar senha:" oninput="validarConfirmSenha()">
+                <div id="mensagem2"></div>
                 <div class="div_button">
                     <button onclick="voltar()">VOLTAR</button>
                     <button onclick="cadastrar()">CADASTRAR</button>
