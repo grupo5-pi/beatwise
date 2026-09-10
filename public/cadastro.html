@@ -5,43 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body class="login-cadastro  pagina-cadastro">
     <header>
-    <img class="logo-header" src="./assets/imgs/logo_B.png" alt="BeatWise">
+        <img class="logo-header" src="./assets/imgs/logo_B.png" alt="BeatWise">
 
-    <input type="checkbox" id="menu-toggle" class="menu-toggle">
-    <label for="menu-toggle" class="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </label>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
 
-    <ul id="nav-menu">
-      <li><a href="index.html#home">HOME</a></li>
-      <li><a href="index.html#quem-somos">QUEM SOMOS</a></li>
-      <li><a href="index.html#valores">VALORES</a></li>
-      <li><a href="index.html#contato">CONTATO</a></li>
-       <li class="login-item">
-        <a href="./login.html">
-          <img src="/assets/imgs/user.png" class="button-login" alt="Login">
+        <ul id="nav-menu">
+            <li><a href="index.html#home">HOME</a></li>
+            <li><a href="index.html#quem-somos">QUEM SOMOS</a></li>
+            <li><a href="index.html#valores">VALORES</a></li>
+            <li><a href="index.html#contato">CONTATO</a></li>
+            <li class="login-item">
+                <a href="./login.html">
+                    <img src="/assets/imgs/user.png" class="button-login" alt="Login">
+                </a>
+            </li>
+        </ul>
+
+        <a href="./login.html" class="button-login-desktop">
+            <img src="/assets/imgs/user.png" class="button-login" alt="Login">
         </a>
-      </li>
-    </ul>
-
-    <a href="./login.html" class="button-login-desktop">
-      <img src="/assets/imgs/user.png" class="button-login" alt="Login">
-    </a>
-  </header>
+    </header>
 
     <main>
         <div class="divisao">
             <div class="centro">
                 <h1>Bem-vindo!</h1>
                 <h5>Faça o Cadastro para continuar</h5>
-                
+
                 <h6>Caso já tenha um cadastro</h6>
                 <a href="login.html" on><button>LOGIN</button></a>
             </div>
@@ -56,27 +58,28 @@
                 <button onclick="continuar()">CONTINUAR</button>
             </div>
             <div class="formulario" id="formulario2" style="display: none;">
-                <input type="text"  id="input_nome" placeholder="Nome:">
+                <input type="text" id="input_nome" placeholder="Nome:">
                 <input type="text" id="input_email" placeholder="Email:">
                 <input type="password" id="input_senha" placeholder="Senha:">
                 <input type="password" id="input_confirmar_senha" placeholder="Confirmar senha:">
                 <div class="div_button">
-                <button onclick="voltar()">VOLTAR</button>
-                <button onclick="cadastrar()">CADASTRAR</button>
+                    <button onclick="voltar()">VOLTAR</button>
+                    <button onclick="cadastrar()">CADASTRAR</button>
                 </div>
             </div>
         </div>
     </main>
 
 </body>
+
 </html>
 <script>
-    function continuar(){
+    function continuar() {
         document.getElementById("formulario1").style.display = "none";
         document.getElementById("formulario2").style.display = "flex";
     }
 
-    function voltar(){
+    function voltar() {
         document.getElementById("formulario1").style.display = "flex";
         document.getElementById("formulario2").style.display = "none";
     }
@@ -115,7 +118,7 @@
     function validarCNPJ() {
         let cnpj = input_cnpj.value;
 
-        if(cnpj.length == 18 && cnpj.includes(".") && cnpj.includes("/") && cnpj.includes("-")) {
+        if (cnpj.length == 18 && cnpj.includes(".") && cnpj.includes("/") && cnpj.includes("-")) {
             validacaoCNPJ = true;
             div_cnpj.innerHTML = "";
         } else {
@@ -124,9 +127,9 @@
         }
     }
 
-    function validarTelefone(){
+    function validarTelefone() {
         let telefone = input_telefone.value
-        if(telefone.length !=   11){
+        if (telefone.length != 11) {
             validacaoTelefone = false;
             div_telefone = "Digite um telefone válido (Ex: 11987632455)"
         } else {
@@ -138,10 +141,10 @@
     function validarSenha() {
         let especial = ["@", "#", "$", "%", "&", "*", "!", "?", "_", "-"];
         let num = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-        let maiscula = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        let minuscula = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+        let maiscula = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        let minuscula = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
         let senha = input_senha.value;
-        if (senha.length >= 8   &&  senha.includes()) {
+        if (senha.length >= 8 && senha.includes()) {
             validacaoSenha = true;
             div_senha.innerHTML = "";
         } else {
@@ -155,11 +158,11 @@
         }
     }
 
-    function validarConfirmSenha(){
+    function validarConfirmSenha() {
         let senha = input_senha.value;
         let confirSenha = input_confirmar_senha.value;
 
-        if(senha == confirSenha){
+        if (senha == confirSenha) {
             div_confirmacao_senha.innerHTML = "";
             validacaoConfirmSenha = true;
         } else {
@@ -168,42 +171,42 @@
         }
     }
 
-    function cadastrar(){
+    function cadastrar() {
 
-        let nome= input_nome.value;
-        let email= input_email.value;
-        let senha= input_senha.value;
+        let nome = input_nome.value;
+        let email = input_email.value;
+        let senha = input_senha.value;
 
         let razaoSocial = input_razao_social.value;
         let emailEmpresa = input_email_empresa.value;
         let cnpj = input_cnpj.value;
         let telefone = input_telefone.value;
-        
-            fetch ("/usuarios/cadastrar", {
-                method:"POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    nomeServer: nome,
-                    emailServer: email,
-                    senhaServer: senha,
-                    razaoSocialServer: razaoSocial,
-                    emailEmpresaServer: emailEmpresa,
-                    cnpjServer: cnpj,
-                    telefoneServer: telefone,
-                }),
-            })
+
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                nomeServer: nome,
+                emailServer: email,
+                senhaServer: senha,
+                razaoSocialServer: razaoSocial,
+                emailEmpresaServer: emailEmpresa,
+                cnpjServer: cnpj,
+                telefoneServer: telefone,
+            }),
+        })
             .then(function (resposta) {
                 console.log("resposta: ", resposta);
-                if(resposta.ok){
+                if (resposta.ok) {
                     alert("Seu cadastro foi realizado com sucesso!")
                     window.location.href = 'login.html';
 
                 } else {
                     throw "Houve um erro ao tentar realizar o cadastro!";
                 }
-            });      
+            });
     }
-    
+
 </script>

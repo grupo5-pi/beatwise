@@ -1,3 +1,12 @@
+@font-face {
+  font-family: "Myriad Pro SemiExtended";
+  src: url("MyriadPro-SemiExtended.woff2") format("woff2"),
+       url("MyriadPro-SemiExtended.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@import url('https://googleapis.com');
+
 :root {
     --roxo-claro: rgba(197, 157, 255, 1);
     --roxo-escuro: rgba(84, 36, 187, 1);
@@ -216,11 +225,8 @@ header a {
     border: none;
     border-radius: 10px;
     color: white;
-    height: 15%;
-    min-height: 50px;
-    max-height: 50px;
-    width: 25%;
-    min-width: 200px;
+    height: 50px;
+    width: 200px;
     font-size: 20px;
     font-weight: bold;
     margin-top: 25px;
@@ -231,8 +237,7 @@ header a {
 
 .login-cadastro .divisao a button {
     height: 100%;
-    width: 25%;
-    min-width: 200px;
+    padding: 0 10px;
 }
 
 .login-cadastro .divisao button:hover {
@@ -253,11 +258,13 @@ header a {
 }
 
 .login-cadastro .divisao .centro h6 {
-    margin: 110px 0 0 0;
+    margin: 110px 0 15px 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 .login-cadastro .divisao .centro h5 {
     margin: 15px 0 0 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Resposividade */
@@ -266,19 +273,19 @@ header a {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 150px;
+        height: 110px;
     }
 
     .banner img{
         display: flex;
         margin-top: 100px;
         margin-bottom: 80px;
-        width: 380px;
+        width: 350px;
     }
     
     .logo-header{
-        width: 100px;
-        height: 100px;
+        width: 90px;
+        height: 90px;
     }
     
     .hamburger {
@@ -317,11 +324,11 @@ header a {
     }
 
     .login-cadastro {
-        margin-top: 90px;
+        margin-top: 50px;
         height: 100vh;
         width: 100%;
         background-image: url(../assets/imgs/fundoLoginMobile.png);
-        overflow: scroll;
+        overflow-y: hidden;
     }
 
     .login-cadastro main {
@@ -351,12 +358,9 @@ header a {
         font-size: 18px;
         margin: 5px 0 10px 0;
         padding: 0 0 0 5%;
+        pointer-events: auto; /* Div da frente não bloqueia o click*/
     }
-
-    .login-cadastro .divisao .formulario button {
-        min-height: 50px;
-    }
-
+    
     .login-cadastro .divisao .centro {
         display: flex;
         flex-direction: column;
@@ -368,7 +372,10 @@ header a {
     }
 
     .login-cadastro .divisao button {
-        pointer-events: auto; /* Div da frente não bloquia o click*/
+        pointer-events: auto; /* Div da frente não bloqueia o click*/
+        max-height: 36px;
+        max-width: 160px;
+        font-size: 18px;
     }
 
     .login-cadastro .divisao .centro h1 {
@@ -376,14 +383,14 @@ header a {
     }
 
     .login-cadastro .divisao .centro h5 {
-        font-size: 24px;
+        font-size: 23px;
     }
 
     /*Estilo pagina-login*/
 
     .pagina-login .divisao .centro h6 {
-        margin: 340px 0 0 0;
-        font-size: 24px;
+        margin: 340px 0 10px 0;
+        font-size: 23px;
         bottom: 0;
     }
 
@@ -394,12 +401,13 @@ header a {
      /*Estilo pagina-cadastro*/
 
     .pagina-cadastro .divisao .centro h6 {
-        margin: 500px 0 0 0;
+        margin: 430px 0 10px 0;
         font-size: 24px;
         bottom: 0;
     }
 
     .div_button{
         display: flex;
+        flex-direction: column;
     }
 }

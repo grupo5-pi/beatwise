@@ -2,14 +2,16 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | BeatWise</title>
-    <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | BeatWise</title>
+  <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body class="login-cadastro pagina-login">
-    <header>
+  <header>
     <img class="logo-header" src=" /assets/imgs/logo_B.png" alt="BeatWise">
 
     <input type="checkbox" id="menu-toggle" class="menu-toggle">
@@ -24,7 +26,7 @@
       <li><a href="index.html#quem-somos">QUEM SOMOS</a></li>
       <li><a href="index.html#valores">VALORES</a></li>
       <li><a href="index.html#contato">CONTATO</a></li>
-       <li class="login-item">
+      <li class="login-item">
         <a href="./login.html">
           <img src="/assets/imgs/user.png" class="button-login" alt="Login">
         </a>
@@ -36,73 +38,74 @@
     </a>
   </header>
 
-    <main>
-        <div class="divisao">
-            <div class="centro">
-                <h1>Bem-vindo de volta!</h1>
-                <h5>Faça o Login para continuar</h5>
-                
-                <h6>Caso ainda não tenha um Login</h6>
-                <a href="cadastro.html" on><button>CADASTRE-SE</button></a>
-            </div>
-        </div>
+  <main>
+    <div class="divisao">
+      <div class="centro">
+        <h1>Bem-vindo de volta!</h1>
+        <h5>Faça o Login para continuar</h5>
 
-        <div class="divisao">
-            <div class="formulario">
-                <input type="text" id="input_email" placeholder="Email:">
-                <input type="password" id="input_senha" placeholder="Senha:">
-                <button onclick="autenticar()">ENTRAR</button>
-            </div>
-        </div>
-    </main>
+        <h6>Caso ainda não tenha um Login</h6>
+        <a href="cadastro.html" on><button>CADASTRE-SE</button></a>
+      </div>
+    </div>
+
+    <div class="divisao">
+      <div class="formulario">
+        <input type="text" id="input_email" placeholder="Email:">
+        <input type="password" id="input_senha" placeholder="Senha:">
+        <button onclick="autenticar()">ENTRAR</button>
+      </div>
+    </div>
+  </main>
 </body>
+
 </html>
 <script>
-    function autenticar(){
-        let email = input_email.value;
-        let senha = input_senha.value;
+  function autenticar() {
+    let email = input_email.value;
+    let senha = input_senha.value;
 
-        fetch("/usuarios/autenticar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                emailServer: email,
-                senhaServer: senha
-            })
-        }).then(function (resposta) {
-             console.log("ESTOU NO THEN DO entrar()!")
+    fetch("/usuarios/autenticar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        emailServer: email,
+        senhaServer: senha
+      })
+    }).then(function (resposta) {
+      console.log("ESTOU NO THEN DO entrar()!")
 
-            if (resposta.ok) {
-                console.log(resposta);
+      if (resposta.ok) {
+        console.log(resposta);
 
-                resposta.json().then(json => {
-                    console.log(json);
-                    console.log(JSON.stringify(json));
-                    console.log("JSON COMPLETO:", json)
-                    sessionStorage.EMAIL_USUARIO = json.email;
-                    sessionStorage.NOME_USUARIO = json.nome;
-                    sessionStorage.setItem("ID_FUNCIONARIO", json.id_funcionario);
-                    sessionStorage.setItem("ID_CARGO", json.id_cargo);
-                    sessionStorage.setItem("ID_EMPRESA", json.id_empresa); 
-            
-                    alert("Autenticado!");
-                    setTimeout(function () {
-                        window.location = "dashboard.html";
-                    }, 1000)
-            });
+        resposta.json().then(json => {
+          console.log(json);
+          console.log(JSON.stringify(json));
+          console.log("JSON COMPLETO:", json)
+          sessionStorage.EMAIL_USUARIO = json.email;
+          sessionStorage.NOME_USUARIO = json.nome;
+          sessionStorage.setItem("ID_FUNCIONARIO", json.id_funcionario);
+          sessionStorage.setItem("ID_CARGO", json.id_cargo);
+          sessionStorage.setItem("ID_EMPRESA", json.id_empresa);
 
-            } else {
-                console.log("Houve um erro ao tentar realizar o login!");
-                    resposta.text().then(texto => {
-                    console.error(texto);
-                });
-            }
-
-        }).catch(function (erro) {
-            console.log(erro);
+          alert("Autenticado!");
+          setTimeout(function () {
+            window.location = "dashboard.html";
+          }, 1000)
         });
-        return false;
-        }
+
+      } else {
+        console.log("Houve um erro ao tentar realizar o login!");
+        resposta.text().then(texto => {
+          console.error(texto);
+        });
+      }
+
+    }).catch(function (erro) {
+      console.log(erro);
+    });
+    return false;
+  }
 </script>
