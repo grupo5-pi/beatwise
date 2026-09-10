@@ -27,7 +27,7 @@
                     sessionStorage.setItem("ID_CARGO", json.id_cargo);
                     sessionStorage.setItem("ID_EMPRESA", json.id_empresa); 
             
-                    mensagem1.innerHTML = `<span class="realizado">Seu cadastro foi realizado com sucesso!`
+                    mensagem1.innerHTML = `<span class="realizado">Login realizado com sucesso!`
                     setTimeout(function () {
                         window.location = "dashboard.html";
                     }, 1000)
