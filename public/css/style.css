@@ -1,9 +1,10 @@
 @font-face {
-  font-family: "Myriad Pro SemiExtended";
-  src: url("MyriadPro-SemiExtended.woff2") format("woff2"),
-       url("MyriadPro-SemiExtended.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'Myriad Pro Semi Extended';
+    src: url('fontes/myriad-pro-semi-extended.woff2') format('woff2'),
+        url('fontes/myriad-pro-semi-extended.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 @import url('https://googleapis.com');
 
