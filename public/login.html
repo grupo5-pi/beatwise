@@ -5,45 +5,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | BeatWise</title>
-    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+    <script src="./js/login.js" defer></script>
 </head>
 
 <body class="login-cadastro pagina-login">
-    <header>
-        <img src="../public/assets/imgs/logo_B.jpeg" alt="">
-        <ul>
-            <li><a href="home.html">HOME</a></li>
-            <li><a href="quemSomos.html">QUEM SOMOS</a></li>
-            <li><a href="dashboard.html">DASHBOARD</a></li>
-            <li><a href="contato.html">CONTATO</a></li>
-        </ul>
-        <a href="./login.html"><img src="../public/assets/imgs/user.png" class="button-login" alt=""></a>
-    </header>
-    <div class="header-border"></div>
+  <header>
+    <img class="logo-header" src=" /assets/imgs/logo_B.png" alt="BeatWise">
 
-    <main>
-        <div class="divisao">
-            <div class="centro">
-                <h1>Bem-vindo de volta!</h1>
-                <h5>Faça o Login para continuar</h5>
-                
-                <h6>Caso ainda não tenha um Login</h6>
-                <a href="cadastro.html" on><button>CADASTRE-SE</button></a>
-            </div>
-        </div>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <label for="menu-toggle" class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
 
-        <div class="divisao">
-            <div class="formulario">
-                <input type="text" id="input_email" placeholder="Email:">
-                <input type="password" id="input_senha" placeholder="Senha:">
-                <button>ENTRAR</button>
-            </div>
-        </div>
+    <ul id="nav-menu">
+      <li><a href="index.html#home">HOME</a></li>
+      <li><a href="index.html#quem-somos">QUEM SOMOS</a></li>
+      <li><a href="index.html#valores">VALORES</a></li>
+      <li><a href="index.html#contato">CONTATO</a></li>
+      <li class="login-item">
+        <a href="./login.html">
+          <img src="/assets/imgs/user.png" class="button-login" alt="Login">
+        </a>
+      </li>
+    </ul>
 
-    </main>
+    <a href="./login.html" class="button-login-desktop">
+      <img src="/assets/imgs/user.png" class="button-login" alt="Login">
+    </a>
+  </header>
 
+  <main>
+    <div class="divisao">
+      <div class="centro">
+        <h1>Bem-vindo de volta!</h1>
+        <h5>Faça o Login para continuar</h5>
 
+        <h6>Caso ainda não tenha um Login</h6>
+        <a href="cadastro.html" on><button>CADASTRE-SE</button></a>
+      </div>
+    </div>
 
+    <div class="divisao">
+      <div class="formulario">
+        <input type="text" id="input_email" placeholder="Email:">
+        <input type="password" id="input_senha" placeholder="Senha:">
+        <button onclick="autenticar()">ENTRAR</button>
+      </div>
+    </div>
+  </main>
 </body>
-
 </html>

@@ -1,11 +1,11 @@
 @font-face {
-    font-family: 'Myriad Pro Semi Extended';
-    src: url('fontes/myriad-pro-semi-extended.woff2') format('woff2'),
-        url('fontes/myriad-pro-semi-extended.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Myriad Pro SemiExtended";
+  src: url("MyriadPro-SemiExtended.woff2") format("woff2"),
+       url("MyriadPro-SemiExtended.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
+@import url('https://googleapis.com');
 
 :root {
     --roxo-claro: rgba(197, 157, 255, 1);
@@ -18,6 +18,7 @@
     box-sizing: border-box;
     list-style: none;
     text-decoration: none;
+    scroll-behavior: smooth;
 }
 
 /* Estilo Header */
@@ -32,7 +33,14 @@ header {
     display: flex;
     justify-content: space-between;
     background-color: black;
-    height: 15%;
+    top: 0;
+    left: 0;     
+    width: 100%; 
+    z-index: 1000;
+    height: 14%;
+    position: fixed;
+    border-bottom: 5px solid;
+    border-image: linear-gradient(to right, var(--roxo-claro), var(--roxo-escuro), black) 1;
 }
 
 header ul {
@@ -51,9 +59,9 @@ header li {
 header ul li a {
     position: relative;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 500;
     width: auto;
-    font-size: 25px;
+    font-size: 18px;
     font-family: 'Myriad Pro Semi Extended', sans-serif;
     color: white;
     transition: width 0.5s ease-in-out;
@@ -74,7 +82,7 @@ header ul li a:hover::after {
     width: 100%;
 }
 
-header img {
+.logo-header {
     height: 100%;
 }
 
@@ -85,35 +93,79 @@ header a {
     width: 8%;
 }
 
-.button-login {
-    height: 60px;
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    cursor: pointer;
+    z-index: 1100;
 }
 
-.header-border {
-    height: 0.7%;
-    background: linear-gradient(90deg, var(--roxo-claro) 0%, var(--roxo-escuro) 45%, rgba(0, 0, 0, 1) 100%);
+.hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.button-login {
+    height: 50px;
+}
+
+.login-item {
+    display: none;
+}
+
+/* Scrool */
+::-webkit-scrollbar {
+  width: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgb(37, 0, 71);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--roxo-escuro);
+  border-radius: 5px;
 }
 
 /* Estilo Banner */
 
 .banner {
-    margin-top: 100px;
+    margin-top: 150px;
+    margin-bottom: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+}
+
+.banner img{
+    width: 60%;
 }
 
 /* Estilo Login e Cadastro*/
 
 .login-cadastro {
-    height: 100vh;
+    margin-top: 170px;
+    height: 80vh;
     background-image: url(../assets/imgs/fundoLogin.jpeg);
-    background-size: cover;
+    background-size: cover; 
+    overflow: hidden;
 }
 
 .login-cadastro main {
     display: flex;
-    height: 83%;
+    height: 80%;
 }
 
 .login-cadastro .divisao {
@@ -173,22 +225,19 @@ header a {
     border: none;
     border-radius: 10px;
     color: white;
-    height: 15%;
-    min-height: 50px;
-    max-height: 50px;
-    width: 25%;
-    min-width: 200px;
+    height: 50px;
+    width: 200px;
     font-size: 20px;
     font-weight: bold;
     margin-top: 25px;
     cursor: pointer;
     transition: 0.9s ease;
+    margin: 10px;
 }
 
 .login-cadastro .divisao a button {
     height: 100%;
-    width: 25%;
-    min-width: 200px;
+    padding: 0 10px;
 }
 
 .login-cadastro .divisao button:hover {
@@ -209,23 +258,77 @@ header a {
 }
 
 .login-cadastro .divisao .centro h6 {
-    margin: 110px 0 0 0;
+    margin: 110px 0 15px 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 .login-cadastro .divisao .centro h5 {
     margin: 15px 0 0 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Resposividade */
 @media (max-width: 600px) {
-    header {
+    header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 110px;
+    }
+
+    .banner img{
+        display: flex;
+        margin-top: 100px;
+        margin-bottom: 80px;
+        width: 350px;
+    }
+    
+    .logo-header{
+        width: 90px;
+        height: 90px;
+    }
+    
+    .hamburger {
+        display: flex;
+        margin: 30px;
+    }
+
+    .button-login-desktop {
         display: none;
     }
 
+    .login-item {
+        display: flex;
+        justify-content: center;
+    }
+
+    header ul {
+        position: fixed;
+        top: 14%;
+        left: 0;
+        width: 100%;
+        height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        background-color: black;
+        transition: height 0.4s ease-in-out;
+    }
+
+    .menu-toggle:checked ~ ul {
+        height: 40vh;
+    }
+
+    header ul li {
+        width: 100%;
+        padding: 20px 0;
+    }
+
     .login-cadastro {
+        margin-top: 50px;
         height: 100vh;
         width: 100%;
         background-image: url(../assets/imgs/fundoLoginMobile.png);
+        overflow-y: hidden;
     }
 
     .login-cadastro main {
@@ -255,12 +358,9 @@ header a {
         font-size: 18px;
         margin: 5px 0 10px 0;
         padding: 0 0 0 5%;
+        pointer-events: auto; /* Div da frente não bloqueia o click*/
     }
-
-    .login-cadastro .divisao .formulario button {
-        min-height: 50px;
-    }
-
+    
     .login-cadastro .divisao .centro {
         display: flex;
         flex-direction: column;
@@ -272,7 +372,10 @@ header a {
     }
 
     .login-cadastro .divisao button {
-        pointer-events: auto; /* Div da frente não bloquia o click*/
+        pointer-events: auto; /* Div da frente não bloqueia o click*/
+        max-height: 36px;
+        max-width: 160px;
+        font-size: 18px;
     }
 
     .login-cadastro .divisao .centro h1 {
@@ -280,14 +383,14 @@ header a {
     }
 
     .login-cadastro .divisao .centro h5 {
-        font-size: 24px;
+        font-size: 23px;
     }
 
     /*Estilo pagina-login*/
 
     .pagina-login .divisao .centro h6 {
-        margin: 340px 0 0 0;
-        font-size: 24px;
+        margin: 340px 0 10px 0;
+        font-size: 23px;
         bottom: 0;
     }
 
@@ -298,8 +401,13 @@ header a {
      /*Estilo pagina-cadastro*/
 
     .pagina-cadastro .divisao .centro h6 {
-        margin: 500px 0 0 0;
+        margin: 430px 0 10px 0;
         font-size: 24px;
         bottom: 0;
+    }
+
+    .div_button{
+        display: flex;
+        flex-direction: column;
     }
 }

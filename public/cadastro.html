@@ -5,81 +5,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro | BeatWise</title>
-    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="./js/cadastro.js" defer></script>
 </head>
 
 <body class="login-cadastro  pagina-cadastro">
     <header>
-        <img src="../public/assets/imgs/logo_B.jpeg" alt="">
-        <ul>
-            <li><a href="home.html">HOME</a></li>
-            <li><a href="quemSomos.html">QUEM SOMOS</a></li>
-            <li><a href="dashboard.html">DASHBOARD</a></li>
-            <li><a href="contato.html">CONTATO</a></li>
+        <img class="logo-header" src="./assets/imgs/logo_B.png" alt="BeatWise">
+
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+
+        <ul id="nav-menu">
+            <li><a href="index.html#home">HOME</a></li>
+            <li><a href="index.html#quem-somos">QUEM SOMOS</a></li>
+            <li><a href="index.html#valores">VALORES</a></li>
+            <li><a href="index.html#contato">CONTATO</a></li>
+            <li class="login-item">
+                <a href="./login.html">
+                    <img src="/assets/imgs/user.png" class="button-login" alt="Login">
+                </a>
+            </li>
         </ul>
-        <a href="./login.html"><img src="../public/assets/imgs/user.png" class="button-login" alt=""></a>
+
+        <a href="./login.html" class="button-login-desktop">
+            <img src="/assets/imgs/user.png" class="button-login" alt="Login">
+        </a>
     </header>
-    <div class="header-border"></div>
 
     <main>
         <div class="divisao">
             <div class="centro">
                 <h1>Bem-vindo!</h1>
                 <h5>Faça o Cadastro para continuar</h5>
-                
+
                 <h6>Caso já tenha um cadastro</h6>
                 <a href="login.html" on><button>LOGIN</button></a>
             </div>
         </div>
 
         <div class="divisao">
-            <div class="formulario">
-                <input type="text" id="input_nome" placeholder="Empresa:">
-                <input type="text" id="input_email" placeholder="Email:">
-                <input type="text" id="input_cnpj" placeholder="CNPJ:">
-                <input type="text" id="input_telefone" placeholder="Telefone:">
-                <input type="password" id="input_senha" placeholder="Senha:">
-                <input type="password" id="input_confirmar_senha" placeholder="Confirmar senha:">
-                <button onclick="cadastrar()">CADASTRAR</button>
+            <div class="formulario" id="formulario1" style="display: flex;">
+                <input type="text" id="input_razao_social" placeholder="Razão Social:" onchange="validarRazaoSocial()">
+                <input type="text" id="input_email_empresa" placeholder="Email (empresa):" onchange="validarEmailEmpresa()">
+                <input type="text" id="input_cnpj" placeholder="CNPJ:" maxlength="18" oninput="mascaraCNPJ(this)" onchange="validarCNPJ()">
+                <input type="text" id="input_telefone" placeholder="Telefone (empresa):" maxlength="15" oninput="mascaraTelefone(this)" onchange="validarTelefone()">
+                <button onclick="continuar()">CONTINUAR</button>
+            </div>
+            <div class="formulario" id="formulario2" style="display: none;">
+                <input type="text"  id="input_nome" placeholder="Nome:" onchange="validarNome()">
+                <input type="text" id="input_email" placeholder="Email:" onchange="validarEmail()">
+                <input type="password" id="input_senha" placeholder="Senha:" onchange="validarSenha()">
+                <input type="password" id="input_confirmar_senha" placeholder="Confirmar senha:" onchange="validarConfirmSenha()">
+                <div class="div_button">
+                    <button onclick="voltar()">VOLTAR</button>
+                    <button onclick="cadastrar()">CADASTRAR</button>
+                </div>
             </div>
         </div>
     </main>
 
 </body>
 </html>
-<script>
-    function cadastrar(){
-        let nome = input_nome.value;
-        let email = input_email.value;
-        let cnpj = input_cnpj.value;
-        let telefone = input_telefone.value;
-        let senha = input_senha.value;
-        let confirmarSenha = input_confirmar_senha.value;
-    
-    
-        fetch ("/usuario/cadastrar", {
-            method:"POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                nomeServer: nome,
-                emailServer: email,
-                cnpjServer: cnpj,
-                telefoneServer: telefone,
-                senhaServer: senha,
-            }),
-        })
-        .then(function (resposta) {
-            console.log("resposta: ", resposta);
-            if(resposta.ok){
-                alert("Seu cadastro foi realizado com sucesso!")
-                limparFormulario();
-
-            } else {
-                throw "Houve um erro ao tentar realizar o cadastro!";
-            }
-        });
-    }        
-    
-    </script>
