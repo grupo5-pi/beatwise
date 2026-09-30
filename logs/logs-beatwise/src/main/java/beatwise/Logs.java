@@ -5,18 +5,18 @@ import java.time.format.DateTimeFormatter;
 
 public class Logs {
 
+    LocalDateTime dataLog;
     String nivel;
     String mensagem;
-    LocalDateTime dataLog;
 
     public Logs(String nivel, String mensagem) {
+        this.dataLog = LocalDateTime.now();
         this.nivel = nivel;
         this.mensagem = mensagem;
-        this.dataLog = LocalDateTime.now();
     }
 
     public String exibirLog() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM'/'dd'/'yyyy hh:mm:ss a");
-        return nivel + ": " + mensagem + "\nData: " + dataLog.format(formatter);
+        return "Data: " + dataLog.format(formatter) + "\n" + nivel + ": " + mensagem;
     }
 }

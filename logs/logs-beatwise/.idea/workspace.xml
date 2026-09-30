@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc083f6c-8b84-4a00-a18a-11eacf7cce56" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../.env.dev" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/beat/wise/Logs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/beatwise/Logs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/beat/wise/LogsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/beatwise/LogsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/beat/wise/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/beatwise/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.env.dev" beforeDir="false" afterPath="$PROJECT_DIR$/../../.env.dev" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +44,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "feature",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/usuario/Desktop/beatwise/logs/logs-beatwise",
     "node.js.detected.package.jshint": "true",
