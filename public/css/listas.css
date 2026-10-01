@@ -19,6 +19,53 @@
 }
 
 body {
+    display: flex;
     height: 100vh;
     width: 100%;
+    background-color: #0A0A0A;
+}
+
+.conteudo {
+    display: flex;
+    height: 100%;
+    width: 83.7%;
+    color: white;
+}
+
+.conteudo .conteudo-topo {
+    display: flex;
+    justify-content: space-between;
+    height: 10%;
+    width: 92%;
+    margin: 30px;
+}
+
+.conteudo .conteudo-topo .titulos {
+    height: 100%;
+    width: 40%;
+    font-size: 20px;
+}
+
+.conteudo .conteudo-topo .abas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #36303f;
+    border-radius: 30px;
+    height: 85%;
+    width: 30%;
+    font-size: 20px;
+    margin-top: auto;
+}
+
+.conteudo .conteudo-topo .abas a {
+    margin: 25px 40px;
+    color: white;
+}
+
+.conteudo .conteudo-topo .abas #selected-tab {
+    background-color: var(--color-bw-purple, 0.15);
+    margin: 25px 20px;
+    padding: 15px 18px;
+    border-radius: 20px;
 }
