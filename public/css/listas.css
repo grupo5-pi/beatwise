@@ -22,11 +22,13 @@ body {
     display: flex;
     height: 100vh;
     width: 100%;
-    background-color: #0A0A0A;
+    background: linear-gradient(280deg,rgba(0, 0, 0, 1) 22%, rgba(14, 2, 33, 1) 46%, rgba(14, 2, 33, 1) 89%);
 }
 
 .conteudo {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     height: 100%;
     width: 83.7%;
     color: white;
@@ -68,4 +70,38 @@ body {
     margin: 25px 20px;
     padding: 15px 18px;
     border-radius: 20px;
+}
+
+/* Lista */
+.lista {
+    display: grid;
+    grid-template-columns: 25% 25% 25% 12.5% 12.5%;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    height: 78%;
+    width: 91%;
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.lista .coluna {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    border: solid 1px white;
+    border-radius: 20px;
+    color: black;
+    font-size: 20px;    
+}
+
+.lista .coluna .grids {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+    padding-left: 10px;
+    border-bottom: solid 1px #0a0a0a5a;
 }
