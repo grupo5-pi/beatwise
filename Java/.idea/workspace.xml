@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BackgroundAgentGlobalSettings">
+    <option name="selectedModelId" value="auto" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="99bc27e1-cd52-4c39-ae94-ea96e52a34b0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/beatwise/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/.idea/logs.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beat/wise/Logs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beat/wise/LogsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beat/wise/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beatwise/Logs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beatwise/LogsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beatwise/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/target/classes/beatwise/Logs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/target/classes/beatwise/LogsService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/target/classes/beatwise/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/out/production/logs/beatwise/Logs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/out/production/logs/beatwise/LogsService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../logs/out/production/logs/beatwise/Main.class" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/usuario/Desktop/beatwise/logs" value="3JJrL0a03gqLwwcGT6D62jJzzLy" />
+    </persistenceIdMap>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="feat/lista-musicas" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="3JJqnnQDqV340mggoIuTAtunqgf" />
+  <component name="ProjectSessionTemplates">
+    <option name="panelTemplate">
+      <template>
+        <option name="modeId" value="Agent" />
+        <option name="model">
+          <model>
+            <option name="modelType" value="builtin_id" />
+            <option name="modelValue" value="auto" />
+          </model>
+        </option>
+        <option name="targetType" value="BACKGROUND" />
+        <option name="worktreeMode" value="WORKSPACE" />
+      </template>
+    </option>
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "feat/extracao-excel",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/usuario/Desktop/beatwise/Java/beatwise",
+    "node.js.detected.package.jshint": "true",
+    "node.js.selected.package.jshint": "",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "MavenSettings"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\usuario\Desktop\beatwise\Java\beatwise" />
+      <recent name="C:\Users\usuario\Desktop\beatwise\logs" />
+      <recent name="C:\Users\usuario\Desktop\beatwise\logs\logs-beatwise\src\main\java\extracaoExcel" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\usuario\Desktop\beatwise\Java\beatwise" />
+      <recent name="C:\Users\usuario\Desktop\beatwise\Java" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-63390994e64e-intellij.indexing.shared.core-IU-262.8665.337" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.8665.337" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="99bc27e1-cd52-4c39-ae94-ea96e52a34b0" name="Changes" comment="" />
+      <created>1789389702720</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1789389702720</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
