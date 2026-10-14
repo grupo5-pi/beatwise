@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feats cadastrados | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/recomendacao.css">
+    <script src="./js/featsCadastrados.js" defer></script>
+</head>
+
+<body class="rec-page">
+    <aside class="sidebar">
+        <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
+        <hr>
+
+        <ul>
+            <li><a href="./dashboard.html">Dashboard</a></li>
+            <li><a href="./listaMusica.html">Músicas</a></li>
+            <li id="selected"><a href="./recomendacao.html">Recomendação</a></li>
+        </ul>
+
+        <div class="perfil">
+            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <div class="usuario" id="nome-usuario">Yasmin</div>
+        </div>
+    </aside>
+
+    <main class="rec-content">
+        <div class="rec-topo">
+            <div>
+                <p class="rec-boas-vindas">Bem-vindo(a), Yasmin</p>
+                <h1 class="rec-titulo">Feats cadastrados</h1>
+            </div>
+
+            <nav class="rec-abas">
+                <a href="./recomendacao.html" class="rec-aba">Recomendação Feat</a>
+                <a href="./featsCadastrados.html" class="rec-aba rec-aba-ativa">Feats cadastrados</a>
+            </nav>
+        </div>
+
+        <h2 class="rec-subtitulo">Acesse recomendações anteriores</h2>
+
+        <div class="rec-painel">
+            <div id="rec-lista" class="rec-cards rec-cards-lista">
+                <div class="rec-card">
+                    
+                    <span class="rec-card-nome">Recomendação 1</span>
+                    <span class="rec-card-info">Artista 1, Artista 2, Artista 3</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" data-acao="editar">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" data-acao="excluir">Excluir</button>
+                    </div>
+                </div>
+                <div class="rec-card">
+                    <span class="rec-card-nome">Recomendação 2</span>
+                    <span class="rec-card-info">Artista 1, Artista 2, Artista 3</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" data-acao="editar">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" data-acao="excluir">Excluir</button>
+                    </div>
+                </div>
+                <div class="rec-card">
+                    <span class="rec-card-nome">Recomendação 3</span>
+                    <span class="rec-card-info">Artista 1, Artista 2, Artista 3</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" data-acao="editar">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" data-acao="excluir">Excluir</button>
+                    </div>
+                </div>
+                <div class="rec-card">
+                    <span class="rec-card-nome">Recomendação 4</span>
+                    <span class="rec-card-info">Artista 1, Artista 2, Artista 3</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" data-acao="editar">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" data-acao="excluir">Excluir</button>
+                    </div>
+                </div>
+                <div class="rec-card">
+                    <span class="rec-card-nome">Recomendação 5</span>
+                    <span class="rec-card-info">Artista 1, Artista 2, Artista 3</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" data-acao="editar">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" data-acao="excluir">Excluir</button>
+                    </div>
+                </div>
+                <div class="rec-card">
+                    <span class="rec-card-nome">Recomendação 6</span>
+                    <span class="rec-card-info">Artista 1, Artista 2, Artista 3</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" data-acao="editar">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" data-acao="excluir">Excluir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+    <div id="rec-modal" class="rec-modal rec-escondido">
+        <div class="rec-modal-caixa">
+            <h3>Editar recomendação</h3>
+            <label for="rec-modal-nome">Nome da recomendação</label>
+            <input type="text" id="rec-modal-nome" maxlength="40">
+            <div class="rec-acoes">
+                <button type="button" id="rec-modal-salvar" class="rec-botao">Salvar</button>
+                <button type="button" id="rec-modal-cancelar" class="rec-botao rec-botao-secundario">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
