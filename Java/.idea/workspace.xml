@@ -7,35 +7,7 @@
     <option name="selectedModelId" value="auto" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99bc27e1-cd52-4c39-ae94-ea96e52a34b0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/beatwise/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/.idea/logs.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beat/wise/Logs.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beat/wise/LogsService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beat/wise/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beatwise/Logs.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beatwise/LogsService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/src/main/java/beatwise/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/target/classes/beatwise/Logs.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/target/classes/beatwise/LogsService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/logs-beatwise/target/classes/beatwise/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/out/production/logs/beatwise/Logs.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/out/production/logs/beatwise/LogsService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logs/out/production/logs/beatwise/Main.class" beforeDir="false" />
-    </list>
+    <list default="true" id="99bc27e1-cd52-4c39-ae94-ea96e52a34b0" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -81,6 +53,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
@@ -88,7 +61,7 @@
     "copilot.chat.legacySessionMetadata.migrated": "true",
     "git-widget-placeholder": "feat/extracao-excel",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/usuario/Desktop/beatwise/Java/beatwise",
+    "last_opened_file_path": "C:/Users/usuario/Desktop/beatwise/Java",
     "node.js.detected.package.jshint": "true",
     "node.js.selected.package.jshint": "",
     "nodejs_package_manager_path": "npm",
