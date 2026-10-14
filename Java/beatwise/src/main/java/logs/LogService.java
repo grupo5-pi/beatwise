@@ -6,12 +6,12 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class LogService {
-    private static List<Log> historicoLogs = new ArrayList<>();
 
     public static void registrarLog(String nivel, String mensagem, String origem) {
-        Log log = new Log(nivel, mensagem, origem);
-        historicoLogs.add(log);
+        if (nivel != null && mensagem != null && origem != null) {
+            Log log = new Log(nivel, mensagem, origem);
 
-        System.out.println(log.exibirLog());
+            System.out.println(log.exibirLog());
+        }
     }
 }
