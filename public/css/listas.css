@@ -16,13 +16,26 @@
     --color-bw-violet: #6D28D9;
     --color-bw-indigo: #4F46E5;
     --color-bw-accent: #A855F7;
+
+    --color-bg-primary: #0A0A0F;
+    --color-bg-sidebar: #0D0718;
+    --color-bg-card: #15131D;
+    --color-bg-secondary: #252131;
+    --color-bg-hover: #302442;
+    --color-primary: #7C3AED;
+    --color-primary-hover: #6D28D9;
+    --color-accent: #A78BFA;
+    --color-border: #30283E;
+    --color-border-strong: #594078;
+    --color-text-primary: #F5F3FF;
+    --color-text-secondary: #AAA3BC;
 }
 
 body {
     display: flex;
     height: 100vh;
     width: 100%;
-    background: linear-gradient(280deg,rgba(0, 0, 0, 1) 22%, rgba(14, 2, 33, 1) 46%, rgba(14, 2, 33, 1) 89%);
+    background: linear-gradient(280deg, rgba(0, 0, 0, 1) 22%, rgba(14, 2, 33, 1) 46%, rgba(14, 2, 33, 1) 89%);
 }
 
 .conteudo {
@@ -39,7 +52,7 @@ body {
     justify-content: space-between;
     height: 10%;
     width: 92%;
-    margin: 30px;
+    margin: 30px 0 20px 0;
 }
 
 .conteudo .conteudo-topo .titulos {
@@ -48,41 +61,25 @@ body {
     font-size: 20px;
 }
 
-.conteudo .conteudo-topo .abas {
+/* tabela */
+.tabela {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #36303f;
+    flex-direction: column;
+    height: 80%;
+    width: 91%;
+    background-color: var(--color-bg-card);
+    border: solid 1px var(--color-border);
     border-radius: 30px;
-    height: 85%;
-    width: 30%;
-    font-size: 20px;
-    margin-top: auto;
 }
 
-.conteudo .conteudo-topo .abas a {
-    margin: 25px 40px;
-    color: white;
-}
-
-.conteudo .conteudo-topo .abas #selected-tab {
-    background-color: var(--color-bw-purple, 0.15);
-    margin: 25px 20px;
-    padding: 15px 18px;
-    border-radius: 20px;
-}
-
-/* Lista */
 .lista {
     display: grid;
     grid-template-columns: 25% 25% 25% 12.5% 12.5%;
     flex-direction: row;
     justify-content: space-between;
-    background-color: white;
-    height: 78%;
-    width: 91%;
-    border-radius: 30px;
-    padding: 10px;
+    height: 90%;
+    width: 100%;
+    padding: 0 15px 10px 15px;
 }
 
 .lista .coluna {
@@ -91,10 +88,9 @@ body {
     justify-content: space-between;
     height: 100%;
     width: 100%;
-    border: solid 1px white;
     border-radius: 20px;
     color: black;
-    font-size: 20px;    
+    font-size: 20px;
 }
 
 .lista .coluna .grids {
@@ -103,5 +99,29 @@ body {
     height: 100%;
     margin: 0;
     padding-left: 10px;
-    border-bottom: solid 1px #0a0a0a5a;
+    border-bottom: solid 1px var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+.lista .primary .grids {
+    color: var(--color-text-primary);
+}
+
+.lista .coluna .top {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+    padding-left: 10px;
+    border-bottom: solid 1px var(--color-border-strong);
+    color: var(--color-bw-accent);
+    background-color: var(--color-bw-surface);
+}
+
+.lista .coluna .left {
+    border-radius: 12px 0 0 0;
+}
+
+.lista .coluna .right {
+    border-radius: 0 12px 0 0;
 }
