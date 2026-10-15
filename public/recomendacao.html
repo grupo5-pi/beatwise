@@ -34,7 +34,7 @@
     <main class="rec-content">
         <div class="rec-topo">
             <div>
-                <p class="rec-boas-vindas">Bem-vindo(a), Yasmin</p> 
+                <p class="rec-boas-vindas">Bem-vindo(a), Yasmin</p>
                 <h1 class="rec-titulo">Recomendação de feat</h1>
             </div>
 
@@ -44,7 +44,7 @@
             </nav>
         </div>
 
-        <section id="rec-etapa-filtros">
+        <section id="etapa_filtros">
             <h2 class="rec-subtitulo">Encontre seu feat ideal</h2>
 
             <form id="rec-form" class="rec-painel">
@@ -110,31 +110,28 @@
                         <input type="number" id="rec-anos" placeholder="xx anos" min="0" max="30">
                     </div>
 
-                    <button type="submit" class="rec-botao">Gerar recomendação</button>
+                    <button type="button" class="rec-botao" onclick="gerarRecomendacao()">Gerar recomendação</button>
                 </div>
             </form>
         </section>
 
         
-        <section id="rec-etapa-resultado" class="rec-escondido">
+        <section id="etapa_resultado" style="display: none;">
             <h2 class="rec-subtitulo">Seu feat ideal é:</h2>
 
             <div class="rec-painel">
                 <div id="rec-cards" class="rec-cards">
                     <div class="rec-card">
-                        <div class="rec-avatar">1</div>
                         <span class="rec-card-nome">Artista 1</span>
                         <span class="rec-card-info">Pop · 118 BPM · Tom C</span>
                         <span class="rec-match">94% compatível</span>
                     </div>
                     <div class="rec-card">
-                        <div class="rec-avatar">2</div>
                         <span class="rec-card-nome">Artista 2</span>
                         <span class="rec-card-info">Funk · 128 BPM · Tom C#</span>
                         <span class="rec-match">89% compatível</span>
                     </div>
                     <div class="rec-card">
-                        <div class="rec-avatar">3</div>
                         <span class="rec-card-nome">Artista 3</span>
                         <span class="rec-card-info">Rap · 95 BPM · Tom D</span>
                         <span class="rec-match">85% compatível</span>
@@ -143,13 +140,13 @@
             </div>
 
             <div class="rec-painel rec-salvar">
-                <label for="rec-nome">Nome para recomendação:</label>
-                <input type="text" id="rec-nome" placeholder="Ex.: Feat para o single de verão">
-                <p id="rec-erro" class="rec-erro rec-escondido">Dê um nome para salvar a recomendação.</p>
+                <label for="input_nome_recomendacao">Nome para recomendação:</label>
+                <input type="text" id="input_nome_recomendacao" placeholder="Ex.: Feat para o single de verão">
+                <p id="mensagem_recomendacao" class="rec-erro" style="display: none;">Dê um nome para salvar a recomendação.</p>
 
                 <div class="rec-acoes">
-                    <button type="button" id="rec-btn-salvar" class="rec-botao">Salvar recomendação</button>
-                    <button type="button" id="rec-btn-nova" class="rec-botao rec-botao-secundario">Nova busca</button>
+                    <button type="button" class="rec-botao" onclick="salvarRecomendacao()">Salvar recomendação</button>
+                    <button type="button" class="rec-botao rec-botao-secundario" onclick="novaBusca()">Nova busca</button>
                 </div>
             </div>
         </section>
