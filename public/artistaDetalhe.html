@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do artista | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/recomendacao.css">
+    <link rel="stylesheet" href="./css/artistaDetalhe.css">
+    <script src="./js/artistaDetalhe.js"></script>
+</head>
+
+<body class="rec-page" onload="carregarArtista()">
+    <aside class="sidebar">
+        <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
+        <hr>
+
+        <ul>
+            <li><a href="./dashboard.html">Dashboard</a></li>
+            <li><a href="./listaMusica.html">Músicas</a></li>
+            <li id="selected"><a href="./recomendacao.html">Recomendação</a></li>
+        </ul>
+
+        <div class="perfil">
+            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <div class="usuario" id="nome-usuario">Yasmin</div>
+        </div>
+    </aside>
+
+    <main class="rec-content">
+        <a href="./recomendacao.html" class="art-voltar">← Voltar para recomendações</a>
+
+        <div class="art-cabecalho">
+            <div>
+                <p class="art-rotulo">DETALHES DO ARTISTA</p>
+                <h1 class="art-nome" id="nome_artista"></h1>
+                <p class="art-info" id="info_artista"></p>
+                <div class="art-tags" id="tags_artista"></div>
+            </div>
+
+            <div class="rec-avatar art-foto" id="avatar_artista"></div>
+        </div>
+
+        <hr class="art-linha">
+
+        <h2 class="art-rotulo">DESEMPENHO NAS PLATAFORMAS</h2>
+        <div class="art-stats">
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_streams"></span>
+                <span class="art-stat-nome">Streams</span>
+                <span class="art-stat-fonte">Spotify</span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_views"></span>
+                <span class="art-stat-nome">Visualizações</span>
+                <span class="art-stat-fonte">YouTube</span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_curtidas"></span>
+                <span class="art-stat-nome">Curtidas</span>
+                <span class="art-stat-fonte">YouTube</span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_comentarios"></span>
+                <span class="art-stat-nome">Comentários</span>
+                <span class="art-stat-fonte">YouTube</span>
+            </div>
+        </div>
+
+        <hr class="art-linha">
+
+        <h2 class="art-rotulo">PERFIL SONORO</h2>
+        <div class="art-perfil" id="perfil_sonoro"></div>
+
+        <div class="art-infos">
+            <div class="art-stat">
+                <span class="art-stat-fonte">TEMPO</span>
+                <span class="art-stat-valor" id="info_bpm"></span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-fonte">DURAÇÃO</span>
+                <span class="art-stat-valor" id="info_duracao"></span>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
