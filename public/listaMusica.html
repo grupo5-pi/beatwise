@@ -48,7 +48,7 @@
                     </svg>
                 </span>
 
-                <input id="pesquisa" type="text" placeholder="Buscar música ou artista..." oninput="pesquisar()">
+                <input id="pesquisa" type="text" placeholder="Buscar por música, artista ou álbum..." oninput="pesquisar()">
             </div>
 
             <div class="lista">
@@ -89,7 +89,7 @@
 
     <script>
         const colunas = document.querySelectorAll(".lista .coluna");
-        let musicas = retonarMusicas();
+        let musicas = retornarMusicas();
 
         let paginaAtual = 1;
         const totalPaginas = Math.ceil(musicas.length / 10);
@@ -173,23 +173,24 @@
 
         <!-- Campo de pesquisa -->
         function pesquisar() {
+            musicas = retornarMusicas();
             let palavraPesquisa = pesquisa.value.toLowerCase();
 
             if (palavraPesquisa == null || palavraPesquisa.trim() == '') {
-                musicas = retonarMusicas();
+                musicas = retornarMusicas();
             }
 
             let musicasFiltradas = [];
             for (let i = 0; i < musicas.length; i++) {
                 if (Array.isArray(musicas[i].artistas)) {
                     for (let j = 0; j < musicas[i].artistas.length; j++) {
-                        if (musicas[i].titulo.toLowerCase().includes(palavraPesquisa) || musicas[i].artistas[j].toLowerCase().includes(palavraPesquisa)) {
+                        if (musicas[i].titulo.toLowerCase().includes(palavraPesquisa) || musicas[i].artistas[j].toLowerCase().includes(palavraPesquisa) || musicas[i].album.toLowerCase().includes(palavraPesquisa)) {
                             musicasFiltradas.push(musicas[i])
                             break
                         }
                     }
                 } else {
-                    if (musicas[i].titulo.toLowerCase().includes(palavraPesquisa) || musicas[i].artistas.toLowerCase().includes(palavraPesquisa)) {
+                    if (musicas[i].titulo.toLowerCase().includes(palavraPesquisa) || musicas[i].artistas.toLowerCase().includes(palavraPesquisa) || musicas[i].album.toLowerCase().includes(palavraPesquisa)) {
                         musicasFiltradas.push(musicas[i])
                     }
                 }

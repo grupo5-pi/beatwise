@@ -1,5 +1,5 @@
 // Dados mockados //
-function retonarMusicas() {
+function retornarMusicas() {
     return [
         {
             "id": 1,
