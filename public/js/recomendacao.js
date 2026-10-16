@@ -17,3 +17,8 @@ function salvarRecomendacao() {
         window.location.href = 'featsCadastrados.html';
     }
 }
+
+function abrirArtista(posicao) {
+    sessionStorage.ARTISTA_SELECIONADO = posicao;
+    window.location.href = 'artistaDetalhe.html';
+}
