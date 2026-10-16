@@ -9,10 +9,10 @@
 
     <link rel="stylesheet" href="./css/listas.css">
     <link rel="stylesheet" href="./css/style.css">
-    <script src="./js/listas.js"></script>
+    <script src="./js/musicas.js"></script>
 </head>
 
-<body class="listas" onload="paginacao() ">
+<body class="listas" onload="iniciarPagina()">
     <aside class="sidebar">
         <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
         <hr>
@@ -20,7 +20,7 @@
         <ul>
             <li><a>Dashboard</a></li>
             <li id="selected"><a>Músicas</a></li>
-            <li><a>Artistas</a></li>
+            <li><a>artist</a></li>
         </ul>
 
         <div class="perfil">
@@ -48,7 +48,8 @@
                     </svg>
                 </span>
 
-                <input id="pesquisa" type="text" placeholder="Buscar por música, artista ou álbum..." oninput="pesquisar()">
+                <input id="pesquisa" type="text" placeholder="Buscar por música, artista ou álbum..."
+                    oninput="pesquisar()">
             </div>
 
             <div class="lista">
@@ -88,11 +89,19 @@
     </div>
 
     <script>
-        const colunas = document.querySelectorAll(".lista .coluna");
-        let musicas = retornarMusicas();
 
+        let musicas = [];
         let paginaAtual = 1;
-        const totalPaginas = Math.ceil(musicas.length / 10);
+        let totalPaginas = 0;
+
+        async function iniciarPagina() {
+            musicas = await retornarMusicas();
+            totalPaginas = Math.ceil(musicas.length / 10);
+            console.log(musicas);
+            console.log(musicas.length)
+
+            paginacao();
+        }
 
         function avancarPagina() {
             paginaAtual++;
@@ -130,6 +139,8 @@
             return celula;
         }
 
+        const colunas = document.querySelectorAll(".lista .coluna");
+
         function renderizarMusica() {
             // limpar os grids existentes para não atrapalhar a renderização
             colunas.forEach((coluna) => {
@@ -137,19 +148,19 @@
                     .forEach((linha) => linha.remove());
             });
 
-            const itens = musicas.length > 10 ? 10 : musicas.length;
+            const itens = 10;
             const inicio = (paginaAtual - 1) * itens;
-            const fim = inicio + itens;
+            const fim = Math.min(inicio + itens, musicas.length);
             document.getElementById("exibicao").textContent = `Exibindo ${inicio + 1}-${fim} de ${musicas.length}`;
 
             for (let i = inicio; i < fim; i++) {
                 const musica = tratarMusica(i);
 
-                colunas[0].appendChild(criarCelula(musica.titulo));
-                colunas[1].appendChild(criarCelula(musica.artistas));
+                colunas[0].appendChild(criarCelula(musica.track));
+                colunas[1].appendChild(criarCelula(musica.artist));
                 colunas[2].appendChild(criarCelula(musica.album));
-                colunas[3].appendChild(criarCelula(formatarReproducoes(musica.youtube)));
-                colunas[4].appendChild(criarCelula(formatarReproducoes(musica.spotify)));
+                colunas[3].appendChild(criarCelula(formatarReproducoes(musica.views)));
+                colunas[4].appendChild(criarCelula(formatarReproducoes(musica.stream)));
             };
         }
 
@@ -163,34 +174,34 @@
             const musica = musicas[posicao];
 
             return {
-                titulo: musica.titulo != null ? musica.titulo : "Título não encontrado",
-                artistas: Array.isArray(musica.artistas) ? musica.artistas.join(", ") : musica.artistas ?? "Artista não encontrado",
+                track: musica.track != null ? musica.track : "Título não encontrado",
+                artist: Array.isArray(musica.artist) ? musica.artist.join(", ") : musica.artist ?? "Artista não encontrado",
                 album: musica.album != null ? musica.album : "Álbum não encontrado",
-                youtube: musica.viewsYoutube != null ? musica.viewsYoutube : 0,
-                spotify: musica.streamsSpotify != null ? musica.streamsSpotify : 0,
+                views: musica.views != null ? musica.views : 0,
+                stream: musica.stream != null ? musica.stream : 0,
             }
         }
 
-        <!-- Campo de pesquisa -->
-        function pesquisar() {
-            musicas = retornarMusicas();
+        // Campo de pesquisa
+        async function pesquisar() {
+            musicas = await retornarMusicas()
             let palavraPesquisa = pesquisa.value.toLowerCase();
 
             if (palavraPesquisa == null || palavraPesquisa.trim() == '') {
-                musicas = retornarMusicas();
+                musicas = await retornarMusicas();
             }
 
             let musicasFiltradas = [];
             for (let i = 0; i < musicas.length; i++) {
-                if (Array.isArray(musicas[i].artistas)) {
-                    for (let j = 0; j < musicas[i].artistas.length; j++) {
-                        if (musicas[i].titulo.toLowerCase().includes(palavraPesquisa) || musicas[i].artistas[j].toLowerCase().includes(palavraPesquisa) || musicas[i].album.toLowerCase().includes(palavraPesquisa)) {
+                if (Array.isArray(musicas[i].artist)) {
+                    for (let j = 0; j < musicas[i].artist.length; j++) {
+                        if (musicas[i].track.toLowerCase().includes(palavraPesquisa) || musicas[i].artist[j].toLowerCase().includes(palavraPesquisa) || musicas[i].album.toLowerCase().includes(palavraPesquisa)) {
                             musicasFiltradas.push(musicas[i])
                             break
                         }
                     }
                 } else {
-                    if (musicas[i].titulo.toLowerCase().includes(palavraPesquisa) || musicas[i].artistas.toLowerCase().includes(palavraPesquisa) || musicas[i].album.toLowerCase().includes(palavraPesquisa)) {
+                    if (musicas[i].track.toLowerCase().includes(palavraPesquisa) || musicas[i].artist.toLowerCase().includes(palavraPesquisa) || musicas[i].album.toLowerCase().includes(palavraPesquisa)) {
                         musicasFiltradas.push(musicas[i])
                     }
                 }
