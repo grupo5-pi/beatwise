@@ -117,8 +117,7 @@ body {
 .lista .coluna {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    height: auto;
     width: 100%;
     border-radius: 20px;
     color: black;
@@ -128,11 +127,12 @@ body {
 .lista .coluna .grids {
     display: flex;
     align-items: center;
-    height: 100%;
+    height: 45px;
     margin: 0;
     padding-left: 10px;
     border-bottom: solid 1px var(--color-border);
     color: var(--color-text-secondary);
+
 }
 
 .lista .primary .grids {
@@ -142,12 +142,13 @@ body {
 .lista .coluna .top {
     display: flex;
     align-items: center;
-    height: 100%;
+    height: 50px;
     margin: 0;
     padding-left: 10px;
     border-bottom: solid 1px var(--color-border-strong);
     color: var(--color-bw-accent);
     background-color: var(--color-bw-surface);
+    font-size: 20px;
 }
 
 .lista .coluna .left {

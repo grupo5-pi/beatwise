@@ -12,7 +12,7 @@
     <script src="./js/listas.js"></script>
 </head>
 
-<body class="listas">
+<body class="listas" onload="paginacao() ">
     <aside class="sidebar">
         <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
         <hr>
@@ -54,78 +54,110 @@
             <div class="lista">
                 <div class="coluna primary">
                     <div class="top left">Música</div>
-                    <div class="grids">Música 1</div>
-                    <div class="grids">Música 2</div>
-                    <div class="grids">Música 3</div>
-                    <div class="grids">Música 4</div>
-                    <div class="grids">Música 5</div>
-                    <div class="grids">Música 6</div>
-                    <div class="grids">Música 7</div>
-                    <div class="grids">Música 8</div>
-                    <div class="grids">Música 9</div>
-                    <div class="grids">Música 10</div>
+
                 </div>
                 <div class="coluna">
                     <div class="top">Artista(s)</div>
-                    <div class="grids">Artista 1</div>
-                    <div class="grids">Artista 2</div>
-                    <div class="grids">Artista 3</div>
-                    <div class="grids">Artista 4</div>
-                    <div class="grids">Artista 5</div>
-                    <div class="grids">Artista 6</div>
-                    <div class="grids">Artista 7</div>
-                    <div class="grids">Artista 8</div>
-                    <div class="grids">Artista 9</div>
-                    <div class="grids">Artista 10</div>
+
                 </div>
                 <div class="coluna">
                     <div class="top">Álbum</div>
-                    <div class="grids">Álbum 1</div>
-                    <div class="grids">Álbum 2</div>
-                    <div class="grids">Álbum 3</div>
-                    <div class="grids">Álbum 4</div>
-                    <div class="grids">Álbum 5</div>
-                    <div class="grids">Álbum 6</div>
-                    <div class="grids">Álbum 7</div>
-                    <div class="grids">Álbum 8</div>
-                    <div class="grids">Álbum 9</div>
-                    <div class="grids">Álbum 10</div>
+
                 </div>
                 <div class="coluna">
                     <div class="top">Youtube</div>
-                    <div class="grids">Views 1</div>
-                    <div class="grids">Views 2</div>
-                    <div class="grids">Views 3</div>
-                    <div class="grids">Views 4</div>
-                    <div class="grids">Views 5</div>
-                    <div class="grids">Views 6</div>
-                    <div class="grids">Views 7</div>
-                    <div class="grids">Views 8</div>
-                    <div class="grids">Views 9</div>
-                    <div class="grids">Views 10</div>
+
                 </div>
                 <div class="coluna">
                     <div class="top right">Spotify</div>
-                    <div class="grids">Streamings 1</div>
-                    <div class="grids">Streamings 2</div>
-                    <div class="grids">Streamings 3</div>
-                    <div class="grids">Streamings 4</div>
-                    <div class="grids">Streamings 5</div>
-                    <div class="grids">Streamings 6</div>
-                    <div class="grids">Streamings 7</div>
-                    <div class="grids">Streamings 8</div>
-                    <div class="grids">Streamings 9</div>
-                    <div class="grids">Streamings 10</div>
+
                 </div>
             </div>
 
             <div class="paginacao">
-                <button id="anterior">Anterior</button>
+                <button id="anterior" onclick="voltarPagina()">❮</button>
                 <span id="pagina">Página 1</span>
-                <button id="proxima">Próxima</button>
+                <button id="proxima" onclick="avancarPagina()">❯</button>
             </div>
         </div>
     </div>
+
+    <script>
+        const colunas = document.querySelectorAll(".lista .coluna");
+        const musicas = retonarMusicas();
+
+        let paginaAtual = 1;
+        const totalPaginas = Math.ceil(musicas.length / 10);
+
+        function avancarPagina() {
+            paginaAtual++;
+            paginacao();
+        }
+
+        function voltarPagina() {
+            paginaAtual--;
+            paginacao();
+        }
+
+        function paginacao() {
+            document.getElementById("pagina").textContent = `Página ${paginaAtual} de ${totalPaginas}`;
+
+            if (paginaAtual == 1) {
+                document.getElementById("anterior").disabled = true;
+                document.getElementById("anterior").classList.add('disabled');
+            } else if (paginaAtual == totalPaginas) {
+                document.getElementById("proxima").disabled = true;
+                document.getElementById("proxima").classList.add('disabled');
+            } else {
+                document.getElementById("anterior").classList.remove('disabled');
+                document.getElementById("anterior").disabled = false;
+                document.getElementById("proxima").classList.remove('disabled');
+                document.getElementById("proxima").disabled = false;
+            }
+
+            renderizarMusica();
+        }
+
+        function criarCelula(texto) {
+            const celula = document.createElement("div");
+            celula.classList.add("grids");
+            celula.textContent = texto;
+            return celula;
+        }
+
+        function renderizarMusica() {
+            // limpar os grids existentes para não atrapalhar a renderização
+            colunas.forEach((coluna) => {
+                coluna.querySelectorAll(".grids")
+                    .forEach((linha) => linha.remove());
+            });
+
+            const inicio = (paginaAtual - 1) * 10;
+            const fim = inicio + 10;
+
+            for (let i = inicio; i < fim; i++) {
+                const musica = tratarMusica(i);
+
+                colunas[0].appendChild(criarCelula(musica.titulo));
+                colunas[1].appendChild(criarCelula(musica.artistas));
+                colunas[2].appendChild(criarCelula(musica.album));
+                colunas[3].appendChild(criarCelula(musica.youtube));
+                colunas[4].appendChild(criarCelula(musica.spotify));
+            };
+        }
+
+        function tratarMusica(posicao) {
+            const musica = musicas[posicao];
+
+            return {
+                titulo: musica.titulo != null ? musica.titulo : "Título não encontrado",
+                artistas: Array.isArray(musica.artistas) ? musica.artistas.join(", ") : musica.artistas ?? "Artista não encontrado",
+                album: musica.album != null ? musica.album : "Álbum não encontrado",
+                youtube: musica.viewsYoutube != null ? musica.viewsYoutube : 0,
+                spotify: musica.streamsSpotify != null ? musica.streamsSpotify : 0,
+            }
+        }
+    </script>
 </body>
 
 </html>
