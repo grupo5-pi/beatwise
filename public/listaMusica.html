@@ -48,7 +48,7 @@
                     </svg>
                 </span>
 
-                <input type="text" placeholder="Buscar música ou artista...">
+                <input id="pesquisa" type="text" placeholder="Buscar música ou artista..." oninput="pesquisar()">
             </div>
 
             <div class="lista">
@@ -89,7 +89,7 @@
 
     <script>
         const colunas = document.querySelectorAll(".lista .coluna");
-        const musicas = retonarMusicas();
+        let musicas = retonarMusicas();
 
         let paginaAtual = 1;
         const totalPaginas = Math.ceil(musicas.length / 10);
@@ -137,8 +137,9 @@
                     .forEach((linha) => linha.remove());
             });
 
-            const inicio = (paginaAtual - 1) * 10;
-            const fim = inicio + 10;
+            const itens = musicas.length > 10 ? 10 : musicas.length;
+            const inicio = (paginaAtual - 1) * itens;
+            const fim = inicio + itens;
             document.getElementById("exibicao").textContent = `Exibindo ${inicio + 1}-${fim} de ${musicas.length}`;
 
             for (let i = inicio; i < fim; i++) {
@@ -168,6 +169,34 @@
                 youtube: musica.viewsYoutube != null ? musica.viewsYoutube : 0,
                 spotify: musica.streamsSpotify != null ? musica.streamsSpotify : 0,
             }
+        }
+
+        <!-- Campo de pesquisa -->
+        function pesquisar() {
+            let palavraPesquisa = pesquisa.value.toLowerCase();
+
+            if (palavraPesquisa == null || palavraPesquisa.trim() == '') {
+                musicas = retonarMusicas();
+            }
+
+            let musicasFiltradas = [];
+            for (let i = 0; i < musicas.length; i++) {
+                if (Array.isArray(musicas[i].artistas)) {
+                    for (let j = 0; j < musicas[i].artistas.length; j++) {
+                        if (musicas[i].titulo.toLowerCase().includes(palavraPesquisa) || musicas[i].artistas[j].toLowerCase().includes(palavraPesquisa)) {
+                            musicasFiltradas.push(musicas[i])
+                            break
+                        }
+                    }
+                } else {
+                    if (musicas[i].titulo.toLowerCase().includes(palavraPesquisa) || musicas[i].artistas.toLowerCase().includes(palavraPesquisa)) {
+                        musicasFiltradas.push(musicas[i])
+                    }
+                }
+            }
+
+            musicas = musicasFiltradas;
+            paginacao();
         }
     </script>
 </body>
