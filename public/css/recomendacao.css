@@ -287,3 +287,7 @@
 .rec-escondido {
     display: none !important;
 }
+
+#etapa_resultado .rec-card {
+    cursor: pointer;
+}
