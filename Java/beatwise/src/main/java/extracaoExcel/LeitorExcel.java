@@ -43,7 +43,7 @@ public class LeitorExcel {
                 Double danceability = row.getCell(7) != null ? tratarDecimal(row.getCell(7).getNumericCellValue()) : null;
                 Double energy = row.getCell(8) != null ? tratarDecimal(row.getCell(8).getNumericCellValue()) : null;
                 Integer key = row.getCell(9) != null ? (int) row.getCell(9).getNumericCellValue() / 10 : null;
-                Double loudness = row.getCell(10) != null ? tratarDecimal(row.getCell(10).getNumericCellValue()) : null;
+                Double loudness = row.getCell(10) != null ? row.getCell(10).getNumericCellValue() : null;
                 Double speechiness = row.getCell(11) != null ? tratarDecimal(row.getCell(11).getNumericCellValue()) : null;
                 Double acousticness = row.getCell(12) != null ? tratarDecimal(row.getCell(12).getNumericCellValue()) : null;
                 Double instrumentalness = row.getCell(13) != null ? tratarDecimal(row.getCell(13).getNumericCellValue()) : null;
