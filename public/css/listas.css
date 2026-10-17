@@ -16,7 +16,7 @@
     --color-bw-violet: #6D28D9;
     --color-bw-indigo: #4F46E5;
     --color-bw-accent: #A855F7;
-    
+
     --color-bg-primary: #0A0A0F;
     --color-bg-sidebar: #0D0718;
     --color-bg-card: #15131D;
@@ -30,7 +30,7 @@
     --color-text-primary: #F5F3FF;
     --color-text-secondary: #AAA3BC;
 
-     --font-primary: 'Inter', sans-serif;
+    --font-primary: 'Inter', sans-serif;
 }
 
 body {
@@ -137,7 +137,6 @@ body {
     padding-left: 10px;
     border-bottom: solid 1px var(--color-border);
     color: var(--color-text-secondary);
-
 }
 
 .lista .primary .grids {
@@ -164,7 +163,7 @@ body {
     border-radius: 0 12px 0 0;
 }
 
-/* Paginação */ 
+/* Paginação */
 footer {
     display: flex;
     align-items: center;
@@ -202,10 +201,10 @@ footer {
     position: absolute;
     display: flex;
     flex-direction: column;
-    height: 65%;
+    height: auto;
     width: 45%;
     background-color: var(--color-bg-card);
-    border: solid 1px var(--color-border);
+    border: solid 2px var(--color-border-strong);
     border-radius: 17px;
     color: var(--color-text-secondary);
     font-size: 13px;
@@ -231,6 +230,24 @@ footer {
     font-weight: 800;
 }
 
+.sair {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 15px;
+    padding: 9px 10px;
+    border: solid 1px var(--color-border-strong);
+    border-radius: 5px;
+    background-color: var(--color-border);
+    height: auto;
+    width: auto;
+}
+
+.sair a {
+    font-weight: bold;
+    color: var(--color-text-secondary);
+}
+
 .info-musicas hr {
     border: solid 0.1px var(--color-border-strong);
     margin: 15px;
@@ -240,13 +257,14 @@ footer {
     color: var(--color-text-primary);
 }
 
-.kpis {
+/* Desempenho */
+.kpis-desempenho {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     margin: 10px 10px 0 10px;
 }
 
-.kpis .kpi {
+.kpi {
     display: flex;
     flex-direction: column;
     margin: 5px;
@@ -255,15 +273,15 @@ footer {
     padding: 5px 0;
 }
 
-.kpis .kpi a {
-   margin: 1.3px 8px;
-   color: var(--color-text-secondary);
-   font-size: 12px;
+.kpi a {
+    margin: 1.3px 8px;
+    color: var(--color-text-secondary);
+    font-size: 12px;
 }
 
-.kpis .kpi .dado {
-   margin: 3px 8px;
-   font-size: 21px;
+.kpi .dado {
+    margin: 3px 8px;
+    font-size: 21px;
 }
 
 .info-musicas svg {
@@ -271,4 +289,47 @@ footer {
     height: 18px;
     color: var(--color-border-strong);
     margin: 3px 8px;
+}
+
+/* Perfil */
+.kpis-perfil {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 10px 10px 0 10px;
+}
+
+.kpis-perfil .kpi a {
+    margin: 4.3px 8px;
+}
+
+.kpis-perfil .kpi .dado {
+    margin: 5px 8px 8px 8px;
+}
+
+/* Links spotify e youtube */
+.links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 10px;
+}
+
+.link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    background-color: var(--color-border);
+    color: var(--color-text-primary);
+    border-radius: 6px;
+}
+
+.link:hover {
+    background-color: var(--color-bw-accent);
+    transition: 0.5s ease;
+}
+
+.link a {
+    margin: 15px;
+    font-size: 14px;
+    font-weight: 500;
 }
