@@ -177,12 +177,12 @@
         </div>
 
         <div class="links">
-            <div class="link">
-                <a>Abrir no Spotify</a>
+            <div class="link" >
+                <a id="urlSpotify">Abrir no Spotify</a>
             </div>
 
             <div class="link">
-                <a>Ver no youtube</a>
+                <a id="urlYoutube">Ver no youtube</a>
             </div>
         </div>
 
@@ -346,19 +346,25 @@
             let id = evento.currentTarget.id;
             let musica = tratarMusica(id);
 
+            // Titulo
             track.innerHTML = musica.track;
             artist.innerHTML = musica.artist;
 
+            // Desempenho
             streams.innerHTML = formatar(musica.stream);
             views.innerHTML = formatar(musica.views);
             comments.innerHTML = formatar(musica.comments);
             likes.innerHTML = formatar(musica.likes);
 
+            // Perfil sonoro
             bpm.innerHTML = (musica.tempo / 1000).toFixed(1).replace('.', ',') + ' BPM';
             licensed.innerHTML = musica.licensed == true ? 'Sim' : 'Não';
-
             let duracao = formatarDuracao(musica.durationMs);
             duration.innerHTML = duracao.replace(':', 'min ') + "s";
+
+            // Links
+            document.getElementById("urlSpotify").href = musica.urlSpotify
+            document.getElementById("urlYoutube").href = musica.urlYoutube
 
             document.getElementById("modal").style.display = 'flex';
         }
