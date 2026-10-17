@@ -9,16 +9,16 @@ public class Musica {
     private String album;
     private String albumType;
     private String uri;
-    private Integer danceability;
-    private Integer energy;
+    private Double danceability;
+    private Double energy;
     private Integer key;
-    private Integer loudness;
-    private Integer speechiness;
+    private Double loudness;
+    private Double speechiness;
     private Double acousticness;
     private Double instrumentalness;
-    private Integer liveness;
-    private Integer valence;
-    private Integer tempo;
+    private Double liveness;
+    private Double valence;
+    private Double tempo;
     private Integer durationMs;
     private String urlYoutube;
     private String title;
@@ -34,7 +34,7 @@ public class Musica {
     public Musica() {
     }
 
-    public Musica(Integer id, String artist, String urlSpotify, String track, String album, String albumType, String uri, Integer danceability, Integer energy, Integer key, Integer loudness, Integer speechiness, Double acousticness, Double instrumentalness, Integer liveness, Integer valence, Integer tempo, Integer durationMs, String urlYoutube, String title, String channel, Long views, Integer likes, Integer comments, String description, Boolean licensed, Boolean officialVideo, Long stream) {
+    public Musica(Integer id, String artist, String urlSpotify, String track, String album, String albumType, String uri, Double danceability, Double energy, Integer key, Double loudness, Double speechiness, Double acousticness, Double instrumentalness, Double liveness, Double valence, Double tempo, Integer durationMs, String urlYoutube, String title, String channel, Long views, Integer likes, Integer comments, String description, Boolean licensed, Boolean officialVideo, Long stream) {
         this.id = id;
         this.artist = artist;
         this.urlSpotify = urlSpotify;
@@ -121,19 +121,19 @@ public class Musica {
         this.uri = uri;
     }
 
-    public Integer getDanceability() {
+    public Double getDanceability() {
         return danceability;
     }
 
-    public void setDanceability(Integer danceability) {
+    public void setDanceability(Double danceability) {
         this.danceability = danceability;
     }
 
-    public Integer getEnergy() {
+    public Double getEnergy() {
         return energy;
     }
 
-    public void setEnergy(Integer energy) {
+    public void setEnergy(Double energy) {
         this.energy = energy;
     }
 
@@ -145,19 +145,19 @@ public class Musica {
         this.key = key;
     }
 
-    public Integer getLoudness() {
+    public Double getLoudness() {
         return loudness;
     }
 
-    public void setLoudness(Integer loudness) {
+    public void setLoudness(Double loudness) {
         this.loudness = loudness;
     }
 
-    public Integer getSpeechiness() {
+    public Double getSpeechiness() {
         return speechiness;
     }
 
-    public void setSpeechiness(Integer speechiness) {
+    public void setSpeechiness(Double speechiness) {
         this.speechiness = speechiness;
     }
 
@@ -177,27 +177,27 @@ public class Musica {
         this.instrumentalness = instrumentalness;
     }
 
-    public Integer getLiveness() {
+    public Double getLiveness() {
         return liveness;
     }
 
-    public void setLiveness(Integer liveness) {
+    public void setLiveness(Double liveness) {
         this.liveness = liveness;
     }
 
-    public Integer getValence() {
+    public Double getValence() {
         return valence;
     }
 
-    public void setValence(Integer valence) {
+    public void setValence(Double valence) {
         this.valence = valence;
     }
 
-    public Integer getTempo() {
+    public Double getTempo() {
         return tempo;
     }
 
-    public void setTempo(Integer tempo) {
+    public void setTempo(Double tempo) {
         this.tempo = tempo;
     }
 
