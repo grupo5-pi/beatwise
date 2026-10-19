@@ -40,23 +40,23 @@ public class LeitorExcel {
                 String album = row.getCell(4) != null ? row.getCell(4).getStringCellValue() : null;
                 String albumType = row.getCell(5) != null ? row.getCell(5).getStringCellValue() : null;
                 String uri = row.getCell(6) != null ? row.getCell(6).getStringCellValue() : null;
-                Integer danceability = row.getCell(7) != null ? (int) row.getCell(7).getNumericCellValue() : null;
-                Integer energy = row.getCell(8) != null ? (int) row.getCell(8).getNumericCellValue() : null;
-                Integer key = row.getCell(9) != null ? (int) row.getCell(9).getNumericCellValue() : null;
-                Integer loudness = row.getCell(10) != null ? (int) row.getCell(10).getNumericCellValue() : null;
-                Integer speechiness = row.getCell(11) != null ? (int) row.getCell(11).getNumericCellValue() : null;
-                Double acousticness = row.getCell(12) != null ? (double) row.getCell(12).getNumericCellValue() : null;
-                Double instrumentalness = row.getCell(13) != null ? (double) row.getCell(13).getNumericCellValue() : null;
-                Integer liveness = row.getCell(14) != null ? (int) row.getCell(14).getNumericCellValue() : null;
-                Integer valence = row.getCell(15) != null ? (int) row.getCell(15).getNumericCellValue() : null;
-                Integer tempo = row.getCell(16) != null ? (int) row.getCell(16).getNumericCellValue() : null;
-                Integer durationMs = row.getCell(17) != null ? (int) row.getCell(17).getNumericCellValue() : null;
+                Double danceability = row.getCell(7) != null ? tratarDecimal(row.getCell(7).getNumericCellValue()) : null;
+                Double energy = row.getCell(8) != null ? tratarDecimal(row.getCell(8).getNumericCellValue()) : null;
+                Integer key = row.getCell(9) != null ? (int) row.getCell(9).getNumericCellValue() / 10 : null;
+                Double loudness = row.getCell(10) != null ? row.getCell(10).getNumericCellValue() : null;
+                Double speechiness = row.getCell(11) != null ? tratarDecimal(row.getCell(11).getNumericCellValue()) : null;
+                Double acousticness = row.getCell(12) != null ? tratarDecimal(row.getCell(12).getNumericCellValue()) : null;
+                Double instrumentalness = row.getCell(13) != null ? tratarDecimal(row.getCell(13).getNumericCellValue()) : null;
+                Double liveness = row.getCell(14) != null ? tratarDecimal(row.getCell(14).getNumericCellValue()) : null;
+                Double valence = row.getCell(15) != null ? tratarDecimal(row.getCell(15).getNumericCellValue()) : null;
+                Double tempo = row.getCell(16) != null ? row.getCell(16).getNumericCellValue() / 1000 : null;
+                Integer durationMs = row.getCell(17) != null ? (int) row.getCell(17).getNumericCellValue() / 10 : null;
                 String urlYoutube = row.getCell(18) != null ? row.getCell(18).getStringCellValue() : null;
                 String title = row.getCell(19) != null ? row.getCell(19).getStringCellValue() : null;
                 String channel = row.getCell(20) != null ? row.getCell(20).getStringCellValue() : null;
-                Long views = row.getCell(21) != null ? (long) row.getCell(21).getNumericCellValue() : null;
-                Integer likes = row.getCell(22) != null ? (int) row.getCell(22).getNumericCellValue() : null;
-                Integer comments = row.getCell(23) != null ? (int) row.getCell(23).getNumericCellValue() : null;
+                Long views = row.getCell(21) != null ? (long) row.getCell(21).getNumericCellValue() / 10 : null;
+                Integer likes = row.getCell(22) != null ? (int) row.getCell(22).getNumericCellValue() / 10 : null;
+                Integer comments = row.getCell(23) != null ? (int) row.getCell(23).getNumericCellValue() / 10 : null;
                 String description = row.getCell(24) != null ? row.getCell(24).getStringCellValue() : null;
                 Boolean licensed = row.getCell(25) != null ? row.getCell(25).getBooleanCellValue() : null;
                 Boolean officialVideo = row.getCell(26) != null ? row.getCell(26).getBooleanCellValue() : null;
@@ -88,5 +88,15 @@ public class LeitorExcel {
 
     private void printarLinhas() {
         System.out.println("-".repeat(20));
+    }
+
+    private Double tratarDecimal(Double valor) {
+        if (valor < 0) {
+            return valor;
+        }
+        while (valor >= 1) {
+            valor /= 10.0;
+        }
+        return valor;
     }
 }

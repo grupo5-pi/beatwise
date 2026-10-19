@@ -177,7 +177,7 @@
         </div>
 
         <div class="links">
-            <div class="link" >
+            <div class="link">
                 <a id="urlSpotify">Abrir no Spotify</a>
             </div>
 
@@ -216,17 +216,22 @@
         function paginacao() {
             document.getElementById("pagina").textContent = `Página ${paginaAtual} de ${totalPaginas}`;
 
-            if (paginaAtual == 1) {
+            document.getElementById("anterior").classList.remove('disabled');
+            document.getElementById("anterior").disabled = false;
+            document.getElementById("proxima").classList.remove('disabled');
+            document.getElementById("proxima").disabled = false;
+
+            if (totalPaginas == 1) {
+                document.getElementById("anterior").classList.add('disabled');
+                document.getElementById("anterior").disabled = true;
+                document.getElementById("proxima").classList.add('disabled');
+                document.getElementById("proxima").disabled = true;
+            } else if (paginaAtual == 1) {
                 document.getElementById("anterior").disabled = true;
                 document.getElementById("anterior").classList.add('disabled');
             } else if (paginaAtual == totalPaginas) {
                 document.getElementById("proxima").disabled = true;
                 document.getElementById("proxima").classList.add('disabled');
-            } else {
-                document.getElementById("anterior").classList.remove('disabled');
-                document.getElementById("anterior").disabled = false;
-                document.getElementById("proxima").classList.remove('disabled');
-                document.getElementById("proxima").disabled = false;
             }
 
             renderizarMusica();
@@ -334,6 +339,7 @@
             }
 
             musicas = musicasFiltradas;
+            totalPaginas = Math.ceil(musicas.length / 10);
             paginacao();
         }
 
