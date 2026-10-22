@@ -63,3 +63,7 @@ function carregarArtista() {
             </div>`;
     }
 }
+
+function voltarParaResultado() {
+    sessionStorage.VOLTAR_PARA_RESULTADO = "sim";
+}

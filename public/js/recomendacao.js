@@ -22,3 +22,10 @@ function abrirArtista(posicao) {
     sessionStorage.ARTISTA_SELECIONADO = posicao;
     window.location.href = 'artistaDetalhe.html';
 }
+
+function verificarResultado() {
+    if (sessionStorage.VOLTAR_PARA_RESULTADO == "sim") {
+        sessionStorage.removeItem("VOLTAR_PARA_RESULTADO");
+        gerarRecomendacao();
+    }
+}
