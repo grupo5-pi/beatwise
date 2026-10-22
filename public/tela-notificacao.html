@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuração de Notificações</title>
+    <link rel="stylesheet" href="css/tela-notificacao.css">
+</head>
+<body class="listas">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+        <img src="./assets/imgs/banner.jpeg" alt="banner da BeatWise" class="logo-banner">
+        <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
+        <hr>
+
+        <ul>
+            <li><img src="assets/imgs/dashboard-white.svg" alt="" class="icone"><a class="texto">Dashboard</a></li>
+            <li ><img src="assets/imgs/music-white.svg" alt="" class="icone"><a class="texto">Músicas</a></li>
+            <li id="selected"><img src="assets/imgs/microphone-white.svg" alt="" class="icone"><a class="texto">Artistas</a></li>
+        </ul>
+
+        <div class="perfil">
+            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <div class="usuario" id="nome-usuario">Mateus</div>
+        </div>
+    </aside>
+
+    <div class="content">
+
+    </div>
+</body>
+</html>
+<script>
+const sidebar = document.getElementById('sidebar');
+
+sidebar.addEventListener('click', () => {
+    sidebar.classList.add('expandida');
+});
+
+document.addEventListener('click', (evento) => {
+    const clicouFora = !sidebar.contains(evento.target);
+
+    if (clicouFora) {
+        sidebar.classList.remove('expandida');
+    }
+});
+</script>
