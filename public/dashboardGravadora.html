@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Gravadora | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+
+<body class="dash-gravadora" onload="carregarAlertas()">
+    <aside class="sidebar">
+        <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
+        <hr>
+
+        <ul>
+            <li id="selected"><a>Dashboard</a></li>
+            <li><a>Músicas</a></li>
+            <li><a>Artistas</a></li>
+        </ul>
+
+        <div class="perfil">
+            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <div id="nome-usuario">Pedro</div>
+        </div>
+    </aside>
+ 
+    <main class="conteudo">
+         <div class="conteudo-topo">
+            <div class="titulos">
+                <h3>Bem vindo(a) <span id="nome-usuario">Pedro</span></h3>
+                <h1>Monitoramento de idicadores estratégicos</h1>
+            </div>
+        </div>
+
+        <div class="dash-alertas" id="lista_alertas">
+        </div>
+
+        <div class="kpis-desempenho">            
+            <div class="kpi">
+                <a>Streams</a>
+                <div class="dado primary-color"> 22222 </div>
+                <a>Spotify</a>
+            </div>
+
+            <div class="kpi">
+                <a>Visualizações</a>
+                <div class="dado primary-color">22222</div>
+                <a>Youtube</a>
+            </div>
+
+            <div class="kpi">
+                <a>Curtidas</a>
+                <div class="dado primary-color">22222</div>
+                <a>Youtube</a>
+            </div>
+
+            <div class="kpi">
+                <a>Comentários </a>
+                <div class="dado primary-color">222222</div>
+                <a>Youtube</a>
+            </div>
+        </div>
+
+        <div class="graficos">
+            <div class="grafico">
+
+            </div>
+
+            <div class="grafico">
+
+            </div>
+        </div>
+    </main>
+
+</body>
+
+<script>
+    let dadosAlertas = [
+        {
+            tipo: "positivo",
+            texto: "Importação de músicas realizada com sucesso."
+        },
+        {
+            tipo: "negativo",
+            texto: "Existem músicas sem informações completas."
+        },
+        // {
+        //     tipo: "positivo",
+        //     texto: "Todos os dados de artistas foram atualizados."
+        // },
+    ];
+
+    function carregarAlertas() {
+    lista_alertas.innerHTML = '';
+
+    for (let i = 0; i < dadosAlertas.length; i++) {
+        let tipo = dadosAlertas[i].tipo;
+        let icone = '';
+
+        if (tipo == 'positivo') {
+            icone = '✓';
+        } else {
+            icone = '✗';
+        }
+
+        lista_alertas.innerHTML += `
+            <div class="dash-alerta dash-alerta-${tipo}">
+                <span class="dash-alerta-icone">${icone}</span>
+                <span>${dadosAlertas[i].texto}</span>
+            </div>`;
+    }
+}
+</script>
+
+</html>
