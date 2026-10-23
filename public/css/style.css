@@ -16,12 +16,16 @@
     --color-bw-violet: #6D28D9;
     --color-bw-indigo: #4F46E5;
     --color-bw-accent: #A855F7;
+    --roxo-claro: rgba(197, 157, 255, 1);
+    --roxo-escuro: rgba(84, 36, 187, 1);
 }
 
 body {
     height: 100vh;
     width: 100%;
 }
+
+/*sidebar*/
 
 .sidebar {
     display: flex;
@@ -115,4 +119,129 @@ body {
     color: white;
     font-size: 22px;
     margin-left: 15px;
+}
+
+/*Header*/
+header {
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 14%;
+    position: fixed;
+    border-bottom: 5px solid;
+    border-image: linear-gradient(to right, var(--roxo-claro), var(--roxo-escuro), black) 1;
+}
+
+header ul {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 70%;
+}
+
+header li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header ul li a {
+    position: relative;
+    text-decoration: none;
+    font-weight: 500;
+    width: auto;
+    font-size: 18px;
+    font-family: 'Myriad Pro Semi Extended', sans-serif;
+    color: white;
+    transition: width 0.5s ease-in-out;
+}
+
+header ul li a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 0%;
+    height: 3px;
+    background-color: var(--roxo-claro);
+    transition: width 0.4s ease-in-out;
+}
+
+header ul li a:hover::after {
+    width: 100%;
+}
+
+.logo-header {
+    height: 100%;
+}
+
+header a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8%;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    cursor: pointer;
+    z-index: 1100;
+}
+
+.hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.button-login {
+    height: 50px;
+}
+
+.login-item {
+    display: none;
+}
+
+/* Scrool */
+::-webkit-scrollbar {
+    width: 11px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgb(37, 0, 71);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--roxo-escuro);
+    border-radius: 5px;
+}
+
+/* Estilo Banner */
+
+.banner {
+    margin-top: 150px;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.banner img {
+    width: 60%;
 }
