@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Produtor | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <script src="./js/dashboardProdutor.js"></script>
+</head>
+
+<body class="dash-page" onload="carregarDashboardProdutor()">
+    <aside class="sidebar">
+        <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
+        <hr>
+
+        <ul>
+            <li id="selected"><a href="./dashboardProdutor.html">Dashboard</a></li>
+            <li><a href="./listaMusica.html">Músicas</a></li>
+            <li><a href="./recomendacao.html">Recomendação</a></li>
+        </ul>
+
+        <div class="perfil">
+            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <div class="usuario" id="nome-usuario">Yasmin</div>
+        </div>
+    </aside>
+
+    <main class="dash-content">
+        <div class="dash-topo">
+            <div>
+                <p class="dash-boas-vindas">Bem-vindo(a), Yasmin</p>
+                <h1 class="dash-titulo">Produção Musical</h1>
+            </div>
+
+        </div>
+
+        <section class="dash-alertas" id="lista_alertas"></section>
+
+        <section class="dash-kpis">
+            <div class="dash-kpi">
+                <span class="dash-kpi-titulo">Fator decisivo</span>
+                <span class="dash-kpi-valor" id="kpi_fator_valor"></span>
+                <span class="dash-kpi-texto" id="kpi_fator_texto"></span>
+            </div>
+
+
+        </section>
+
+        <section class="dash-graficos">
+            <div class="dash-grafico">
+                <h2 class="dash-grafico-titulo" id="titulo_bpm"></h2>
+                <p class="dash-grafico-subtitulo">Views médias (milhões) por faixa de BPM</p>
+                <div class="dash-grafico-area">
+                    <canvas id="grafico_bpm"></canvas>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+</body>
+
+</html>
