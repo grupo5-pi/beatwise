@@ -139,7 +139,7 @@ body {
 /* Gráficos */
 .graficos {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 3fr 3fr 2fr;
     width: 93%;
     min-height: 340px;
     margin: 10px 0 20px 0;
