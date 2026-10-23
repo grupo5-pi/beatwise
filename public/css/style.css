@@ -26,6 +26,8 @@ body {
 .sidebar {
     display: flex;
     flex-direction: column;
+    position: fixed;
+    left: 0;
     height: 100%;
     width: 16.3%;
     background: linear-gradient(280deg,rgba(0, 0, 0, 1) 22%, rgba(14, 2, 33, 1) 46%, rgba(14, 2, 33, 1) 89%);
