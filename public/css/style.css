@@ -36,7 +36,7 @@ body {
     width: 16.3%;
     background: linear-gradient(280deg,rgba(0, 0, 0, 1) 22%, rgba(14, 2, 33, 1) 46%, rgba(14, 2, 33, 1) 89%);
     border-right: solid 5px var(--color-bw-accent);
-    z-index: 999;
+    z-index: 999; 
 }
 
 .sidebar hr {

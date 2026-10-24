@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Equipe de Marketing - BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/dashboardMarketing.css">
+</head>
+
+<body class="dash-marketing" onload="carregarAlertas(); carregarKpis()">
+    <aside class="sidebar">
+        <img src="./assets/imgs/Logo_nav.png" alt="logo da BeatWise">
+        <hr>
+
+        <ul>
+            <li id="selected"><a>Dashboard</a></li>
+            <li><a>Músicas</a></li>
+            <li><a>Artistas</a></li>
+            <li><a>Recomendações</a></li>
+            <li><a>Funcionários</a></li>
+        </ul>
+
+        <div class="perfil">
+            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a href="./perfil.html" id="nome-usuario">Lucas</a>
+        </div>
+    </aside>
+
+    <main class="conteudo">
+        <div class="conteudo-topo">
+            <div class="titulos">
+                <h3>Bem vindo(a) <span id="nome-usuario">Lucas</span></h3>
+                <h1>Dashboard Marketing</h1>
+            </div>
+        </div>
+
+        <div class="dash-alertas" id="lista_alertas">
+        </div>
+
+        <div class="dash-kpi" id="kpis">
+        </div>
+    </main>
+
+    <script>
+        let dadosAlertas = [
+            {
+                tipo: "positivo",
+                texto: ""
+            },
+            {
+                tipo: "negativo",
+                texto: ""
+            },
+        ];
+
+        let dadosKpis = [
+            {
+                titulo: "Comparativo de engajamento entre músicas com clipe e sem clipe",
+                dado: "20M/45M",
+                descricao: "Diferença de %% de views/engajamento.",
+                delta: "+1.5% ↑↑",
+                positivo: true
+            },
+            {
+                titulo: " ",
+                dado: " ",
+                descricao: " ",
+                delta: " ",
+                positivo: true
+            },
+            {
+                titulo: "Qual a melhor plataforma",
+                dado: "Youtube ↑↑",
+                descricao: "O Spotify apresenta maior taxa de aproveitamento.",
+                delta: "+11% ↑↑",
+                positivo: true
+            },
+            {
+                titulo: "Comparativo Feat/Solo",
+                dado: "Feat 20M/19M",
+                descricao: "Músicas feat tem maior taxa de engajamento.",
+                delta: "+7% ↑↑",
+                positivo: true
+            }
+        ]
+
+        function carregarAlertas() {
+            lista_alertas.innerHTML = '';
+
+            for (let i = 0; i < dadosAlertas.length; i++) {
+                let tipo = dadosAlertas[i].tipo;
+                let icone = '';
+
+                if (tipo == 'positivo') {
+                    icone = '✓';
+                } else {
+                    icone = '✗';
+                }
+
+                lista_alertas.innerHTML += `
+                    <div class="dash-alerta dash-alerta-${tipo}">
+                        <span class="dash-alerta-icone">${icone}</span>
+                        <span>${dadosAlertas[i].texto}</span>
+                    </div>`;
+            }
+
+        }
+
+        function carregarKpis() {
+            kpis.innerHTML = '';
+
+            for (let i = 0; i < dadosKpis.length; i++) {
+                let titulo = dadosKpis[i].titulo;
+                let dado = dadosKpis[i].dado;
+                let descricao = dadosKpis[i].descricao;
+                let delta = dadosKpis[i].delta;
+                let classeDelta = dadosKpis[i].positivo ? 'positivo' : 'negativo';
+
+                kpis.innerHTML += `
+                    <div class="kpi">
+                        <span class="kpi-titulo">${titulo}</span>
+                        <span class="kpi-valor">${dado}</span>
+                        <span class="kpi-descricao">${descricao}
+                            <span class="kpi-delta ${classeDelta}">${delta}</span>
+                        </span>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>
