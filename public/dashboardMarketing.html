@@ -61,7 +61,7 @@
             {
                 titulo: "Comparativo de engajamento entre músicas com clipe e sem clipe",
                 dado: "20M/45M",
-                descricao: "Diferença de %% de views/engajamento.",
+                descricao: "Diferença de % de views/engajamento.",
                 delta: "+1.5% ↑↑",
                 positivo: true
             },
@@ -111,6 +111,105 @@
         }
 
         function carregarKpis() {
+            let musicas = [
+                { plataforma: 'Spotify', tem_clipe: true, is_feat: true, views: 22000000, likes: 1100000, comentarios: 48000 },
+                { plataforma: 'Spotify', tem_clipe: true, is_feat: false, views: 18000000, likes: 850000, comentarios: 36000 },
+                { plataforma: 'Spotify', tem_clipe: false, is_feat: true, views: 40000000, likes: 1900000, comentarios: 70000 },
+                { plataforma: 'Spotify', tem_clipe: false, is_feat: false, views: 50000000, likes: 2300000, comentarios: 82000 },
+                { plataforma: 'YouTube', tem_clipe: true, is_feat: true, views: 21000000, likes: 900000, comentarios: 41000 },
+                { plataforma: 'YouTube', tem_clipe: true, is_feat: false, views: 19000000, likes: 760000, comentarios: 30000 },
+                { plataforma: 'YouTube', tem_clipe: false, is_feat: true, views: 38000000, likes: 1500000, comentarios: 55000 },
+                { plataforma: 'YouTube', tem_clipe: false, is_feat: false, views: 52000000, likes: 1900000, comentarios: 64000 },
+            ];
+
+            let clipeViews = 0, clipeEng = 0, clipeQtd = 0;
+            let semClipeViews = 0, semClipeEng = 0, semClipeQtd = 0;
+            let spotifyViews = 0, spotifyEng = 0;
+            let youtubeViews = 0, youtubeEng = 0;
+            let featViews = 0, featEng = 0, featQtd = 0;
+            let soloViews = 0, soloEng = 0, soloQtd = 0;
+
+            for (let i = 0; i < musicas.length; i++) {
+                let m = musicas[i];
+                let eng = m.likes + m.comentarios;
+
+                if (m.tem_clipe) {
+                    clipeViews += m.views; 
+                    clipeEng += eng; 
+                    clipeQtd++;
+                } else {
+                    semClipeViews += m.views; 
+                    semClipeEng += eng; 
+                    semClipeQtd++;
+                }
+
+                if (m.plataforma == 'Spotify') {
+                    spotifyViews += m.views; 
+                    spotifyEng += eng;
+                } else {
+                    youtubeViews += m.views; 
+                    youtubeEng += eng;
+                }
+
+                if (m.is_feat) {
+                    featViews += m.views;
+                    featEng += eng; 
+                    featQtd++;
+                } else {
+                    soloViews += m.views; 
+                    soloEng += eng; 
+                    soloQtd++;
+                }
+            }
+
+            let taxaClipe = clipeEng / clipeViews * 100;
+            let taxaSemClipe = semClipeEng / semClipeViews * 100;
+            let taxaSpotify = spotifyEng / spotifyViews * 100;
+            let taxaYoutube = youtubeEng / youtubeViews * 100;
+            let taxaFeat = featEng / featViews * 100;
+            let taxaSolo = soloEng / soloViews * 100;
+
+            let mediaClipe = clipeViews / clipeQtd / 1000000;
+            let mediaSemClipe = semClipeViews / semClipeQtd / 1000000;
+            let dif1 = (taxaClipe - taxaSemClipe) / taxaSemClipe * 100;
+
+            dadosKpis[0].dado = mediaClipe.toFixed(0) + 'M/' + mediaSemClipe.toFixed(0) + 'M';
+            if (dif1 >= 0) {
+                dadosKpis[0].delta = '+' + dif1.toFixed(1) + '% ↑↑';
+                dadosKpis[0].positivo = true;
+            } else {
+                dadosKpis[0].delta = dif1.toFixed(1) + '% ↓↓';
+                dadosKpis[0].positivo = false;
+            }
+
+            let dif3;
+            if (taxaSpotify > taxaYoutube) {
+                dif3 = (taxaSpotify - taxaYoutube) / taxaYoutube * 100;
+                dadosKpis[2].dado = 'Spotify ↑↑';
+                dadosKpis[2].descricao = 'O Spotify apresenta maior taxa de aproveitamento.';
+            } else {
+                dif3 = (taxaYoutube - taxaSpotify) / taxaSpotify * 100;
+                dadosKpis[2].dado = 'Youtube ↑↑';
+                dadosKpis[2].descricao = 'O Youtube apresenta maior taxa de aproveitamento.';
+            }
+            dadosKpis[2].delta = '+' + dif3.toFixed(1) + '% ↑↑';
+            dadosKpis[2].positivo = true;
+
+            let mediaFeat = featViews / featQtd / 1000000;
+            let mediaSolo = soloViews / soloQtd / 1000000;
+            let dif4 = (taxaFeat - taxaSolo) / taxaSolo * 100;
+
+            dadosKpis[3].dado = 'Feat ' + mediaFeat.toFixed(0) + 'M/' + mediaSolo.toFixed(0) + 'M';
+            if (dif4 >= 0) {
+                dadosKpis[3].descricao = 'Músicas feat tem maior taxa de engajamento.';
+                dadosKpis[3].delta = '+' + dif4.toFixed(1) + '% ↑↑';
+                dadosKpis[3].positivo = true;
+            } else {
+                dadosKpis[3].descricao = 'Músicas solo tem maior taxa de engajamento.';
+                dadosKpis[3].delta = dif4.toFixed(1) + '% ↓↓';
+                dadosKpis[3].positivo = false;
+            }
+
             kpis.innerHTML = '';
 
             for (let i = 0; i < dadosKpis.length; i++) {
@@ -121,14 +220,14 @@
                 let classeDelta = dadosKpis[i].positivo ? 'positivo' : 'negativo';
 
                 kpis.innerHTML += `
-                    <div class="kpi">
-                        <span class="kpi-titulo">${titulo}</span>
-                        <span class="kpi-valor">${dado}</span>
-                        <span class="kpi-descricao">${descricao}
-                            <span class="kpi-delta ${classeDelta}">${delta}</span>
-                        </span>
-                    </div>
-                `;
+            <div class="kpi">
+                <span class="kpi-titulo">${titulo}</span>
+                <span class="kpi-valor">${dado}</span>
+                <span class="kpi-descricao">${descricao}
+                    <span class="kpi-delta ${classeDelta}">${delta}</span>
+                </span>
+            </div>
+        `;
             }
         }
     </script>
