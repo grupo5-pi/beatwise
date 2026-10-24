@@ -51,6 +51,7 @@ body {
     width: 83.7%;
     color: white;
     background: linear-gradient(280deg, rgba(0, 0, 0, 1) 22%, rgba(14, 2, 33, 1) 46%, rgba(14, 2, 33, 1) 89%);
+    min-height: 100%;
 }
 
 .conteudo .conteudo-topo {
@@ -65,6 +66,10 @@ body {
     height: 100%;
     width: 80%;
     font-size: 20px;
+}
+
+.titulos h1 {
+    margin-bottom: 25px;
 }
 
 /* Alertas */
