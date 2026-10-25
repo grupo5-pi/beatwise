@@ -9,12 +9,15 @@
 
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/dispersaoProdutor.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <script src="./js/musicasExemplo.js"></script>
+    <script src="./js/dispersaoProdutor.js"></script>
     <script src="./js/dashboardProdutor.js"></script>
 </head>
 
-<body class="dash-page" onload="carregarDashboardProdutor()">
+<body class="dash-page" onload="carregarDashboardProdutor(); carregarDispersao()">
     <aside class="sidebar">
         <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
         <hr>
@@ -54,7 +57,11 @@
                 <span class="dash-kpi-texto" id="kpi_duracao_ideal_texto"></span>
             </div>
 
-
+            <div class="dash-kpi">
+                <span class="dash-kpi-titulo">Duração ideal</span>
+                <span class="dash-kpi-valor" id="kpi_duracao_valor">2:30 - 3:30</span>
+                <span class="dash-kpi-texto" id="kpi_duracao_texto">Músicas nessa faixa têm streams 2x acima da média (980 mil vs média geral)</span>
+            </div>
         </section>
 
         <section class="dash-graficos">
@@ -73,7 +80,27 @@
                 </div>
             </div>
         </section>
-        
+
+        <section class="dash-graficos dash-graficos-dispersao">
+            <div class="dash-grafico">
+                <div class="dash-dispersao-topo">
+                    <div>
+                        <h2 class="dash-grafico-titulo">Dispersão de views por característica</h2>
+                        <p class="dash-grafico-subtitulo">Views de cada música e mediana da característica escolhida</p>
+                    </div>
+
+                    <div class="dash-seletor">
+                        <label for="select_caracteristica">Característica</label>
+                        <select id="select_caracteristica"></select>
+                    </div>
+                </div>
+
+                <div class="dash-grafico-area dash-dispersao-area">
+                    <canvas id="grafico_dispersao"></canvas>
+                </div>
+            </div>
+        </section>
+
     </main>
 </body>
 
