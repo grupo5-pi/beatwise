@@ -64,7 +64,7 @@
                 <div class="perfil-campo">
                     <label for="empresa">Empresa:</label>
                     <div class="campo-input">
-                        <input id="empresa" name="empresa" type="text" autocomplete="off" required readonly>
+                        <input id="empresa" name="empresa" type="text" autocomplete="off" required>
                     </div>
                     <p class="campo-erro" id="erro-empresa"></p>
                 </div>
@@ -133,32 +133,6 @@
         document.getElementById("nome-usuario").textContent = primeiroLogin;
         document.getElementById("boas-nome").textContent = primeiroLogin;
     }
-
-    async function carregarUsuario() {
-        try {
-            const resposta = await fetch("/funcionarios/perfil/" + usuarioId);
-            if (!resposta.ok) throw new Error();
-            const p = await resposta.json();
-
-            const primeiro = p.nome.split(" ")[0];
-            document.getElementById("nome-usuario").textContent = primeiro;
-            document.getElementById("boas-nome").textContent = primeiro;
-            if (p.foto) document.getElementById("sidebar-foto").src = p.foto;
-
-            empresaAtual = p.empresa;
-            document.getElementById("empresa").value = empresaAtual;
-
-            if (p.cargo !== "Administrador") {
-                document.getElementById("erro-geral").textContent =
-                    "Apenas administradores podem cadastrar funcionários.";
-                form.querySelectorAll("input, button").forEach(function (el) { el.disabled = true; });
-            }
-        } catch (erro) {
-            document.getElementById("erro-geral").textContent = "Erro ao carregar os dados do usuário.";
-        }
-    }
-
-    carregarUsuario();
 
     const mensagens = {
         nome: "Informe o nome do funcionário.",

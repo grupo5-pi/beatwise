@@ -41,6 +41,11 @@
                 <h3>Bem vindo(a) <span>Lucas</span></h3>
                 <h1>Funcionários Cadastrados</h1>
             </div>
+
+            <nav class="abas">
+                <a class="aba" href="./cadastroFuncionario.html">Cadastro de Funcionário</a>
+                <a class="aba ativa" href="./funcionarios.html">Funcionários</a>
+            </nav>
         </div>
 
         <div class="tabela">
@@ -58,10 +63,18 @@
             </div>
 
             <div class="lista">
-                <div class="coluna primary"><div class="top left">Nome</div></div>
-                <div class="coluna"><div class="top">E-mail</div></div>
-                <div class="coluna"><div class="top">Cargo</div></div>
-                <div class="coluna"><div class="top direita">Ações</div></div>
+                <div class="coluna primary">
+                    <div class="top left">Nome</div>
+                </div>
+                <div class="coluna">
+                    <div class="top">E-mail</div>
+                </div>
+                <div class="coluna">
+                    <div class="top">Cargo</div>
+                </div>
+                <div class="coluna">
+                    <div class="top direita">Ações</div>
+                </div>
             </div>
 
             <footer>
@@ -105,171 +118,212 @@
     </div>
 
     <!-- POPUP: EXCLUIR -->
-    <div class="modal" id="modal-excluir" onclick="confirmarExclusao()">
+    <div class="modal" id="modal-excluir">
         <a href="#" class="modal-fundo" aria-label="Fechar"></a>
         <div class="modal-caixa modal-confirmar" role="alertdialog" aria-labelledby="titulo-excluir">
             <h2 id="titulo-excluir">Tem certeza que deseja excluir o funcionário?</h2>
             <div class="modal-acoes">
                 <a href="#" class="btn btn-secundario">Cancelar</a>
-                <button type="button" class="btn btn-perigo">Excluir</button>
+                <button type="button" class="btn btn-perigo" onclick="confirmarExclusao()">Excluir</button>
             </div>
         </div>
     </div>
 
     <script>
-        const URL_JSON = './dados/funcionarios.json'; // ajuste o caminho do seu JSON
-        const POR_PAGINA = 10;
+    const usuarioId = sessionStorage.ID_FUNCIONARIO;
+    if (!usuarioId) window.location.href = "./login.html";
 
-        const ICONE_EDITAR = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
-        const ICONE_EXCLUIR = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`;
+    const POR_PAGINA = 10;
 
-        let funcionarios = [];
-        let filtrados = [];
-        let paginaAtual = 1;
-        let selecionado = null;
+    const ICONE_EDITAR = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
+    const ICONE_EXCLUIR = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`;
 
-        async function iniciarPagina() {
-    try {
-        const resposta = await fetch(URL_JSON);
-        console.log('Status:', resposta.status, resposta.url);
+    let funcionarios = [];
+    let filtrados = [];
+    let paginaAtual = 1;
+    let selecionado = null;
 
-        if (!resposta.ok) {
-            throw new Error(`HTTP ${resposta.status} ao buscar ${resposta.url}`);
-        }
-
-        const dados = await resposta.json();
-        funcionarios = dados.funcionarios;
-        filtrados = [...funcionarios];
-        renderizar();
-    } catch (erro) {
-        console.error('Erro ao carregar funcionários:', erro);
-        document.getElementById('exibicao').textContent = 'Erro: ' + erro.message;
+    async function iniciarPagina() {
+        await carregarFuncionarios();
     }
-}
 
-        function normalizar(texto) {
-            return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    async function carregarFuncionarios() {
+        try {
+            const resposta = await fetch('/cadastroFuncionario/listar/' + usuarioId);
+
+            if (!resposta.ok) {
+                const corpo = await resposta.json().catch(() => ({}));
+                throw new Error(corpo.mensagem || 'HTTP ' + resposta.status);
+            }
+
+            funcionarios = await resposta.json();
+            aplicarFiltro();
+            renderizar();
+        } catch (erro) {
+            console.error('Erro ao carregar funcionários:', erro);
+            document.getElementById('exibicao').textContent = 'Erro: ' + erro.message;
         }
+    }
 
-        function pesquisar() {
-            const termo = normalizar(document.getElementById('pesquisa').value.trim());
-            filtrados = funcionarios.filter(f =>
-                normalizar(`${f.nome} ${f.email} ${f.cargo}`).includes(termo)
-            );
-            paginaAtual = 1;
+    function normalizar(texto) {
+        return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function aplicarFiltro() {
+        const termo = normalizar(document.getElementById('pesquisa').value.trim());
+        filtrados = funcionarios.filter(f =>
+            normalizar(`${f.nome} ${f.email} ${f.cargo}`).includes(termo)
+        );
+    }
+
+    function pesquisar() {
+        aplicarFiltro();
+        paginaAtual = 1;
+        renderizar();
+    }
+
+    function criarCelula(texto) {
+        const div = document.createElement('div');
+        div.className = 'celula';
+        div.textContent = texto;
+        div.title = texto;
+        return div;
+    }
+
+    function criarAcoes(funcionario) {
+        const div = document.createElement('div');
+        div.className = 'celula acoes';
+
+        const editar = document.createElement('a');
+        editar.className = 'btn-icone';
+        editar.href = '#modal-editar';
+        editar.title = 'Editar';
+        editar.innerHTML = ICONE_EDITAR;
+        editar.addEventListener('click', () => abrirEditar(funcionario));
+
+        const excluir = document.createElement('a');
+        excluir.className = 'btn-icone';
+        excluir.href = '#modal-excluir';
+        excluir.title = 'Excluir';
+        excluir.innerHTML = ICONE_EXCLUIR;
+        excluir.addEventListener('click', () => { selecionado = funcionario; });
+
+        div.append(editar, excluir);
+        return div;
+    }
+
+    function renderizar() {
+        const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA));
+        if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
+
+        const inicio = (paginaAtual - 1) * POR_PAGINA;
+        const fim = Math.min(inicio + POR_PAGINA, filtrados.length);
+        const pagina = filtrados.slice(inicio, fim);
+
+        const colunas = document.querySelectorAll('.lista .coluna');
+        colunas.forEach(coluna => coluna.querySelectorAll('.celula').forEach(c => c.remove()));
+
+        pagina.forEach(f => {
+            colunas[0].appendChild(criarCelula(f.nome));
+            colunas[1].appendChild(criarCelula(f.email));
+            colunas[2].appendChild(criarCelula(f.cargo));
+            colunas[3].appendChild(criarAcoes(f));
+        });
+
+        document.getElementById('exibicao').textContent = filtrados.length
+            ? `Exibindo ${inicio + 1}-${fim} de ${filtrados.length}`
+            : 'Nenhum funcionário encontrado';
+
+        document.getElementById('pagina').textContent = `Página ${paginaAtual} de ${totalPaginas}`;
+        document.getElementById('anterior').disabled = paginaAtual === 1;
+        document.getElementById('proxima').disabled = paginaAtual === totalPaginas;
+    }
+
+    function voltarPagina() {
+        if (paginaAtual > 1) {
+            paginaAtual--;
             renderizar();
         }
+    }
 
-        function criarCelula(texto) {
-            const div = document.createElement('div');
-            div.className = 'celula';
-            div.textContent = texto;
-            div.title = texto;
-            return div;
+    function avancarPagina() {
+        const totalPaginas = Math.ceil(filtrados.length / POR_PAGINA);
+        if (paginaAtual < totalPaginas) {
+            paginaAtual++;
+            renderizar();
         }
+    }
 
-        function criarAcoes(funcionario) {
-            const div = document.createElement('div');
-            div.className = 'celula acoes';
+    /* POPUPS */
+    function abrirEditar(funcionario) {
+        selecionado = funcionario;
+        document.getElementById('edit-nome').value = funcionario.nome;
+        document.getElementById('edit-cargo').value = funcionario.cargo;
+        document.getElementById('edit-email').value = funcionario.email;
+        document.getElementById('edit-senha').value = '';
+    }
 
-            const editar = document.createElement('a');
-            editar.className = 'btn-icone';
-            editar.href = '#modal-editar';
-            editar.title = 'Editar';
-            editar.innerHTML = ICONE_EDITAR;
-            editar.addEventListener('click', () => abrirEditar(funcionario));
+    function fecharModal() {
+        location.hash = '#';
+    }
 
-            const excluir = document.createElement('a');
-            excluir.className = 'btn-icone';
-            excluir.href = '#modal-excluir';
-            excluir.title = 'Excluir';
-            excluir.innerHTML = ICONE_EXCLUIR;
-            excluir.addEventListener('click', () => { selecionado = funcionario; });
+    async function salvarEdicao(evento) {
+        evento.preventDefault();
+        if (!selecionado) return;
 
-            div.append(editar, excluir);
-            return div;
-        }
+        const dados = {
+            idAdminServer: usuarioId,
+            nomeServer: document.getElementById('edit-nome').value.trim(),
+            cargoServer: document.getElementById('edit-cargo').value.trim(),
+            emailServer: document.getElementById('edit-email').value.trim(),
+            senhaServer: document.getElementById('edit-senha').value
+        };
 
-        function renderizar() {
-            const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA));
-            if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
-
-            const inicio = (paginaAtual - 1) * POR_PAGINA;
-            const fim = Math.min(inicio + POR_PAGINA, filtrados.length);
-            const pagina = filtrados.slice(inicio, fim);
-
-            const colunas = document.querySelectorAll('.lista .coluna');
-            colunas.forEach(coluna => coluna.querySelectorAll('.celula').forEach(c => c.remove()));
-
-            pagina.forEach(f => {
-                colunas[0].appendChild(criarCelula(f.nome));
-                colunas[1].appendChild(criarCelula(f.email));
-                colunas[2].appendChild(criarCelula(f.cargo));
-                colunas[3].appendChild(criarAcoes(f));
+        try {
+            const resposta = await fetch('/cadastroFuncionario/atualizar/' + selecionado.id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
             });
 
-            document.getElementById('exibicao').textContent = filtrados.length
-                ? `Exibindo ${inicio + 1}-${fim} de ${filtrados.length}`
-                : 'Nenhum funcionário encontrado';
-
-            document.getElementById('pagina').textContent = `Página ${paginaAtual} de ${totalPaginas}`;
-            document.getElementById('anterior').disabled = paginaAtual === 1;
-            document.getElementById('proxima').disabled = paginaAtual === totalPaginas;
-        }
-
-        function voltarPagina() {
-            if (paginaAtual > 1) {
-                paginaAtual--;
-                renderizar();
+            if (!resposta.ok) {
+                const corpo = await resposta.json().catch(() => ({}));
+                throw new Error(corpo.mensagem || 'Erro ao atualizar o funcionário.');
             }
-        }
-
-        function avancarPagina() {
-            const totalPaginas = Math.ceil(filtrados.length / POR_PAGINA);
-            if (paginaAtual < totalPaginas) {
-                paginaAtual++;
-                renderizar();
-            }
-        }
-
-        /* ---------- POPUPS ---------- */
-        function abrirEditar(funcionario) {
-            selecionado = funcionario;
-            document.getElementById('edit-nome').value = funcionario.nome;
-            document.getElementById('edit-cargo').value = funcionario.cargo;
-            document.getElementById('edit-email').value = funcionario.email;
-            document.getElementById('edit-senha').value = '';
-        }
-
-        function fecharModal() {
-            location.hash = '#';
-        }
-
-        // Só altera na memória (sem banco)
-        function salvarEdicao(evento) {
-            evento.preventDefault();
-            if (!selecionado) return;
-
-            selecionado.nome = document.getElementById('edit-nome').value.trim();
-            selecionado.cargo = document.getElementById('edit-cargo').value.trim();
-            selecionado.email = document.getElementById('edit-email').value.trim();
 
             fecharModal();
-            renderizar();
+            await carregarFuncionarios();
+        } catch (erro) {
+            console.error(erro);
+            alert(erro.message);
         }
+    }
 
-        // Só remove da memória (sem banco)
-        function confirmarExclusao() {
-            if (!selecionado) return;
+    async function confirmarExclusao() {
+        if (!selecionado) return;
 
-            funcionarios = funcionarios.filter(f => f !== selecionado);
-            filtrados = filtrados.filter(f => f !== selecionado);
+        try {
+            const resposta = await fetch('/cadastroFuncionario/excluir/' + selecionado.id, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idAdminServer: usuarioId })
+            });
+
+            if (!resposta.ok) {
+                const corpo = await resposta.json().catch(() => ({}));
+                throw new Error(corpo.mensagem || 'Erro ao excluir o funcionário.');
+            }
+
             selecionado = null;
-
             fecharModal();
-            renderizar();
+            await carregarFuncionarios();
+        } catch (erro) {
+            console.error(erro);
+            fecharModal();
+            alert(erro.message);
         }
-    </script>
+    }
+</script>
 </body>
 
 </html>
