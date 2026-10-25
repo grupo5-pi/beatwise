@@ -1,23 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuração de Notificações</title>
     <link rel="stylesheet" href="css/tela-notificacao.css">
+    <script src="js/tela-notificacao.js" defer></script>
 </head>
 <body class="listas">
     <aside class="sidebar" id="sidebar">
         <div class="logo-area">
-        <img src="./assets/imgs/banner.jpeg" alt="banner da BeatWise" class="logo-banner">
-        <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+            <img src="./assets/imgs/banner.jpeg" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
         </div>
         <hr>
 
         <ul>
-            <li><img src="assets/imgs/dashboard-white.svg" alt="" class="icone"><a class="texto">Dashboard</a></li>
-            <li ><img src="assets/imgs/music-white.svg" alt="" class="icone"><a class="texto">Músicas</a></li>
-            <li id="selected"><img src="assets/imgs/microphone-white.svg" alt="" class="icone"><a class="texto">Artistas</a></li>
+            <li>
+                <div class="icone-box"><img src="assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                <div class="texto">Dashboard</div>
+            </li>
+            <li>
+                <div class="icone-box"><img src="assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                <div class="texto">Recomendações</div>
+            </li>
+            <li>
+                <div class="icone-box"><img src="assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                <div class="texto">Acesso</div>
+            </li>
+            <li id="selected">
+                <div class="icone-box"><img src="assets/imgs/bell-ringing-svgrepo-com.svg" alt="" class="icone"></div>
+                <div class="texto">Notificações</div>
+            </li>
         </ul>
 
         <div class="perfil">
@@ -26,23 +40,34 @@
         </div>
     </aside>
 
-    <div class="content">
+    <main class="content">
+        <div class="cabecalho">
+            <span><b>Olá, Mateus!</b></span>
+            <h1>Configuração de Notificações</h1>
+        </div>
 
-    </div>
+        <section class="container">
+            <div class="container-filho" id="colunas"></div>
+        </section>
+    </main>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+
+        sidebar.addEventListener('click', () => {
+            sidebar.classList.add('expandida');
+        });
+
+        document.addEventListener('click', (evento) => {
+            const clicouFora = !sidebar.contains(evento.target);
+
+            if (clicouFora) {
+                sidebar.classList.remove('expandida');
+            }
+        });
+
+        
+    </script>
+    <script src="js/notificacoes.js"></script>
 </body>
 </html>
-<script>
-const sidebar = document.getElementById('sidebar');
-
-sidebar.addEventListener('click', () => {
-    sidebar.classList.add('expandida');
-});
-
-document.addEventListener('click', (evento) => {
-    const clicouFora = !sidebar.contains(evento.target);
-
-    if (clicouFora) {
-        sidebar.classList.remove('expandida');
-    }
-});
-</script>
