@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Funcionário | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/cadastroFuncionario.css">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <img src="./assets/imgs/Logo_nav.png" alt="logo da BeatWise">
+        <hr>
+
+        <ul>
+            <li><a href="./dashboard.html">Dashboard</a></li>
+            <li><a href="./musicas.html">Músicas</a></li>
+            <li><a href="./artistas.html">Artistas</a></li>
+            <li><a href="./recomendacao.html">Recomendação</a></li>
+            <li id="selected"><a href="./cadastroFuncionario.html">Funcionário</a></li>
+        </ul>
+
+        <div class="perfil">
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
+        </div>
+    </aside>
+
+    <div class="conteudo">
+        <div class="conteudo-topo">
+            <div class="titulos">
+                <h3>Bem vindo(a), <span id="boas-nome"></span></h3>
+                <h1>Cadastro de Funcionário</h1>
+            </div>
+
+            <nav class="abas">
+                <a class="aba ativa" href="./cadastroFuncionario.html">Cadastro de Funcionário</a>
+                <a class="aba" href="./funcionarios.html">Funcionários</a>
+            </nav>
+        </div>
+
+        <section class="perfil-card cadastro-card">
+            <form id="form-cadastro" novalidate>
+                <div class="perfil-campo">
+                    <label for="nome">Nome do Funcionário:</label>
+                    <div class="campo-input">
+                        <input id="nome" name="nome" type="text" autocomplete="off" required>
+                    </div>
+                    <p class="campo-erro" id="erro-nome"></p>
+                </div>
+
+                <div class="perfil-campo">
+                    <label for="email">E-mail:</label>
+                    <div class="campo-input">
+                        <input id="email" name="email" type="email" autocomplete="off" required>
+                    </div>
+                    <p class="campo-erro" id="erro-email"></p>
+                </div>
+
+                <div class="perfil-campo">
+                    <label for="empresa">Empresa:</label>
+                    <div class="campo-input">
+                        <input id="empresa" name="empresa" type="text" autocomplete="off" required readonly>
+                    </div>
+                    <p class="campo-erro" id="erro-empresa"></p>
+                </div>
+
+                <div class="perfil-campo">
+                    <label for="cargo">Cargo:</label>
+                    <div class="campo-input">
+                        <input id="cargo" name="cargo" type="text" autocomplete="off" required>
+                    </div>
+                    <p class="campo-erro" id="erro-cargo"></p>
+                </div>
+
+                <p class="campo-erro" id="erro-geral"></p>
+
+                <div class="perfil-acoes">
+                    <button type="submit" class="btn-perfil btn-salvar">
+                        Cadastrar
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="10" cy="8" r="4" />
+                            <path d="M3 21v-1a6 6 0 0 1 6-6h2" />
+                            <path d="M18 14v6M15 17h6" />
+                        </svg>
+                    </button>
+
+                    <button type="button" class="btn-perfil btn-cancelar" onclick="cancelar()">
+                        Cancelar
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M9 9l6 6M15 9l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <div class="modal-overlay" id="popup" hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="popup-titulo">
+            <div class="modal-icone sucesso">✓</div>
+            <h2 id="popup-titulo">Cadastro realizado com sucesso!</h2>
+            <p class="modal-texto">Uma senha provisória foi gerada e armazenada para o funcionário.</p>
+            <div class="modal-acoes">
+                <button type="button" class="btn-modal btn-modal-pri" id="popup-fechar"
+                    onclick="fecharPopup()">Fechar</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    const form = document.getElementById("form-cadastro");
+    const popup = document.getElementById("popup");
+
+    // ---------- USUÁRIO LOGADO ----------
+    const usuarioId = sessionStorage.ID_FUNCIONARIO;
+    if (!usuarioId) window.location.href = "./login.html";
+
+    let empresaAtual = "";
+
+    // Mostra o nome salvo no login enquanto (ou caso) a busca no servidor falhe
+    if (sessionStorage.NOME_USUARIO) {
+        const primeiroLogin = sessionStorage.NOME_USUARIO.split(" ")[0];
+        document.getElementById("nome-usuario").textContent = primeiroLogin;
+        document.getElementById("boas-nome").textContent = primeiroLogin;
+    }
+
+    async function carregarUsuario() {
+        try {
+            const resposta = await fetch("/funcionarios/perfil/" + usuarioId);
+            if (!resposta.ok) throw new Error();
+            const p = await resposta.json();
+
+            const primeiro = p.nome.split(" ")[0];
+            document.getElementById("nome-usuario").textContent = primeiro;
+            document.getElementById("boas-nome").textContent = primeiro;
+            if (p.foto) document.getElementById("sidebar-foto").src = p.foto;
+
+            empresaAtual = p.empresa;
+            document.getElementById("empresa").value = empresaAtual;
+
+            if (p.cargo !== "Administrador") {
+                document.getElementById("erro-geral").textContent =
+                    "Apenas administradores podem cadastrar funcionários.";
+                form.querySelectorAll("input, button").forEach(function (el) { el.disabled = true; });
+            }
+        } catch (erro) {
+            document.getElementById("erro-geral").textContent = "Erro ao carregar os dados do usuário.";
+        }
+    }
+
+    carregarUsuario();
+
+    const mensagens = {
+        nome: "Informe o nome do funcionário.",
+        email: "Digite um email válido (Ex: fulano@mail.com)",
+        empresa: "Informe a empresa.",
+        cargo: "Informe o cargo."
+    };
+
+    // ---------- VALIDAÇÕES (mesmas regras do cadastro principal) ----------
+
+    function emailValido(email) {
+        return email.includes('@')
+            && email.indexOf('@') > 0
+            && email.lastIndexOf('.') > email.indexOf('@') + 1
+            && email.lastIndexOf('.') < email.length - 1;
+    }
+
+    const ESPECIAIS = ["@", "#", "$", "%", "&", "*", "!", "?", "_", "-"];
+    const NUMEROS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    const MAIUSCULAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    const MINUSCULAS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+    function senhaValida(senha) {
+        let temEspecial = false, temNum = false, temMaiuscula = false, temMinuscula = false;
+
+        for (let i = 0; i < senha.length; i++) {
+            const letra = senha[i];
+            if (ESPECIAIS.includes(letra)) temEspecial = true;
+            if (NUMEROS.includes(letra)) temNum = true;
+            if (MAIUSCULAS.includes(letra)) temMaiuscula = true;
+            if (MINUSCULAS.includes(letra)) temMinuscula = true;
+        }
+
+        return senha.length >= 8 && temEspecial && temNum && temMaiuscula && temMinuscula;
+    }
+
+    // ---------- GERAÇÃO DA SENHA PROVISÓRIA ----------
+
+    function sorteio(lista) {
+        const n = new Uint32Array(1);
+        crypto.getRandomValues(n);
+        return lista[n[0] % lista.length];
+    }
+
+    function gerarSenha(tamanho = 10) {
+        const todos = [...ESPECIAIS, ...NUMEROS, ...MAIUSCULAS, ...MINUSCULAS];
+        let senha;
+
+        do {
+            // garante ao menos um de cada tipo
+            const chars = [sorteio(ESPECIAIS), sorteio(NUMEROS), sorteio(MAIUSCULAS), sorteio(MINUSCULAS)];
+            while (chars.length < tamanho) chars.push(sorteio(todos));
+
+            // embaralha (Fisher-Yates)
+            for (let i = chars.length - 1; i > 0; i--) {
+                const r = new Uint32Array(1);
+                crypto.getRandomValues(r);
+                const j = r[0] % (i + 1);
+                [chars[i], chars[j]] = [chars[j], chars[i]];
+            }
+            senha = chars.join("");
+        } while (!senhaValida(senha));
+
+        return senha;
+    }
+
+    // ---------- ENVIO ----------
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        document.getElementById("erro-geral").textContent = "";
+
+        if (!validar()) return;
+
+        const senha = gerarSenha();
+
+        const dados = {
+            nomeServer: document.getElementById("nome").value.trim(),
+            emailServer: document.getElementById("email").value.trim(),
+            idAdminServer: usuarioId,
+            cargoServer: document.getElementById("cargo").value.trim(),
+            senhaServer: senha
+        };
+
+        try {
+            // rota registrada no app.js como /cadastroFuncionario
+            const resposta = await fetch("/cadastroFuncionario/cadastrar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dados)
+            });
+
+            if (!resposta.ok) {
+                const corpo = await resposta.json().catch(function () { return {}; });
+                document.getElementById("erro-geral").textContent =
+                    corpo.mensagem || "Houve um erro ao tentar realizar o cadastro!";
+                return;
+            }
+
+            abrirPopup();
+        } catch (erro) {
+            console.error(erro);
+            document.getElementById("erro-geral").textContent =
+                "Houve um erro ao tentar realizar o cadastro!";
+        }
+    });
+
+    // Limpa o erro do campo assim que a pessoa volta a digitar
+    form.querySelectorAll("input").forEach(function (input) {
+        input.addEventListener("input", function () {
+            marcarErro(input, "");
+        });
+    });
+
+    function validar() {
+        let valido = true;
+        let primeiroInvalido = null;
+
+        ["nome", "email", "empresa", "cargo"].forEach(function (campo) {
+            const input = document.getElementById(campo);
+            const valor = input.value.trim();
+            const invalido = valor === "" || (campo === "email" && !emailValido(valor));
+
+            marcarErro(input, invalido ? mensagens[campo] : "");
+
+            if (invalido) {
+                valido = false;
+                if (!primeiroInvalido) primeiroInvalido = input;
+            }
+        });
+
+        if (primeiroInvalido) primeiroInvalido.focus();
+        return valido;
+    }
+
+    function marcarErro(input, mensagem) {
+        document.getElementById("erro-" + input.id).textContent = mensagem;
+        input.closest(".campo-input").classList.toggle("invalido", mensagem !== "");
+    }
+
+    function cancelar() {
+        form.reset();
+        document.getElementById("empresa").value = empresaAtual;
+        document.getElementById("erro-geral").textContent = "";
+        form.querySelectorAll("input").forEach(function (input) { marcarErro(input, ""); });
+    }
+
+    function abrirPopup() {
+        popup.hidden = false;
+        document.getElementById("popup-fechar").focus();
+    }
+
+    function fecharPopup() {
+        popup.hidden = true;
+        cancelar();
+    }
+
+    // Fecha clicando fora da caixa ou com Esc
+    popup.addEventListener("click", function (e) {
+        if (e.target === popup) fecharPopup();
+    });
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !popup.hidden) fecharPopup();
+    });
+</script>
