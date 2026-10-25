@@ -43,6 +43,21 @@
 
         <div class="dash-kpi" id="kpis">
         </div>
+
+        <div class="graficos">
+            <div class="grafico">
+                <h3 class="grafico-titulo">Top 5 músicas: views e likes no Youtube</h3>
+                <div class="grafico-area"><canvas id="graficoYoutube"></canvas></div>
+            </div>
+            <div class="grafico">
+                <h3 class="grafico-titulo">Top 5 músicas: streamings no Spotify</h3>
+                <div class="grafico-area"><canvas id="graficoSpotify"></canvas></div>
+            </div>
+            <div class="grafico">
+                <h3 class="grafico-titulo">Média de views por tipo de lançamento</h3>
+                <div class="grafico-area"><canvas id="graficoLancamento"></canvas></div>
+            </div>
+        </div>
     </main>
 
     <script>
@@ -230,6 +245,231 @@
         `;
             }
         }
+    </script>
+    <!-- Gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+    <script>
+        // Top músicas do YouTube
+        let topMusicasYoutube = [
+            { nome: 'Luís Fonsi ft. Daddy Yankee - Despacito', views: 80796493620, likes: 507886520 },
+            { nome: 'Ed Sheehan - Shape of You', views: 59083984790, likes: 310477800 },
+            { nome: 'Wiz Khalifa ft. Charlie Puth - See You Again', views: 57737984070, likes: 401476740 },
+            { nome: 'Mark Ronson feat. Bruno Mars - Uptown Funk', views: 48210162180, likes: 200678790 },
+            { nome: 'Psy - Gangnam Style', views: 46797674710, likes: 263991330 },
+        ];
+
+        // Top músicas do Spotify
+        let topMusicasSpotify = [
+            { nome: 'The Weeknd - Blinding Lights', streamings: 3386520288 },
+            { nome: 'Ed Sheeran - Shape of You', streamings: 3362005201 },
+            { nome: 'Lewis Capaldi - Someone You Loved', streamings: 2634013335 },
+            { nome: 'Post Malone ft. 21 Savage - Rockstar', streamings: 2594926619 },
+            { nome: 'Post Malone - Sunflower feat. Swae Lee', streamings: 2538329799 },
+            { nome: 'Drake - One Dance feat. Wizkid & Kyla', streamings: 2522431995 },
+        ];
+
+        // Tipos de lançamento
+        // quantidade = músicas com views | totalViews = soma de views do YouTube
+        let tiposLancamento = [
+            { nome: 'Feat - Single', quantidade: 858, totalViews: 926768125820 },
+            { nome: 'Solo - Single', quantidade: 3243, totalViews: 2194458530560 },
+            { nome: 'Feat - Álbum', quantidade: 2000, totalViews: 2981551764750 },
+            { nome: 'Solo - Álbum', quantidade: 12388, totalViews: 10510229367070 },
+        ];
+
+        
+        function formatarViews(n) {
+            if (n >= 1000000000) {
+                return (n / 1000000000).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' bi';
+            }
+            return (n / 1000000).toLocaleString('pt-BR', { maximumFractionDigits: 0 }) + ' mi';
+        }
+
+        // Quebra o nome em várias linhas (para caber no gráfico)
+        function quebrarNome(nome, maxCaracteres) {
+            let palavras = nome.split(' ');
+            let linhas = [];
+            let atual = '';
+
+            for (let i = 0; i < palavras.length; i++) {
+                if ((atual + ' ' + palavras[i]).trim().length > maxCaracteres && atual != '') {
+                    linhas.push(atual);
+                    atual = palavras[i];
+                } else {
+                    atual = (atual + ' ' + palavras[i]).trim();
+                }
+            }
+            linhas.push(atual);
+            return linhas;
+        }
+
+        function tituloCurto(nome) {
+            let partes = nome.split(' - ');
+            return partes[partes.length - 1];
+        }
+
+        function carregarGraficos() {
+            Chart.defaults.color = '#C4B5FD';
+            Chart.defaults.borderColor = 'rgba(139, 92, 246, 0.15)';
+
+            let labelsYoutube = [], nomesYoutube = [], viewsYoutube = [], likesYoutube = [];
+            let labelsSpotify = [], nomesSpotify = [], streamsSpotify = [];
+
+            let youtube = topMusicasYoutube.slice();
+            let spotify = topMusicasSpotify.slice();
+
+            youtube.sort((a, b) => b.views - a.views);
+            spotify.sort((a, b) => b.streamings - a.streamings);
+
+            for (let i = 0; i < 5 && i < youtube.length; i++) {
+                labelsYoutube.push(quebrarNome(youtube[i].nome, 20));
+                nomesYoutube.push(youtube[i].nome);
+                viewsYoutube.push(youtube[i].views / 1000000000);
+                likesYoutube.push(youtube[i].likes / 1000000);
+            }
+
+            for (let i = 0; i < 5 && i < spotify.length; i++) {
+                labelsSpotify.push(quebrarNome(spotify[i].nome, 20));
+                nomesSpotify.push(spotify[i].nome);
+                streamsSpotify.push(spotify[i].streamings / 1000000000);
+            }
+
+            let maxViews = Math.max(...viewsYoutube);
+            let maxLikes = Math.max(...likesYoutube);
+            let limiteViews = Math.ceil(maxViews * 1.05);
+            let limiteLikes = Math.ceil(maxLikes / 100) * 100 * 2;
+
+
+            new Chart(graficoYoutube, {
+                type: 'bar',
+                data: {
+                    labels: labelsYoutube,
+                    datasets: [
+                        { label: 'Views (bilhões)', data: viewsYoutube, backgroundColor: '#7C3AED', borderRadius: 4 },
+                        { label: 'Likes (milhões)', data: likesYoutube, backgroundColor: '#C4B5FD', borderRadius: 4, yAxisID: 'y2' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: { callbacks: { title: function (itens) { return nomesYoutube[itens[0].dataIndex]; } } }
+                    },
+                    scales: {
+                        x: { ticks: { autoSkip: false, minRotation: 45, maxRotation: 45, font: { size: 8 } } },
+                        y: {
+                            beginAtZero: true,
+                            max: limiteViews,
+                            title: { display: true, text: 'Views (bilhões)', color: '#7C3AED' },
+                            ticks: { maxTicksLimit: 5, callback: function (v) { return v.toLocaleString('pt-BR'); } }
+                        },
+                        y2: {
+                            position: 'right',
+                            beginAtZero: true,
+                            max: limiteLikes,
+                            title: { display: true, text: 'Likes (milhões)', color: '#C4B5FD' },
+                            grid: { drawOnChartArea: false },
+                            ticks: { maxTicksLimit: 5, callback: function (v) { return v.toLocaleString('pt-BR'); } }
+                        }
+                    }
+                }
+            });
+
+            new Chart(graficoSpotify, {
+                type: 'bar',
+                data: {
+                    labels: labelsSpotify,
+                    datasets: [
+                        { label: 'Streamings (bilhões)', data: streamsSpotify, backgroundColor: '#A855F7', borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: { callbacks: { title: function (itens) { return nomesSpotify[itens[0].dataIndex]; } } }
+                    },
+                    scales: {
+                        x: { ticks: { autoSkip: false, minRotation: 45, maxRotation: 45, font: { size: 8 } } },
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Streamings (bilhões)', color: '#A855F7' },
+                            ticks: { maxTicksLimit: 5, callback: function (v) { return v.toLocaleString('pt-BR'); } }
+                        }
+                    }
+                }
+            });
+
+            // Donut: média de views por música em cada tipo de lançamento
+            let nomesTipos = [], medias = [], quantidades = [];
+            let somaViews = 0, somaMusicas = 0;
+
+            for (let i = 0; i < tiposLancamento.length; i++) {
+                let t = tiposLancamento[i];
+                nomesTipos.push(t.nome);
+                medias.push(t.totalViews / t.quantidade);
+                quantidades.push(t.quantidade);
+                somaViews += t.totalViews;
+                somaMusicas += t.quantidade;
+            }
+
+            let mediaGeral = somaViews / somaMusicas;
+
+            let textoCentro = {
+                id: 'textoCentro',
+                afterDraw(chart) {
+                    let ctx = chart.ctx;
+                    let x = (chart.chartArea.left + chart.chartArea.right) / 2;
+                    let y = (chart.chartArea.top + chart.chartArea.bottom) / 2;
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.font = 'bold 22px Arial';
+                    ctx.fillText(formatarViews(mediaGeral), x, y - 8);
+                    ctx.fillStyle = '#C4B5FD';
+                    ctx.font = '11px Arial';
+                    ctx.fillText('média/música', x, y + 14);
+                    ctx.restore();
+                }
+            };
+
+            new Chart(graficoLancamento, {
+                type: 'doughnut',
+                data: {
+                    labels: nomesTipos,
+                    datasets: [{
+                        data: medias,
+                        backgroundColor: ['#7C3AED', '#A855F7', '#4F46E5', '#C4B5FD'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '68%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } },
+                        tooltip: {
+                            displayColors: false,
+                            bodyFont: { size: 11 },
+                            titleFont: { size: 12 },
+                            callbacks: {
+                                label: function (item) {
+                                    return 'Média: ' + formatarViews(item.raw);
+                                },
+                                afterLabel: function (item) {
+                                    return 'Músicas: ' + quantidades[item.dataIndex].toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [textoCentro]
+            });
+        }
+
+        window.addEventListener('load', carregarGraficos);
     </script>
 </body>
 
