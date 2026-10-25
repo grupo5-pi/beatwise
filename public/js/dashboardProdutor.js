@@ -14,21 +14,35 @@ let dadosKpiFator = {
     texto: 'Músicas de sucesso (top 10) têm, em média, 35% mais energia que as de baixo desempenho.'
 }
 
+let dadosKpiDuracaoIdeal = {
+    valor: '2:30 - 3:30',
+    texto: 'Músicas nessa faixa têm streams 2x acima da média (980 mil vs média geral)'
+}
+
 let dadosBpmFaixa = {
     genero: 'Pop',
     faixas: ['80–90', '90–100', '100–110', '110–120', '120–130', '130–140', '140–150'],
     views: [0.5, 4.8, 3.7, 2.9, 2.1, 4.7, 2.7],
-    qtd: [8, 14, 22, 30, 25, 12, 5],     
-    retornoEsperado: 3                    
+    qtd: [8, 14, 22, 30, 25, 12, 5],
+    retornoEsperado: 3
+}
+
+let dadosRadar = {
+    genero: 'Pop',
+    rotulos: ['BPM', 'Tonalidade', 'Energia', 'Valência', 'Dançabilidade'],
+    valores: [65, 50, 80, 70, 75],
+    valoresReais: ['118 BPM', 'Lá menor', '80%', '70%', '75%']
 }
 
 
 let graficoBpm;
+let graficoRadar;
 
 function carregarDashboardProdutor() {
     carregarAlertas();
-    carregarKpiFator();
+    carregarKpis();
     montarGraficoBpm();
+    montarGraficoRadar();
 }
 
 function carregarAlertas() {
@@ -52,9 +66,12 @@ function carregarAlertas() {
     }
 }
 
-function carregarKpiFator() {
+function carregarKpis() {
     kpi_fator_valor.textContent = dadosKpiFator.valor;
     kpi_fator_texto.textContent = dadosKpiFator.texto;
+
+    kpi_duracao_ideal_valor.textContent = dadosKpiDuracaoIdeal.valor;
+    kpi_duracao_ideal_texto.textContent = dadosKpiDuracaoIdeal.texto;
 }
 
 let pluginTextoRetorno = {
@@ -72,28 +89,28 @@ let pluginTextoRetorno = {
 }
 
 function montarGraficoBpm() {
-    let corDestaque = '#A855F7';                  
-    let corApagada = '#6D28D9';                   
-    let corBorda = 'rgba(139, 92, 246, 0.28)';   
- 
+    let corDestaque = '#A855F7';
+    let corApagada = '#6D28D9';
+    let corBorda = 'rgba(139, 92, 246, 0.28)';
+
     Chart.defaults.color = corDestaque;
- 
+
     titulo_bpm.textContent = dadosBpmFaixa.genero.toUpperCase() + ': média de views por faixa de BPM';
- 
+
     let retorno = dadosBpmFaixa.retornoEsperado;
     let linhaRetorno = [];
     let cores = [];
- 
+
     for (let i = 0; i < dadosBpmFaixa.views.length; i++) {
         linhaRetorno.push(retorno);
- 
+
         if (dadosBpmFaixa.views[i] >= retorno) {
-            cores.push(corDestaque);  
+            cores.push(corDestaque);
         } else {
-            cores.push(corApagada); 
+            cores.push(corApagada);
         }
     }
- 
+
     graficoBpm = new Chart(grafico_bpm, {
         type: 'bar',
         data: {
@@ -136,16 +153,72 @@ function montarGraficoBpm() {
                 }
             },
             scales: {
-                y: { beginAtZero: true, suggestedMax: 5, 
-                        ticks: {
-                            stepSize: 1,
-                            callback: function (valor) {
-                                return valor + ' mi';
-                            }
-                        }, 
-                        grid: { color: corBorda }
+                y: {
+                    beginAtZero: true, suggestedMax: 5,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function (valor) {
+                            return valor + ' mi';
+                        }
                     },
+                    grid: { color: corBorda }
+                },
                 x: { grid: { display: false } }
+            }
+        }
+    })
+}
+
+function montarGraficoRadar() {
+    let corDestaque = '#A855F7';
+    let corBorda = 'rgba(139, 92, 246, 0.28)';
+
+    titulo_radar.textContent = dadosRadar.genero.toUpperCase() + ': perfil musical das músicas de sucesso';
+
+    graficoRadar = new Chart(grafico_radar, {
+        type: 'radar',
+        data: {
+            labels: dadosRadar.rotulos,
+            datasets: [
+                {
+                    label: 'Perfil médio',
+                    data: dadosRadar.valores,
+                    backgroundColor: 'rgba(168, 85, 247, 0.3)',
+                    borderColor: corDestaque,
+                    borderWidth: 2,
+                    pointBackgroundColor: corDestaque,
+                    pointRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function (item) {
+                            return item.label + ': ' + dadosRadar.valoresReais[item.dataIndex];
+                        }
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        display: false,
+                        stepSize: 25
+                    },
+                    grid: { color: corBorda },
+                    angleLines: { color: corBorda },
+                    pointLabels: {
+                        color: 'white',
+                        font: { size: 13 }
+                    }
+                }
             }
         }
     })

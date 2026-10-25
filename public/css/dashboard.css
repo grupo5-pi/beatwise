@@ -265,3 +265,12 @@ body {
     position: relative;
     height: 280px;
 }
+
+.dash-grafico,
+.dash-grafico-radar {
+    min-width: 0;
+    padding: 20px;
+    background-color: var(--color-bw-surface);
+    border: 1px solid var(--color-bw-border);
+    border-radius: 16px;
+}
