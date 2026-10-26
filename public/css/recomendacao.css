@@ -12,6 +12,8 @@
 
 .rec-content {
     flex: 1;
+    min-width: 0;
+    margin-left: 16.3%;
     height: 100%;
     overflow-y: auto;
     padding: 28px 40px;

@@ -10,10 +10,12 @@
     
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/recomendacao.css">
+    <link rel="stylesheet" href="./css/artistaDetalhe.css">
     <script src="./js/recomendacao.js" defer></script>
+    <script src="./js/artistaDetalhe.js" defer></script>
 </head>
 
-<body class="rec-page" onload="verificarResultado()">
+<body class="rec-page">
     <aside class="sidebar">
         <img src="./assets/imgs/Logo_nav.png" alt="logo da BeatWise">
         <hr>
@@ -121,17 +123,17 @@
 
             <div class="rec-painel">
                 <div id="rec-cards" class="rec-cards">
-                    <div class="rec-card" onclick="abrirArtista(0)">
+                    <div class="rec-card" onclick="abrirModalArtista(0)">
                         <span class="rec-card-nome">Artista 1</span>
                         <span class="rec-card-info">Pop · 118 BPM · Tom C</span>
                         <span class="rec-match">94% compatível</span>
                     </div>
-                    <div class="rec-card" onclick="abrirArtista(1)">
+                    <div class="rec-card" onclick="abrirModalArtista(1)">
                         <span class="rec-card-nome">Artista 2</span>
                         <span class="rec-card-info">Funk · 128 BPM · Tom C#</span>
                         <span class="rec-match">89% compatível</span>
                     </div>
-                    <div class="rec-card" onclick="abrirArtista(2)">
+                    <div class="rec-card" onclick="abrirModalArtista(2)">
                         <span class="rec-card-nome">Artista 3</span>
                         <span class="rec-card-info">Rap · 95 BPM · Tom D</span>
                         <span class="rec-match">85% compatível</span>
@@ -151,6 +153,62 @@
             </div>
         </section>
     </main>
+    <!-- Popup de detalhes do artista (mesmo estilo do popup das músicas) -->
+    <div class="art-modal" id="modal_artista" style="display: none;">
+        <div class="art-header">
+            <a class="art-rotulo">DETALHES DO ARTISTA</a>
+            <div class="art-nome" id="nome_artista"></div>
+            <div class="art-tags" id="tags_artista"></div>
+
+            <div class="art-sair" onclick="fecharModalArtista()">
+                <a> X </a>
+            </div>
+        </div>
+
+        <hr class="art-linha">
+
+        <p class="art-titulo">DESEMPENHO NAS PLATAFORMAS</p>
+
+        <div class="art-stats">
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_streams"></span>
+                <span class="art-stat-nome">Streams</span>
+                <span class="art-stat-fonte">Spotify</span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_views"></span>
+                <span class="art-stat-nome">Visualizações</span>
+                <span class="art-stat-fonte">Youtube</span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_curtidas"></span>
+                <span class="art-stat-nome">Curtidas</span>
+                <span class="art-stat-fonte">Youtube</span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_comentarios"></span>
+                <span class="art-stat-nome">Comentários</span>
+                <span class="art-stat-fonte">Youtube</span>
+            </div>
+        </div>
+
+        <hr class="art-linha">
+
+        <p class="art-titulo">PERFIL SONORO</p>
+
+        <div class="art-perfil" id="perfil_sonoro"></div>
+
+        <div class="art-infos">
+            <div class="art-stat">
+                <span class="art-stat-nome">TEMPO</span>
+                <span class="art-stat-valor" id="info_bpm"></span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-nome">DURAÇÃO</span>
+                <span class="art-stat-valor" id="info_duracao"></span>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
