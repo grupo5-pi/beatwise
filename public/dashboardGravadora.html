@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -7,11 +7,16 @@
     <title>Dashboard Gravadora | BeatWise</title>
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 
-<body class="dash-gravadora" onload="carregarAlertas()">
+<body class="dash-gravadora" onload="iniciar()">
     <aside class="sidebar">
         <img src="./assets/imgs/Logo_nav.png" alt="logo da BeatWise">
         <hr>
@@ -27,97 +32,162 @@
             <a href="./perfil.html" id="nome-usuario">Pedro</a>
         </div>
     </aside>
- 
+
     <main class="conteudo">
-         <div class="conteudo-topo">
+        <div class="conteudo-topo">
             <div class="titulos">
-                <h3>Bem vindo(a) <span id="nome-usuario">Pedro</span></h3>
+                <h3>Bem vindo(a) Pedro</h3>
                 <h1>Monitoramento de Indicadores estratégicos</h1>
             </div>
         </div>
 
-        <div class="dash-alertas" id="lista_alertas">
-        </div>
+        <div class="dash-alertas" id="lista_alertas"></div>
 
-        <div class="kpis-desempenho">            
-            <div class="kpi">
-                <a>Streams</a>
-                <div class="dado primary-color"> 22222 </div>
-                <a>Spotify</a>
-            </div>
-
-            <div class="kpi">
-                <a>Visualizações</a>
-                <div class="dado primary-color">22222</div>
-                <a>Youtube</a>
-            </div>
-
-            <div class="kpi">
-                <a>Curtidas</a>
-                <div class="dado primary-color">22222</div>
-                <a>Youtube</a>
-            </div>
-
-            <div class="kpi">
-                <a>Comentários </a>
-                <div class="dado primary-color">222222</div>
-                <a>Youtube</a>
-            </div>
-        </div>
+        <div class="kpis-desempenho" id="lista_kpis"></div>
 
         <div class="graficos">
             <div class="grafico">
-
+                <h3>Comparação de Reprodução entre Spotify(streaming) e YouTube (views)</h3>
+                <div class="grafico-canvas"><canvas id="graficoLancamento"></canvas></div>
             </div>
 
             <div class="grafico">
-
+                <h3>Gêneros com mais engajamento</h3>
+                <div class="grafico-canvas"><canvas id="graficoGeneros"></canvas></div>
             </div>
 
             <div class="grafico">
-
+                <h3>Tipo de álbum</h3>
+                <div class="grafico-canvas"><canvas id="graficoTipoAlbum"></canvas></div>
             </div>
         </div>
     </main>
 
-</body>
+    <script>
+        /* ---------- ALERTAS ---------- */
+        let dadosAlertas = [
+            { tipo: "positivo", texto: "Importação de músicas realizada com sucesso." },
+            { tipo: "negativo", texto: "Existem músicas sem informações completas." },
+        ];
 
-<script>
-    let dadosAlertas = [
-        {
-            tipo: "positivo",
-            texto: "Importação de músicas realizada com sucesso."
-        },
-        {
-            tipo: "negativo",
-            texto: "Existem músicas sem informações completas."
-        },
-        // {
-        //     tipo: "positivo",
-        //     texto: "Todos os dados de artistas foram atualizados."
-        // },
-    ];
+        function carregarAlertas() {
+            lista_alertas.innerHTML = '';
 
-    function carregarAlertas() {
-    lista_alertas.innerHTML = '';
+            for (let i = 0; i < dadosAlertas.length; i++) {
+                let tipo = dadosAlertas[i].tipo;
+                let icone = tipo == 'positivo' ? '✓' : '✗';
 
-    for (let i = 0; i < dadosAlertas.length; i++) {
-        let tipo = dadosAlertas[i].tipo;
-        let icone = '';
-
-        if (tipo == 'positivo') {
-            icone = '✓';
-        } else {
-            icone = '✗';
+                lista_alertas.innerHTML += `
+                    <div class="dash-alerta dash-alerta-${tipo}">
+                        <span class="dash-alerta-icone">${icone}</span>
+                        <span>${dadosAlertas[i].texto}</span>
+                    </div>`;
+            }
         }
 
-        lista_alertas.innerHTML += `
-            <div class="dash-alerta dash-alerta-${tipo}">
-                <span class="dash-alerta-icone">${icone}</span>
-                <span>${dadosAlertas[i].texto}</span>
-            </div>`;
-    }
-}
-</script>
+        /* ---------- KPIs (dados mockados) ---------- */
+        let dadosKpis = [
+            { titulo: "Comparativo músicas com clipe X sem clipe", valor: "Com Clipe", desc: "Músicas com clipe têm maior taxa de engajamento:  <span class='destaque'>6,0%</span>", seta: "↑↑" },
+            { titulo: "Gênero com melhor desempenho", valor: "Pop", desc: "Pop está performando  <span class='destaque'>44%</span> acima da média geral", seta: "↑↑" },
+            { titulo: "Qual a melhor plataforma", valor: "YouTube", desc: "O YouTube apresenta maior taxa de aproveitamento: <span class='destaque'>+11%</span>", seta: "↑↑" },
+            { titulo: "Comparativo Feat/Solo", valor: "Feat", desc: "Músicas feat têm maior taxa de engajamento: <span class='destaque'>+8%</span>", seta: "↑↑" },
+        ];
+
+        function carregarKpis() {
+            lista_kpis.innerHTML = '';
+
+            for (let i = 0; i < dadosKpis.length; i++) {
+                let k = dadosKpis[i];
+
+                lista_kpis.innerHTML += `
+                    <div class="kpi">
+                        <span class="kpi-titulo">${k.titulo}</span>
+                        <div class="dado">${k.valor} <span class="kpi-seta">${k.seta}</span></div>
+                        <span class="kpi-desc">${k.desc}</span>
+                    </div>`;
+            }
+        }
+
+
+        const roxo = '#7C3AED';
+        const roxoClaro = '#A78BFA';
+        const indigo = '#4F46E5';
+        const lilas = '#C4B5FD';
+        const texto= '#fff';
+        const linhaGrade = 'rgba(139, 92, 246, 0.15)';
+
+        Chart.defaults.color = texto
+        Chart.defaults.font.family = 'Inter, sans-serif';
+        Chart.defaults.borderColor = linhaGrade;
+        Chart.defaults.maintainAspectRatio = false;
+
+        function carregarGraficos() {
+            // 1) Tipo de lançamento x desempenho: Spotify x YouTube (em milhões)
+            new Chart(graficoLancamento, {
+                type: 'bar',
+                data: {
+                    labels: ['Álbum', 'Solo'],
+                    datasets: [
+                        { label: 'Spotify', data: [5.2, 8.0], backgroundColor: roxo, borderRadius: 6 },
+                        { label: 'YouTube', data: [5.5, 8.6], backgroundColor: roxoClaro, borderRadius: 6 }
+                    ]
+                },
+                options: {
+                    plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y.toString().replace('.', ',')} mi` } } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { callback: v => v + ' mi' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 2) Gêneros com mais engajamento (% de curtidas + comentários / views)
+            new Chart(graficoGeneros, {
+                type: 'bar',
+                data: {
+                    labels: ['Pop', 'Funk', 'Trap', 'MPB', 'Rock', 'Eletrônica', 'Sertanejo', 'Samba'],
+                    datasets: [{
+                        label: 'Engajamento',
+                        data: [7.0, 5.2, 4.9, 4.3, 3.9, 3.9, 3.5, 3.5],
+                        backgroundColor: roxo,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { beginAtZero: true, ticks: { callback: v => v + '%' } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 3) Tipo de álbum (% do desempenho)
+            new Chart(graficoTipoAlbum, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Feat - Single', 'Feat - Álbum', 'Solo - Single', 'Solo - Álbum'],
+                    datasets: [{
+                        data: [41, 16, 19, 24],
+                        backgroundColor: [roxo, indigo, roxoClaro, lilas],
+                        borderColor: '#15131D',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    cutout: '65%',
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
+                }
+            });
+        }
+
+        function iniciar() {
+            carregarAlertas();
+            carregarKpis();
+            carregarGraficos();
+        }
+    </script>
+</body>
 
 </html>

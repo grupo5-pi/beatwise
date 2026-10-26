@@ -7,13 +7,19 @@ public class Log {
     private LocalDateTime dataLog;
     private String nivel;
     private String mensagem;
-    private String origem;
 
-    public Log(String nivel, String mensagem, String origem) {
+    public Log(String nivel, String mensagem) {
         this.dataLog = LocalDateTime.now();
         this.nivel = nivel;
         this.mensagem = mensagem;
-        this.origem = origem;
+    }
+
+    public void registrarLog(String nivel, String mensagem) {
+        if (nivel != null && mensagem != null) {
+            Log log = new Log(nivel, mensagem);
+
+            System.out.println(log.exibirLog());
+        }
     }
 
     public LocalDateTime getDataLog() {
@@ -40,16 +46,8 @@ public class Log {
         this.mensagem = mensagem;
     }
 
-    public String getOrigem() {
-        return origem;
-    }
-
-    public void setOrigem(String origem) {
-        this.origem = origem;
-    }
-
     public String exibirLog() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM'/'dd'/'yyyy hh:mm:ss a");
-        return "Data: " + dataLog.format(formatter) + "\n" + nivel + ": " + mensagem;
+        return "[" + getDataLog().format(formatter) + "] [" + getNivel() + "] - " + getMensagem();
     }
 }
