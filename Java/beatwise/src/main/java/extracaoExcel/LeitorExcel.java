@@ -1,9 +1,13 @@
 package extracaoExcel;
 
+import logs.LogExtracaoExcel;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.jdbc.core.JdbcTemplate;
+import repository.ConexaoBD;
+import repository.LogRepository;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,6 +19,10 @@ public class LeitorExcel {
 
     public List<Musica> extrairMusica(String nomeArquivo) {
         List<Musica> musicasExtraidas = new ArrayList<>();
+
+        ConexaoBD conexao = new ConexaoBD();
+        JdbcTemplate jdbcTemplate = conexao.getJdbcTemplate();
+        LogRepository repository = new LogRepository(jdbcTemplate);
 
         try (
               InputStream arquivo = new FileInputStream(nomeArquivo);
@@ -70,8 +78,15 @@ public class LeitorExcel {
             System.out.println("Leitura do arquivo finalizada");
             printarLinhas();
 
+            LogExtracaoExcel logExtracaoExcel = new LogExtracaoExcel("INFO", "A leitura do arquivo excel foi reaizada com sucesso!", repository);
+            logExtracaoExcel.registrarLog();
+
             return musicasExtraidas;
         } catch (IOException e) {
+
+            LogExtracaoExcel logExtracaoExcel = new LogExtracaoExcel("WARNING", "Ocorreu um erro ao realizar a leitura dos arquivos!", repository);
+            logExtracaoExcel.registrarLog();
+
             return musicasExtraidas;
         }
     }

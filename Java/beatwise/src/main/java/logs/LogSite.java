@@ -1,22 +1,26 @@
 package logs;
 
+import repository.LogRepository;
+
 import java.time.format.DateTimeFormatter;
 
 public class LogSite extends Log{
     private Integer idUsuario;
     private String origem;
+    private final LogRepository repository;
 
-    public LogSite(String nivel, String mensagem, Integer idUsuario, String origem) {
+    public LogSite(String nivel, String mensagem, Integer idUsuario, String origem, LogRepository repository) {
         super(nivel, mensagem);
         this.idUsuario = idUsuario;
         this.origem = origem;
+        this.repository = repository;
     }
 
-    public void registrarLog(String nivel, String mensagem, Integer idUsuario, String origem) {
-        if (nivel != null && mensagem != null || idUsuario != null || origem != null) {
-            LogSite logSite = new LogSite(nivel, mensagem, idUsuario, origem);
+    public void registrarLog() {
+        if (this.getNivel() != null && this.getMensagem() != null || idUsuario != null || origem != null) {
 
-            System.out.println(logSite.exibirLog());
+            repository.saveSite(this);
+            System.out.println(this.exibirLog());
         }
     }
 
