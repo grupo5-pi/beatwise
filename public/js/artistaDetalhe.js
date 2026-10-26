@@ -23,17 +23,10 @@ let artistas = [
     }
 ];
 
-function carregarArtista() {
-    let posicao = sessionStorage.ARTISTA_SELECIONADO;
-
-    if (posicao == undefined) {
-        posicao = 0;
-    }
-
+function abrirModalArtista(posicao) {
     let artista = artistas[posicao];
 
     nome_artista.textContent = artista.nome;
-    info_artista.textContent = artista.info;
 
     stat_streams.textContent = artista.streams;
     stat_views.textContent = artista.views;
@@ -42,6 +35,10 @@ function carregarArtista() {
 
     info_bpm.textContent = artista.bpm;
     info_duracao.textContent = artista.duracao;
+
+    // limpa antes de preencher, senão repete ao abrir outro artista
+    tags_artista.innerHTML = '';
+    perfil_sonoro.innerHTML = '';
 
     for (let i = 0; i < artista.generos.length; i++) {
         tags_artista.innerHTML += `<span class="art-tag">${artista.generos[i]}</span>`;
@@ -62,4 +59,10 @@ function carregarArtista() {
                 </div>
             </div>`;
     }
+
+    modal_artista.style.display = 'flex';
+}
+
+function fecharModalArtista() {
+    modal_artista.style.display = 'none';
 }

@@ -245,9 +245,9 @@ h1 {
 }
 
 .btn-contato {
-  background: linear-gradient(90deg, var(--roxo-claro) 0%, var(--roxo-escuro) 50%, rgba(0, 0, 0, 1) 100%);
+  background: linear-gradient(309deg, rgba(109, 40, 217, 1) 0%, rgba(0, 0, 0, 1) 55%, rgba(45, 36, 201, 1) 100%);
   background-position: left;
-  background-size: 200% 100%;
+  background-size: 200% 200%;
   border: none;
   border-radius: 20px;
   color: white;
@@ -259,7 +259,17 @@ h1 {
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.9s ease;
+  animation: fundo 4s ease-in-out alternate infinite;
+}
+
+@keyframes fundo {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 0%;
+    }
 }
 
 .btn-contato:hover {
