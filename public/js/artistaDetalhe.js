@@ -1,25 +1,24 @@
 let artistas = [
     {
-        nome: 'Artista 1',
-        
+        nome: 'Dua Lipa',
         generos: ['Pop', 'Eletrônico'],
-        streams: '1,04 bi', views: '6,94 bi', curtidas: '62,2 mi', comentarios: '1,7 mi',
-        perfil: [['Dançabilidade', 82], ['Energia', 71], ['Valência', 77], ['Acústica', 8], ['Instrumentalidade', 2]],
-        bpm: '118 BPM', duracao: '3min 42s'
+        streams: '1,2 bi', views: '515 mi', curtidas: '9,6 mi', comentarios: '205 mil',
+        perfil: [['Dançabilidade', 52], ['Energia', 64], ['Valência', 40], ['Acústica', 13], ['Instrumentalidade', 7]],
+        bpm: '96 BPM', duracao: '3min 5s'
     },
     {
-        nome: 'Artista 2',
+        nome: 'Luísa Sonza',
         generos: ['Funk', 'Pop'],
-        streams: '720 mi', views: '3,2 bi', curtidas: '40,1 mi', comentarios: '980 mil',
-        perfil: [['Dançabilidade', 93], ['Energia', 88], ['Valência', 70], ['Acústica', 5], ['Instrumentalidade', 4]],
-        bpm: '128 BPM', duracao: '2min 58s'
+        streams: '7,33 bi', views: '6,03 bi', curtidas: '48 mi', comentarios: '2,1 mi',
+        perfil: [['Dançabilidade', 72], ['Energia', 86], ['Valência', 46], ['Acústica', 41], ['Instrumentalidade', 4]],
+        bpm: '121 BPM', duracao: '3min 46s'
     },
     {
-        nome: 'Artista 3',
+        nome: 'Veigh',
         generos: ['Rap', 'Hip Hop'],
-        streams: '510 mi', views: '1,8 bi', curtidas: '25,4 mi', comentarios: '640 mil',
-        perfil: [['Dançabilidade', 64], ['Energia', 74], ['Valência', 48], ['Acústica', 12], ['Instrumentalidade', 3]],
-        bpm: '95 BPM', duracao: '3min 15s'
+        streams: '14,8 bi', views: '7,6 bi', curtidas: '36 mi', comentarios: '2,6 mi',
+        perfil: [['Dançabilidade', 78], ['Energia', 69], ['Valência', 71], ['Acústica', 36], ['Instrumentalidade', 11]],
+        bpm: '158 BPM', duracao: '4min 0s'
     }
 ];
 
@@ -36,7 +35,6 @@ function abrirModalArtista(posicao) {
     info_bpm.textContent = artista.bpm;
     info_duracao.textContent = artista.duracao;
 
-    // limpa antes de preencher, senão repete ao abrir outro artista
     tags_artista.innerHTML = '';
     perfil_sonoro.innerHTML = '';
 
