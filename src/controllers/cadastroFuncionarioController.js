@@ -1,3 +1,4 @@
+var crypto = require("crypto");
 var cadastroFuncionarioModel = require("../models/cadastroFuncionarioModel");
 
 function emailValido(email) {
@@ -23,7 +24,7 @@ function escapar(texto) {
 async function validarAdmin(idAdmin) {
     if (!Number.isInteger(idAdmin)) return null;
     var admin = await cadastroFuncionarioModel.buscarAdminPorId(idAdmin);
-    if (admin.length == 0 || admin[0].cargo != "Administrador") return null;
+    if (admin.length == 0 || admin[0].cargo != "Admin") return null;
     return admin[0];
 }
 
@@ -32,7 +33,6 @@ async function cadastrarFuncionario(req, res) {
         var nome = (req.body.nomeServer || "").trim();
         var email = (req.body.emailServer || "").trim();
         var cargo = (req.body.cargoServer || "").trim();
-        var senha = req.body.senhaServer || "";
         var idAdmin = parseInt(req.body.idAdminServer);
 
         if (nome.length < 3 || nome.length > 45) {
@@ -47,12 +47,9 @@ async function cadastrarFuncionario(req, res) {
         if (!Number.isInteger(idAdmin)) {
             return res.status(400).json({ mensagem: "Usuário não identificado." });
         }
-        if (!senhaValida(senha) || senha.length > 100) {
-            return res.status(400).json({ mensagem: "Senha provisória inválida." });
-        }
 
         var admin = await cadastroFuncionarioModel.buscarAdminPorId(idAdmin);
-        if (admin.length == 0 || admin[0].cargo != "Administrador") {
+        if (admin.length == 0 || admin[0].cargo != "Admin") {
             return res.status(403).json({ mensagem: "Apenas administradores podem cadastrar funcionários." });
         }
 
@@ -69,15 +66,41 @@ async function cadastrarFuncionario(req, res) {
         await cadastroFuncionarioModel.cadastrarFuncionario(
             nome.replace(/'/g, "''"),
             email.replace(/'/g, "''"),
-            senha.replace(/'/g, "''"),
             admin[0].fkEmpresa,
             cargoEncontrado[0].id
         );
+
+        var letras = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        var codigo = "";
+        for (var i = 0; i < 8; i++) {
+            codigo += letras[crypto.randomInt(letras.length)];
+        }
+        await cadastroFuncionarioModel.criarToken(escapar(email), codigo);
 
         res.status(201).json({ ok: true });
     } catch (erro) {
         console.log(erro);
         res.status(500).json({ mensagem: "Erro ao cadastrar o funcionário." });
+    }
+}
+
+async function obterEmpresa(req, res) {
+    try {
+        var idAdmin = parseInt(req.params.idAdmin);
+        var admin = await validarAdmin(idAdmin);
+        if (!admin) {
+            return res.status(403).json({ mensagem: "Apenas administradores podem cadastrar funcionários." });
+        }
+
+        var resultado = await cadastroFuncionarioModel.buscarEmpresaDoAdmin(idAdmin);
+        if (resultado.length == 0) {
+            return res.status(404).json({ mensagem: "Empresa não encontrada." });
+        }
+
+        res.status(200).json({ empresa: resultado[0].empresa });
+    } catch (erro) {
+        console.log(erro);
+        res.status(500).json({ mensagem: "Erro ao buscar a empresa." });
     }
 }
 
@@ -208,6 +231,7 @@ async function excluirFuncionario(req, res) {
 
 module.exports = {
     cadastrarFuncionario,
+    obterEmpresa,
     listarFuncionarios,
     atualizarFuncionario,
     excluirFuncionario
