@@ -19,6 +19,7 @@ var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var funcionarioRouter = require("./src/routes/funcionarioRoutes");
 var cadastroFuncionarioRouter = require("./src/routes/cadastroFuncionarioRoutes");
+var primeiroAcessoRouter = require("./src/routes/primeiroAcessoRoutes");
 
 
 app.use(express.json({ limit: "2mb" }));
@@ -31,6 +32,7 @@ app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/funcionarios", funcionarioRouter); 
 app.use("/cadastroFuncionario", cadastroFuncionarioRouter);
+app.use("/primeiroAcesso", primeiroAcessoRouter);
 
 
 app.listen(PORTA_APP, function () {
