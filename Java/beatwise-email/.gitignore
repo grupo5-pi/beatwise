@@ -1,0 +1,6 @@
+# NUNCA enviar o .env ao Git: ele guarda a senha do e-mail e a do banco
+.env
+target/
+out/
+.idea/
+*.iml
