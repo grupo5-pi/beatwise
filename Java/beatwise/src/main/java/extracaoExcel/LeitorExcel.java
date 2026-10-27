@@ -29,9 +29,11 @@ public class LeitorExcel {
               Workbook workbook = new XSSFWorkbook(arquivo) // caso seja .xls troque para HSSFWorkbook
         ) {
 
-            System.out.printf("Iniciando leitura do arquivo %s%n inserção no banco de dados da BeatWise", nomeArquivo);
+            System.out.printf("Iniciando leitura do arquivo %s, para inserção no banco de dados da BeatWise", nomeArquivo);
 
             Sheet sheet = workbook.getSheetAt(0);
+
+            Integer contador = 1;
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) {
                     printarCabecalho(row);
@@ -39,7 +41,7 @@ public class LeitorExcel {
                 }
 
                 // Extraindo valor das células e criando objeto Música
-                System.out.println("Lendo linha " + row.getRowNum());
+//                System.out.println("Lendo linha " + row.getRowNum());
 
                 Integer id = row.getCell(0) != null ? (int) row.getCell(0).getNumericCellValue() : null;
                 String artist = row.getCell(1) != null ? row.getCell(1).getStringCellValue() : null;
@@ -72,6 +74,12 @@ public class LeitorExcel {
 
                 Musica musica = new Musica(id, artist, urlSpotify, track, album, albumType, uri, danceability, energy, key, loudness, speechiness, acousticness, instrumentalness, liveness, valence, tempo, durationMs, urlYoutube, title, channel, views, likes, comments, description, licensed, officialVideo, stream);
                 musicasExtraidas.add(musica);
+
+                contador++; // Quantidade de registros
+                if (contador % 1000 == 0) {
+                    LogExtracaoExcel logExtracaoExcel = new LogExtracaoExcel("INFO", "Leitura e inserção de registros no banco de dados: [" + contador + " registros]", repository);
+                    logExtracaoExcel.registrarLog();
+                }
             }
 
             printarLinhas();
