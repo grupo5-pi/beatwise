@@ -11,9 +11,9 @@ public class Main {
         LeitorExcel leitorExcel = new LeitorExcel();
         List<Musica> musicasExtraidas = leitorExcel.extrairMusica(nomeArquivo);
 
-        System.out.println("Músicas extraídas:");
-        for (Musica musica : musicasExtraidas) {
-            System.out.println(musica);
-        }
+//        System.out.println("Músicas extraídas:");
+//        for (Musica musica : musicasExtraidas) {
+//            System.out.println(musica);
+//        }
     }
 }
