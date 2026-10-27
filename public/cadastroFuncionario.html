@@ -64,7 +64,7 @@
                 <div class="perfil-campo">
                     <label for="empresa">Empresa:</label>
                     <div class="campo-input">
-                        <input id="empresa" name="empresa" type="text" autocomplete="off" required>
+                        <input id="empresa" name="empresa" type="text" autocomplete="off" required readonly>
                     </div>
                     <p class="campo-erro" id="erro-empresa"></p>
                 </div>
@@ -72,7 +72,13 @@
                 <div class="perfil-campo">
                     <label for="cargo">Cargo:</label>
                     <div class="campo-input">
-                        <input id="cargo" name="cargo" type="text" autocomplete="off" required>
+                        <select id="cargo" name="cargo" required>
+                            <option value="">Selecione o cargo</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Empresa">Empresa</option>
+                            <option value="Produtor">Produtor</option>
+                            <option value="Marketing">Marketing</option>
+                        </select>
                     </div>
                     <p class="campo-erro" id="erro-cargo"></p>
                 </div>
@@ -107,7 +113,7 @@
         <div class="modal" role="dialog" aria-modal="true" aria-labelledby="popup-titulo">
             <div class="modal-icone sucesso">✓</div>
             <h2 id="popup-titulo">Cadastro realizado com sucesso!</h2>
-            <p class="modal-texto">Uma senha provisória foi gerada e armazenada para o funcionário.</p>
+            <p class="modal-texto">Enviamos um e-mail para o funcionário com o código para criar a senha.</p>
             <div class="modal-acoes">
                 <button type="button" class="btn-modal btn-modal-pri" id="popup-fechar"
                     onclick="fecharPopup()">Fechar</button>
@@ -133,6 +139,28 @@
         document.getElementById("nome-usuario").textContent = primeiroLogin;
         document.getElementById("boas-nome").textContent = primeiroLogin;
     }
+
+    // Mostra a empresa do administrador (o servidor usa sempre a empresa dele no cadastro)
+    async function carregarEmpresa() {
+        try {
+            const resposta = await fetch("/cadastroFuncionario/empresa/" + usuarioId);
+            const corpo = await resposta.json().catch(function () { return {}; });
+
+            if (!resposta.ok) {
+                document.getElementById("erro-geral").textContent =
+                    corpo.mensagem || "Erro ao carregar os dados da empresa.";
+                form.querySelectorAll("input, select, button").forEach(function (el) { el.disabled = true; });
+                return;
+            }
+
+            empresaAtual = corpo.empresa;
+            document.getElementById("empresa").value = empresaAtual;
+        } catch (erro) {
+            document.getElementById("erro-geral").textContent = "Erro ao carregar os dados da empresa.";
+        }
+    }
+
+    carregarEmpresa();
 
     const mensagens = {
         nome: "Informe o nome do funcionário.",
@@ -207,14 +235,11 @@
 
         if (!validar()) return;
 
-        const senha = gerarSenha();
-
         const dados = {
             nomeServer: document.getElementById("nome").value.trim(),
             emailServer: document.getElementById("email").value.trim(),
             idAdminServer: usuarioId,
-            cargoServer: document.getElementById("cargo").value.trim(),
-            senhaServer: senha
+            cargoServer: document.getElementById("cargo").value.trim()
         };
 
         try {
@@ -241,7 +266,7 @@
     });
 
     // Limpa o erro do campo assim que a pessoa volta a digitar
-    form.querySelectorAll("input").forEach(function (input) {
+    form.querySelectorAll("input, select").forEach(function (input) {
         input.addEventListener("input", function () {
             marcarErro(input, "");
         });
@@ -277,7 +302,7 @@
         form.reset();
         document.getElementById("empresa").value = empresaAtual;
         document.getElementById("erro-geral").textContent = "";
-        form.querySelectorAll("input").forEach(function (input) { marcarErro(input, ""); });
+        form.querySelectorAll("input, select").forEach(function (input) { marcarErro(input, ""); });
     }
 
     function abrirPopup() {
