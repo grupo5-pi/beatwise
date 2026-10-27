@@ -1,8 +1,9 @@
 package repository;
 
-import logs.LogExtracaoExcel;
-import logs.LogSite;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.util.List;
 
 public class ExtracaoRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -11,14 +12,19 @@ public class ExtracaoRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // Inserts
     public void saveAlbum(String nome) {
-        jdbcTemplate.update(
-                "INSERT INTO albumBD (nome) VALUES (?);", nome);
+        if (selectAlbum(nome) == null) {
+            jdbcTemplate.update(
+                    "INSERT INTO albumBD (nome) VALUES (?);", nome);
+        }
     }
 
     public void saveArtista(String nome) {
-        jdbcTemplate.update(
-                "INSERT INTO artistaBD (nome) VALUES (?);", nome);
+        if (selectArtista(nome) == null) {
+            jdbcTemplate.update(
+                    "INSERT INTO artistaBD (nome) VALUES (?);", nome);
+        }
     }
 
     public void saveMusica(String nome, Integer album) {
@@ -28,7 +34,7 @@ public class ExtracaoRepository {
 
     public void saveMusicaArtista(Integer artista, Integer musica) {
         jdbcTemplate.update(
-                "INSERT INTO musicaArtistaBD (fkArtistaBD, fkMusicaBD) VALUES (?, ?);", artista, musica);
+                "INSERT  IGNORE INTO musicaArtistaBD (fkArtistaBD, fkMusicaBD) VALUES (?, ?);", artista, musica);
     }
 
     public void saveSpotify(
@@ -36,15 +42,15 @@ public class ExtracaoRepository {
             String url,
             Double dancabilidade,
             Double energia,
-            Double tonalidade,
+            Integer tonalidade,
             Double intensidadeSonora,
             Double acustica,
             Double instrumentalidade,
             Double vivicidade,
             Double valenciaPositividade,
             Double tempoBPM,
-            Double duracaoMs,
-            String fluxo) {
+            Long duracaoMs,
+            Long stream) {
 
         jdbcTemplate.update(
                 "INSERT INTO spotifyBD (fkMusicaBD, url, dancabilidade, energia, tonalidade, " +
@@ -53,7 +59,7 @@ public class ExtracaoRepository {
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
                 musica, url, dancabilidade, energia, tonalidade, intensidadeSonora,
                 acustica, instrumentalidade, vivicidade, valenciaPositividade,
-                tempoBPM, duracaoMs, fluxo);
+                tempoBPM, duracaoMs, stream);
     }
 
     public void saveYoutube(
@@ -61,9 +67,9 @@ public class ExtracaoRepository {
             String url,
             String titulo,
             String canal,
-            Double visitas,
-            Double curtidas,
-            Double comentarios,
+            Long visitas,
+            Integer curtidas,
+            Integer comentarios,
             String descricao,
             Boolean licenciado,
             Boolean videoOficial) {
@@ -73,6 +79,38 @@ public class ExtracaoRepository {
                         "curtidas, comentarios, descricao, licenciado, videoOficial) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
                 musica, url, titulo, canal, visitas, curtidas, comentarios,
-                descricao, licenciado, videoOficial);
+                "Não usamos a descrição", licenciado, videoOficial);
+    }
+
+
+    // SELECTS
+    public Integer selectMusica(String nome, Integer album) {
+        List<Integer> resultados = jdbcTemplate.query(
+                "SELECT id FROM musicaBD WHERE nome = ? AND fkAlbumBD = ?",
+                (rs, rowNum) -> rs.getInt("id"),
+                nome, album
+        );
+
+        return resultados.isEmpty() ? null : resultados.getFirst();
+    }
+
+    public Integer selectAlbum(String nome) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT id FROM albumBD where ? = nome", Integer.class, nome);
+
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public Integer selectArtista(String nome) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT id FROM artistaBD where ? = nome", Integer.class, nome);
+
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

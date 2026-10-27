@@ -1,6 +1,9 @@
 package extracaoExcel;
 
+import repository.ExtracaoRepository;
+
 public class Musica {
+    private final ExtracaoRepository repository;
 
     private Integer id;
     private String artist;
@@ -19,7 +22,7 @@ public class Musica {
     private Double liveness;
     private Double valence;
     private Double tempo;
-    private Integer durationMs;
+    private Long durationMs;
     private String urlYoutube;
     private String title;
     private String channel;
@@ -31,10 +34,12 @@ public class Musica {
     private Boolean officialVideo;
     private Long stream;
 
-    public Musica() {
+    public Musica(ExtracaoRepository repository) {
+        this.repository = repository;
     }
 
-    public Musica(Integer id, String artist, String urlSpotify, String track, String album, String albumType, String uri, Double danceability, Double energy, Integer key, Double loudness, Double speechiness, Double acousticness, Double instrumentalness, Double liveness, Double valence, Double tempo, Integer durationMs, String urlYoutube, String title, String channel, Long views, Integer likes, Integer comments, String description, Boolean licensed, Boolean officialVideo, Long stream) {
+    public Musica(ExtracaoRepository repository, Integer id, String artist, String urlSpotify, String track, String album, String albumType, String uri, Double danceability, Double energy, Integer key, Double loudness, Double speechiness, Double acousticness, Double instrumentalness, Double liveness, Double valence, Double tempo, Long durationMs, String urlYoutube, String title, String channel, Long views, Integer likes, Integer comments, String description, Boolean licensed, Boolean officialVideo, Long stream) {
+        this.repository = repository;
         this.id = id;
         this.artist = artist;
         this.urlSpotify = urlSpotify;
@@ -63,6 +68,46 @@ public class Musica {
         this.licensed = licensed;
         this.officialVideo = officialVideo;
         this.stream = stream;
+    }
+
+    // Metodo de inserir no banco
+    public void inserirMusica() {
+        repository.saveAlbum(album);
+
+        repository.saveArtista(artist);
+
+        repository.saveMusica(track, repository.selectAlbum(album));
+
+        repository.saveMusicaArtista(repository.selectArtista(artist), repository.selectMusica(track, repository.selectAlbum(album)));
+
+        repository.saveSpotify(
+                repository.selectMusica(track, repository.selectAlbum(album)),
+                urlSpotify,
+                danceability,
+                energy,
+                key,
+                loudness,
+                acousticness,
+                instrumentalness,
+                liveness,
+                valence,
+                tempo,
+                durationMs,
+                stream
+        );
+
+        repository.saveYoutube(
+                repository.selectMusica(track, repository.selectAlbum(album)),
+                urlYoutube,
+                title,
+                channel,
+                views,
+                likes,
+                comments,
+                description,
+                licensed,
+                officialVideo
+        );
     }
 
     public Integer getId() {
@@ -201,11 +246,11 @@ public class Musica {
         this.tempo = tempo;
     }
 
-    public Integer getDurationMs() {
+    public Long getDurationMs() {
         return durationMs;
     }
 
-    public void setDurationMs(Integer durationMs) {
+    public void setDurationMs(Long durationMs) {
         this.durationMs = durationMs;
     }
 
