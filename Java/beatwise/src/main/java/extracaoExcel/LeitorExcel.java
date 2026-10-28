@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.jdbc.core.JdbcTemplate;
 import repository.ConexaoBD;
+import repository.ExtracaoRepository;
 import repository.LogRepository;
 
 import java.io.FileInputStream;
@@ -23,6 +24,7 @@ public class LeitorExcel {
         ConexaoBD conexao = new ConexaoBD();
         JdbcTemplate jdbcTemplate = conexao.getJdbcTemplate();
         LogRepository repository = new LogRepository(jdbcTemplate);
+        ExtracaoRepository extracaoRepository = new ExtracaoRepository(jdbcTemplate);
 
         try (
               InputStream arquivo = new FileInputStream(nomeArquivo);
@@ -60,7 +62,7 @@ public class LeitorExcel {
                 Double liveness = row.getCell(14) != null ? tratarDecimal(row.getCell(14).getNumericCellValue()) : null;
                 Double valence = row.getCell(15) != null ? tratarDecimal(row.getCell(15).getNumericCellValue()) : null;
                 Double tempo = row.getCell(16) != null ? row.getCell(16).getNumericCellValue() / 1000 : null;
-                Integer durationMs = row.getCell(17) != null ? (int) row.getCell(17).getNumericCellValue() / 10 : null;
+                Long durationMs = row.getCell(17) != null ? (long) row.getCell(17).getNumericCellValue() / 10 : null;
                 String urlYoutube = row.getCell(18) != null ? row.getCell(18).getStringCellValue() : null;
                 String title = row.getCell(19) != null ? row.getCell(19).getStringCellValue() : null;
                 String channel = row.getCell(20) != null ? row.getCell(20).getStringCellValue() : null;
@@ -72,8 +74,10 @@ public class LeitorExcel {
                 Boolean officialVideo = row.getCell(26) != null ? row.getCell(26).getBooleanCellValue() : null;
                 Long stream = row.getCell(27) != null ? (long) row.getCell(27).getNumericCellValue() : null;
 
-                Musica musica = new Musica(id, artist, urlSpotify, track, album, albumType, uri, danceability, energy, key, loudness, speechiness, acousticness, instrumentalness, liveness, valence, tempo, durationMs, urlYoutube, title, channel, views, likes, comments, description, licensed, officialVideo, stream);
+                Musica musica = new Musica(extracaoRepository, id, artist, urlSpotify, track, album, albumType, uri, danceability, energy, key, loudness, speechiness, acousticness, instrumentalness, liveness, valence, tempo, durationMs, urlYoutube, title, channel, views, likes, comments, description, licensed, officialVideo, stream);
                 musicasExtraidas.add(musica);
+
+                musica.inserirMusica(); // Salvar no banco de dados
 
                 contador++; // Quantidade de registros
                 if (contador % 1000 == 0) {
@@ -94,6 +98,7 @@ public class LeitorExcel {
 
             LogExtracaoExcel logExtracaoExcel = new LogExtracaoExcel("WARNING", "Ocorreu um erro ao realizar a leitura dos arquivos!", repository);
             logExtracaoExcel.registrarLog();
+            System.out.println(e);
 
             return musicasExtraidas;
         }
