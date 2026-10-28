@@ -18,21 +18,51 @@
 </head>
 
 <body class="listas" onload="iniciarPagina()">
-    <aside class="sidebar">
-        <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
+        <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/banner.jpeg" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
         <hr>
 
         <ul>
-            <li><a>Dashboard</a></li>
-            <li id="selected"><a>Músicas</a></li>
-            <li><a>Artistas</a></li>
-        </ul>
-
-        <div class="perfil">
-            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
-            <div id="nome-usuario">Pedro</div>
-        </div>
-    </aside>
+    <li id="selected">
+        <a href="dashboardGravadora.html">
+            <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+            <div class="texto">Dashboard</div>
+        </a>
+    </li>
+    <li id="selected">
+        <a href="dashboardMarketing.html">
+            <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+            <div class="texto">Dashboard</div>
+        </a>
+    </li>
+    <li id="selected">
+        <a href="dashboardProdutor.html">
+            <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+            <div class="texto">Dashboard</div>
+        </a>
+    </li>
+    <li>
+        <a href="listaMusica.html">
+            <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+            <div class="texto">Músicas</div>
+        </a>
+    </li>
+    <li>
+        <a href="recomendacao.html">
+            <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+            <div class="texto">Recomendação</div>
+        </a>
+    </li>
+    <li>
+        <a href="cadastroFuncionario.html">
+            <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+            <div class="texto">Funcionários</div>
+        </a>
+    </li>
+</ul>
 
     <!-- Lista -->
     <div class="conteudo">

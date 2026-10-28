@@ -12,31 +12,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/tela-notificacao.css">
     <link rel="stylesheet" href="./css/dashboardGeral.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="./js/sidebar.js" defer></script>
+    <script src="./js/usuario.js" defer></script>
 </head>
 
 <body class="dash-gravadora" onload="iniciar()">
-    <aside class="sidebar">
-        <img src="./assets/imgs/Logo_nav.png" alt="logo da BeatWise">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/banner.jpeg" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
         <hr>
 
         <ul>
-            <li id="selected"><a>Dashboard</a></li>
-            <li><a>Músicas</a></li>
-            <li><a>Artistas</a></li>
-        </ul>
+    <li id="selected">
+        <a href="dashboardGravadora.html">
+            <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+            <div class="texto">Dashboard</div>
+        </a>
+    </li>
+    <li id="selected">
+        <a href="dashboardMarketing.html">
+            <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+            <div class="texto">Dashboard</div>
+        </a>
+    </li>
+    <li id="selected">
+        <a href="dashboardProdutor.html">
+            <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+            <div class="texto">Dashboard</div>
+        </a>
+    </li>
+    <li>
+        <a href="listaMusica.html">
+            <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+            <div class="texto">Músicas</div>
+        </a>
+    </li>
+    <li>
+        <a href="recomendacao.html">
+            <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+            <div class="texto">Recomendação</div>
+        </a>
+    </li>
+    <li>
+        <a href="cadastroFuncionario.html">
+            <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+            <div class="texto">Funcionários</div>
+        </a>
+    </li>
+</ul>
 
         <div class="perfil">
-            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
-            <a href="./perfil.html" id="nome-usuario">Pedro</a>
+            <img data-usuario="foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <div class="usuario" id="nome-usuario" data-usuario="primeiro-nome">Mateus</div>
         </div>
     </aside>
 
     <main class="conteudo">
         <div class="conteudo-topo">
             <div class="titulos">
-                <h3>Bem vindo(a) Pedro</h3>
+                <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
                 <h1>Monitoramento de Indicadores estratégicos</h1>
             </div>
         </div>
@@ -181,6 +220,27 @@
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.querySelector('.sidebar');
+    if (!sidebar) return;
+ 
+    sidebar.addEventListener('click', () => {
+        sidebar.classList.add('expandida');
+    });
+ 
+    document.addEventListener('click', (evento) => {
+        if (!sidebar.contains(evento.target)) {
+            sidebar.classList.remove('expandida');
+        }
+    });
+ 
+    document.addEventListener('keydown', (evento) => {
+        if (evento.key === 'Escape') {
+            sidebar.classList.remove('expandida');
+        }
+    });
+});
 
         function iniciar() {
             carregarAlertas();
