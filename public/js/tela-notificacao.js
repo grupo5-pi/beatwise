@@ -10,7 +10,7 @@ let subtitulos = [
 let opcoes = [
     ["Usuário", "Data", "Horário", "Páginas"],
     ["Novas funcionalidades", "Correções", "Manutenções", "Versões"],
-    ["Em tempo real", "Diária", "Semanal", "Mensal"],
+    ["Diária", "Semanal", "Mensal"],
     ["Novidades", "Dicas", "Comunicados", "Eventos"]
 ];
 
