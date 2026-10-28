@@ -3,32 +3,7 @@ body {
     background-attachment: fixed;
 }
 
-/* ===== Sidebar ===== */
-.sidebar ul {
-    height: auto;
-    justify-content: flex-start;
-    gap: 10px;
-}
-
-.sidebar ul li {
-    height: 46px;
-    font-size: 20px;
-}
-
-.sidebar ul li a {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    margin-left: 0;
-    padding-left: 30px;
-    color: #fff;
-}
-
-.sidebar .perfil img {
-    object-fit: cover;
-}
-
+/* ===== Sidebar: estilos vêm do style.css ===== */
 .sidebar .perfil #nome-usuario:hover {
     text-decoration: underline;
 }
@@ -39,9 +14,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 83.7%;
     height: auto;
-    margin-left: 16.3%;
     padding: 0;
     color: white;
 }

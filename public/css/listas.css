@@ -46,11 +46,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
-    width: 83.7%;
+    height: 100vh;
     color: white;
-    position: absolute;
-    right: 0;
 }
 
 .conteudo .conteudo-topo {
@@ -200,7 +197,10 @@ footer {
 /* Modal de informações das músicas */
 .info-musicas {
     z-index: 999;
-    position: absolute;
+    position: fixed; /* centralizado na tela, independente do layout da página */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     height: auto;

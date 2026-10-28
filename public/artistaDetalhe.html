@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="./css/recomendacao.css">
     <link rel="stylesheet" href="./css/artistaDetalhe.css">
     <script src="./js/artistaDetalhe.js"></script>
+    <script src="./js/sidebar.js" defer></script>
 </head>
 
 <body class="rec-page" onload="carregarArtista()">
@@ -22,102 +23,105 @@
         <hr>
 
         <ul>
-            <li id="selected">
-                <a href="dashboardGravadora.html">
+            <li>
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
                     <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
-                    <div class="texto">Dashboard</div>
-                </a>
-            </li>
-            <li id="selected">
-                <a href="dashboardMarketing.html">
-                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
-                    <div class="texto">Dashboard</div>
-                </a>
-            </li>
-            <li id="selected">
-                <a href="dashboardProdutor.html">
-                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
-                    <div class="texto">Dashboard</div>
+                    <div class="texto">Gravadora</div>
                 </a>
             </li>
             <li>
-                <a href="listaMusica.html">
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li>
+                <a href="./listaMusica.html" title="Músicas">
                     <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
                     <div class="texto">Músicas</div>
                 </a>
             </li>
-            <li>
-                <a href="recomendacao.html">
+            <li id="selected">
+                <a href="./recomendacao.html" title="Recomendação">
                     <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
                     <div class="texto">Recomendação</div>
                 </a>
             </li>
             <li>
-                <a href="cadastroFuncionario.html">
-                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone">
-                    </div>
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
                     <div class="texto">Funcionários</div>
                 </a>
             </li>
         </ul>
 
-        <main class="rec-content">
-            <a href="./recomendacao.html" class="art-voltar" onclick="voltarParaResultado()">← Voltar para
-                recomendações</a>
-
-            <div class="art-cabecalho">
-                <div>
-                    <p class="art-rotulo">DETALHES DO ARTISTA</p>
-                    <h1 class="art-nome" id="nome_artista"></h1>
-                    <p class="art-info" id="info_artista"></p>
-                    <div class="art-tags" id="tags_artista"></div>
-                </div>
+        <div class="perfil">
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
+        </div>
     </aside>
 
-    <div class="rec-avatar art-foto" id="avatar_artista"></div>
-    </div>
+    <main class="rec-content">
+        <a href="./recomendacao.html" class="art-voltar" onclick="voltarParaResultado()">← Voltar para
+            recomendações</a>
 
-    <hr class="art-linha">
+        <div class="art-cabecalho">
+            <div>
+                <p class="art-rotulo">DETALHES DO ARTISTA</p>
+                <h1 class="art-nome" id="nome_artista"></h1>
+                <p class="art-info" id="info_artista"></p>
+                <div class="art-tags" id="tags_artista"></div>
+            </div>
+        <div class="rec-avatar art-foto" id="avatar_artista"></div>
+        </div>
 
-    <h2 class="art-rotulo">DESEMPENHO NAS PLATAFORMAS</h2>
-    <div class="art-stats">
-        <div class="art-stat">
-            <span class="art-stat-valor" id="stat_streams"></span>
-            <span class="art-stat-nome">Streams</span>
-            <span class="art-stat-fonte">Spotify</span>
-        </div>
-        <div class="art-stat">
-            <span class="art-stat-valor" id="stat_views"></span>
-            <span class="art-stat-nome">Visualizações</span>
-            <span class="art-stat-fonte">YouTube</span>
-        </div>
-        <div class="art-stat">
-            <span class="art-stat-valor" id="stat_curtidas"></span>
-            <span class="art-stat-nome">Curtidas</span>
-            <span class="art-stat-fonte">YouTube</span>
-        </div>
-        <div class="art-stat">
-            <span class="art-stat-valor" id="stat_comentarios"></span>
-            <span class="art-stat-nome">Comentários</span>
-            <span class="art-stat-fonte">YouTube</span>
-        </div>
-    </div>
+        <hr class="art-linha">
 
-    <hr class="art-linha">
-
-    <h2 class="art-rotulo">PERFIL SONORO</h2>
-    <div class="art-perfil" id="perfil_sonoro"></div>
-
-    <div class="art-infos">
-        <div class="art-stat">
-            <span class="art-stat-fonte">TEMPO</span>
-            <span class="art-stat-valor" id="info_bpm"></span>
+        <h2 class="art-rotulo">DESEMPENHO NAS PLATAFORMAS</h2>
+        <div class="art-stats">
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_streams"></span>
+                <span class="art-stat-nome">Streams</span>
+                <span class="art-stat-fonte">Spotify</span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_views"></span>
+                <span class="art-stat-nome">Visualizações</span>
+                <span class="art-stat-fonte">YouTube</span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_curtidas"></span>
+                <span class="art-stat-nome">Curtidas</span>
+                <span class="art-stat-fonte">YouTube</span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-valor" id="stat_comentarios"></span>
+                <span class="art-stat-nome">Comentários</span>
+                <span class="art-stat-fonte">YouTube</span>
+            </div>
         </div>
-        <div class="art-stat">
-            <span class="art-stat-fonte">DURAÇÃO</span>
-            <span class="art-stat-valor" id="info_duracao"></span>
+
+        <hr class="art-linha">
+
+        <h2 class="art-rotulo">PERFIL SONORO</h2>
+        <div class="art-perfil" id="perfil_sonoro"></div>
+
+        <div class="art-infos">
+            <div class="art-stat">
+                <span class="art-stat-fonte">TEMPO</span>
+                <span class="art-stat-valor" id="info_bpm"></span>
+            </div>
+            <div class="art-stat">
+                <span class="art-stat-fonte">DURAÇÃO</span>
+                <span class="art-stat-valor" id="info_duracao"></span>
+            </div>
         </div>
-    </div>
     </main>
 </body>
 
