@@ -7,7 +7,7 @@
     <title>Recomendação de Feat | BeatWise</title>
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
 
-    
+
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/recomendacao.css">
     <link rel="stylesheet" href="./css/artistaDetalhe.css">
@@ -16,7 +16,7 @@
 </head>
 
 <body class="rec-page">
-        <aside class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="./assets/imgs/banner.jpeg" alt="banner da BeatWise" class="logo-banner">
             <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
@@ -24,44 +24,45 @@
         <hr>
 
         <ul>
-    <li id="selected">
-        <a href="dashboardGravadora.html">
-            <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
-            <div class="texto">Dashboard</div>
-        </a>
-    </li>
-    <li id="selected">
-        <a href="dashboardMarketing.html">
-            <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
-            <div class="texto">Dashboard</div>
-        </a>
-    </li>
-    <li id="selected">
-        <a href="dashboardProdutor.html">
-            <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
-            <div class="texto">Dashboard</div>
-        </a>
-    </li>
-    <li>
-        <a href="listaMusica.html">
-            <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
-            <div class="texto">Músicas</div>
-        </a>
-    </li>
-    <li>
-        <a href="recomendacao.html">
-            <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
-            <div class="texto">Recomendação</div>
-        </a>
-    </li>
-    <li>
-        <a href="cadastroFuncionario.html">
-            <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
-            <div class="texto">Funcionários</div>
-        </a>
-    </li>
-</ul>
-
+            <li id="selected">
+                <a href="dashboardGravadora.html">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Dashboard</div>
+                </a>
+            </li>
+            <li id="selected">
+                <a href="dashboardMarketing.html">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Dashboard</div>
+                </a>
+            </li>
+            <li id="selected">
+                <a href="dashboardProdutor.html">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Dashboard</div>
+                </a>
+            </li>
+            <li>
+                <a href="listaMusica.html">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li>
+                <a href="recomendacao.html">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li>
+                <a href="cadastroFuncionario.html">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone">
+                    </div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
+        </ul>
+    </aside>
 
     <main class="rec-content">
         <div class="rec-topo">
@@ -147,7 +148,7 @@
             </form>
         </section>
 
-        
+
         <section id="etapa_resultado" style="display: none;">
             <h2 class="rec-subtitulo">Seu feat ideal é:</h2>
 
@@ -174,11 +175,13 @@
             <div class="rec-painel rec-salvar">
                 <label for="input_nome_recomendacao">Nome para recomendação:</label>
                 <input type="text" id="input_nome_recomendacao" placeholder="Ex.: Feat para o single de verão">
-                <p id="mensagem_recomendacao" class="rec-erro" style="display: none;">Dê um nome para salvar a recomendação.</p>
+                <p id="mensagem_recomendacao" class="rec-erro" style="display: none;">Dê um nome para salvar a
+                    recomendação.</p>
 
                 <div class="rec-acoes">
                     <button type="button" class="rec-botao" onclick="salvarRecomendacao()">Salvar recomendação</button>
-                    <button type="button" class="rec-botao rec-botao-secundario" onclick="novaBusca()">Nova busca</button>
+                    <button type="button" class="rec-botao rec-botao-secundario" onclick="novaBusca()">Nova
+                        busca</button>
                 </div>
             </div>
         </section>
