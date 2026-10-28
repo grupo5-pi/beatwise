@@ -24,10 +24,29 @@ function verificarEmailExistente(email) {
     return database.executar(instrucaoSql);
 }
 
-function cadastrarFuncionario(nome, email, senha, fkEmpresa, fkCargo) {
+function cadastrarFuncionario(nome, email, fkEmpresa, fkCargo) {
     var instrucaoSql = `
         INSERT INTO funcionario (nome, email, senha, fkEmpresa, fkCargo)
-        VALUES ('${nome}', '${email}', '${senha}', ${fkEmpresa}, ${fkCargo});
+        VALUES ('${nome}', '${email}', NULL, ${fkEmpresa}, ${fkCargo});
+    `;
+    return database.executar(instrucaoSql);
+}
+
+function criarToken(email, codigo) {
+    var instrucaoSql = `
+        INSERT INTO tokenAcesso (fkFuncionario, tipo, codigo, expiracao)
+        SELECT id, 'PRIMEIRO_ACESSO', '${codigo}', DATE_ADD(NOW(), INTERVAL 48 HOUR)
+        FROM funcionario WHERE email = '${email}' ORDER BY id DESC LIMIT 1;
+    `;
+    return database.executar(instrucaoSql);
+}
+
+function buscarEmpresaDoAdmin(id) {
+    var instrucaoSql = `
+        SELECT e.razaoSocial AS empresa
+        FROM funcionario f
+        JOIN empresa e ON e.id = f.fkEmpresa
+        WHERE f.id = ${id};
     `;
     return database.executar(instrucaoSql);
 }
@@ -81,6 +100,8 @@ module.exports = {
     buscarCargoPorNome,
     verificarEmailExistente,
     cadastrarFuncionario,
+    criarToken,
+    buscarEmpresaDoAdmin,
     listarPorEmpresa,
     buscarFuncionarioPorId,
     verificarEmailDeOutro,

@@ -151,7 +151,8 @@ body {
     border-bottom-color: var(--roxo-claro);
 }
 
-.campo-input input {
+.campo-input input,
+.campo-input select {
     flex: 1;
     min-width: 0;
     height: 46px;
@@ -164,6 +165,15 @@ body {
 
 .campo-input input:read-only {
     cursor: default;
+}
+
+.campo-input select {
+    cursor: pointer;
+}
+
+.campo-input select option {
+    background: #1a0f2e;
+    color: #fff;
 }
 
 /* Erros */
