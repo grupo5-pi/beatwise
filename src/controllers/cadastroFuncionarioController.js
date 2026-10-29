@@ -24,7 +24,7 @@ function escapar(texto) {
 async function validarAdmin(idAdmin) {
     if (!Number.isInteger(idAdmin)) return null;
     var admin = await cadastroFuncionarioModel.buscarAdminPorId(idAdmin);
-    if (admin.length == 0 || admin[0].cargo != "Admin") return null;
+    if (admin.length == 0 || admin[0].cargo != "Admin" &&  admin[0].cargo != "Empresa") return null;
     return admin[0];
 }
 
