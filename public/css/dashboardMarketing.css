@@ -34,206 +34,240 @@
     --font-primary: 'Inter', sans-serif;
 }
 
-body {
-    display: flex;
-    flex-direction: row;
-    min-height: 100vh;
+html, body {
     width: 100%;
+    min-width: 0;
+    min-height: 100%;
     margin: 0;
-    font-family: var(--font-primary);
 }
 
-.conteudo {
+body.dash-marketing {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body.dash-marketing>.sidebar {
+    flex: 0 0 auto;
+    min-width: 0;
+}
+
+body.dash-marketing>main.conteudo {
+    position: relative;
+    right: auto;
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex: 1; /* Ocupa todo o espaço restante ao lado da sidebar */
-    position: relative; /* Remove o absolute */
-    right: auto;
-    width: auto;
-    min-height: 100vh;
-    padding-bottom: 30px;
-    background: linear-gradient(280deg, rgba(0, 0, 0, 1) 22%, rgba(14, 2, 33, 1) 46%, rgba(14, 2, 33, 1) 89%);
+    padding: 0 0 30px;
     overflow-x: hidden;
-    color: white;
+    background: linear-gradient(280deg,#000000 22%, #0e0221 46%, #0e0221 89%);
+    color: #ffffff;
 }
 
-.conteudo .conteudo-topo {
-    display: flex;
-    justify-content: space-between;
-    height: 10%;
-    width: 92%;
-    margin: 27px 0 18px 0;
-}
-
-.conteudo .conteudo-topo .titulos {
-    height: 100%;
-    width: 80%;
-    font-size: 20px;
-}
-
-.titulos h1 {
-    margin-bottom: 25px;
-}
-
-/* Alertas */
-.dash-alertas {
+/* ALERTAS */
+.dash-marketing .dash-alertas {
     display: flex;
     flex-direction: column;
     width: 92%;
     gap: 10px;
-    margin-bottom: 22px;
+    margin: 0 0 22px 0;
 }
 
-.dash-alerta {
+.dash-marketing .dash-alerta {
     display: flex;
     align-items: center;
     gap: 12px;
+
+    width: 100%;
+    min-width: 0;
     padding: 10px 16px;
-    background-color: var(--color-bw-surface);
-    border: 1px solid var(--color-bw-border);
+
+    background-color: rgba(76, 29, 149, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.28);
     border-radius: 10px;
-    font-size: 15px;
-}
 
-.dash-alerta-icone {
-    font-weight: 700;
-    font-size: 16px;
-}
-
-.dash-alerta-positivo {
-    border-color: #22c55e;
-}
-
-.dash-alerta-positivo .dash-alerta-icone {
-    color: #4ade80;
-}
-
-.dash-alerta-negativo {
-    border-color: #ef4444;
-}
-
-.dash-alerta-negativo .dash-alerta-icone {
-    color: #f87171;
-}
-
-/* KPIs */
-.dash-kpi {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    width: 92%;
-    margin-bottom: 10px;
-}
-
-.kpi {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 18px 22px;
-    min-height: 170px;
-    background-color: #150A2B;
-    border: solid 1px var(--color-border);
-    border-radius: 20px;
-    transition: border-color 0.2s;
-}
-
-.kpi:hover {
-    border-color: var(--color-border-strong);
-}
-
-.kpi .kpi-titulo {
-    min-height: 2.6em;
-    font-size: 15px;
-    line-height: 1.3;
-    color: #C4B5FD;
-}
-
-.kpi .kpi-valor {
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 1.1;
     color: #FFFFFF;
-    white-space: nowrap;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
-.kpi .kpi-descricao {
-    min-height: 3.9em;
-    font-size: 14px;
-    line-height: 1.35;
-    color: var(--color-accent);
-}
-
-.kpi .kpi-delta {
+.dash-marketing .dash-alerta-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
     font-weight: 700;
-    white-space: nowrap;
 }
 
-.kpi .kpi-delta.positivo {
+.dash-marketing .dash-alerta-positivo {
+    border-color: #22C55E;
+}
+
+.dash-marketing .dash-alerta-positivo .dash-alerta-icone {
     color: #4ADE80;
 }
 
-.kpi .kpi-delta.negativo {
+.dash-marketing .dash-alerta-negativo {
+    border-color: #EF4444;
+}
+
+.dash-marketing .dash-alerta-negativo .dash-alerta-icone {
     color: #F87171;
 }
 
-.kpi-seta {
-    font-size: inherit;
-    font-weight: bold;
-}
-.kpi-seta.positivo { 
-    color: #4ade80; 
+.dash-marketing .dash-alerta span:last-child {
+    flex: 1;
+    min-width: 0;
 }
 
-.kpi-seta.negativo { 
-    color: #f87171; 
+.dash-marketing .conteudo-topo {
+    width: 92%;
+    max-width: 100%;
+    height: auto;
+    min-height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 27px 0 18px;
+    gap: 16px;
 }
 
-.positivo {
-    color: #4ADE80 !important; /* Verde brilhante */
-    font-weight: 600;
+.dash-marketing .conteudo-topo .titulos {
+    width: 100%;
+    min-width: 0;
+    height: auto;
 }
 
-.negativo {
-    color: #c70000 !important; /* Vermelho claro */
-    font-weight: 600;
+.dash-marketing .conteudo-topo h1 {
+    margin-bottom: 16px;
+    overflow-wrap: anywhere;
 }
 
-/* Gráficos */
-.graficos {
+.dash-marketing .dash-alertas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 92%;
+    min-width: 0;
+    margin-bottom: 22px;
+}
+
+.dash-marketing .dash-alerta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 16px;
+    border-radius: 10px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.dash-marketing .dash-alerta-icone {
+    flex-shrink: 0;
+}
+
+.dash-marketing .dash-kpi {
     display: grid;
-    grid-template-columns: 1fr 1fr 240px;
-    width: 93%;
-    margin: 10px 0 20px 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    width: 92%;
+    min-width: 0;
+    margin-bottom: 10px;
 }
 
-.grafico {
+.dash-marketing .kpi {
+    min-width: 0;
+    width: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    overflow-wrap: anywhere;
+}
+
+.dash-marketing .kpi .kpi-titulo {
+    min-height: 2.6em;
+    line-height: 1.4;
+}
+
+.dash-marketing .kpi .kpi-valor {
+    max-width: 100%;
+    font-size: clamp(20px, 1.7vw, 32px);
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.dash-marketing .kpi .kpi-descricao {
+    min-height: 3.9em;
+    line-height: 1.45;
+}
+
+.dash-marketing .graficos {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.65fr);
+    gap: 14px;
+    align-items: stretch;
+    width: 93%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 10px 0 20px;
+}
+
+.dash-marketing .grafico {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
+    min-width: 0;
+    min-height: 360px;
+    margin: 0;
     padding: 18px 20px;
-    background-color: #150A2B;
-    border: solid 1px var(--color-border);
-    border-radius: 20px;
-    margin: 7px;
+    overflow: hidden;
 }
 
-.grafico .grafico-titulo {
-    font-size: 15px;
-    font-weight: 400;
-    color: #C4B5FD;
+.dash-marketing .grafico .grafico-titulo {
+    flex: 0 0 auto;
+    min-width: 0;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
 
-.grafico .grafico-area {
+.dash-marketing .grafico .grafico-area {
     position: relative;
-    flex: 1;
-    min-height: 380px;
+
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 250px;
 }
 
-.graficos .grafico:nth-child(3) .grafico-area {
-    flex: none;
-    min-height: 0;
-    height: 270px;
-    margin: auto 0;
+.dash-marketing .graficos .grafico:nth-child(3) .grafico-area {
+    flex: 1 1 auto;
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    min-height: 250px;
+    margin: 0;
+}
+
+.dash-marketing .grafico-area canvas {
+    display: block;
+    max-width: 100%;
 }
