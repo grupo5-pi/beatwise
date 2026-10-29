@@ -9,8 +9,8 @@
 
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/dashboardProdutor.css">
-    <link rel="stylesheet" href="./css/dispersaoProdutor.css">
     <link rel="stylesheet" href="./css/padrao.css">
+    <link rel="stylesheet" href="./css/dispersaoProdutor.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
     <script src="./js/musicasExemplo.js"></script>
@@ -24,7 +24,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body class="dash-page bw" onload="carregarDashboardProdutor(); carregarDispersao(), validarAcesso()">
+<body class="dash-page bw" onload="carregarDashboardProdutor(); carregarDispersao(); validarAcesso();">
     <aside class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
@@ -89,66 +89,32 @@
         </div>
     </aside>
 
-        <main class="dash-content">
-            <div class="conteudo-topo">
-                <div class="titulos">
-                    <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
-                    <h1>Produção Musical</h1>
-                </div>
-            </div>
-
-    <section class="dash-alertas" id="lista_alertas"></section>
-
-    <section class="dash-kpis">
-        <div class="dash-kpi">
-            <span class="dash-kpi-titulo">Fator decisivo</span>
-            <span class="dash-kpi-valor" id="kpi_fator_valor"></span>
-            <span class="dash-kpi-texto" id="kpi_fator_texto"></span>
-        </div>
-        <div class="dash-kpi">
-            <span class="dash-kpi-titulo">Duração Ideal</span>
-            <span class="dash-kpi-valor" id="kpi_duracao_ideal_valor"></span>
-            <span class="dash-kpi-texto" id="kpi_duracao_ideal_texto"></span>
-        </div>
-
-        <div class="dash-kpi">
-            <span class="dash-kpi-titulo">Duração ideal</span>
-            <span class="dash-kpi-valor" id="kpi_duracao_valor">2:30 - 3:30</span>
-            <span class="dash-kpi-texto" id="kpi_duracao_texto">Músicas nessa faixa têm streams 2x acima da média (980
-                mil vs média geral)</span>
-        </div>
-    </section>
-
-    <section class="dash-graficos">
-        <div class="dash-grafico">
-            <h2 class="dash-grafico-titulo" id="titulo_bpm"></h2>
-            <p class="dash-grafico-subtitulo">Views médias (milhões) por faixa de BPM</p>
-            <div class="dash-grafico-area">
-                <canvas id="grafico_bpm"></canvas>
+    <main class="dash-content">
+        <div class="conteudo-topo">
+            <div class="titulos">
+                <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
+                <h1>Produção Musical</h1>
             </div>
         </div>
-        <div class="dash-grafico-radar">
-            <h2 class="dash-grafico-titulo" id="titulo_radar"></h2>
-            <p class="dash-grafico-subtitulo">Características musicais</p>
-            <div class="dash-grafico-area">
-                <canvas id="grafico_radar"></canvas>
-            </div>
-        </div>
-    </section>
 
-    <section class="dash-graficos dash-graficos-dispersao">
-        <div class="dash-grafico">
-            <div class="dash-dispersao-topo">
-                <div>
-                    <h2 class="dash-grafico-titulo">Dispersão de views por característica</h2>
-                    <p class="dash-grafico-subtitulo">Relação entre a característica musical e as visualizações, com
-                        linha de tendência projetada</p>
+        <section class="dash-alertas" id="lista_alertas"></section>
+
+        <section class="dash-kpis">
+            <div class="dash-kpi">
+                <span class="dash-kpi-titulo">Fator decisivo</span>
+                <span class="dash-kpi-valor" id="kpi_fator_valor"></span>
+                <span class="dash-kpi-texto" id="kpi_fator_texto"></span>
+            </div>
+            <div class="dash-kpi">
+                <span class="dash-kpi-titulo">Duração Ideal</span>
+                <span class="dash-kpi-valor" id="kpi_duracao_ideal_valor"></span>
+                <span class="dash-kpi-texto" id="kpi_duracao_ideal_texto"></span>
+            </div>
             <div class="dash-kpi">
                 <span class="dash-kpi-titulo">Total de Streams por Gênero</span>
                 <span class="dash-kpi-valor" id="kpi_total_streams_valor"></span>
                 <span class="dash-kpi-texto" id="kpi_total_streams_texto"></span>
             </div>
-
         </section>
 
         <section class="dash-graficos">
@@ -158,19 +124,33 @@
                 <div class="dash-grafico-area">
                     <canvas id="grafico_bpm"></canvas>
                 </div>
-
-                <div class="dash-seletor">
-                    <label for="select_caracteristica">Característica</label>
-                    <select id="select_caracteristica"></select>
+            </div>
+            <div class="dash-grafico-radar">
+                <h2 class="dash-grafico-titulo" id="titulo_radar"></h2>
+                <p class="dash-grafico-subtitulo">Características musicais</p>
+                <div class="dash-grafico-area">
+                    <canvas id="grafico_radar"></canvas>
                 </div>
             </div>
+        </section>
 
-            <div class="dash-grafico-area dash-dispersao-area">
-                <canvas id="grafico_dispersao"></canvas>
+        <section class="dash-graficos dash-graficos-dispersao">
+            <div class="dash-grafico">
+                <div class="dash-dispersao-topo">
+                    <div>
+                        <h2 class="dash-grafico-titulo">Dispersão de views por característica</h2>
+                        <p class="dash-grafico-subtitulo">Relação entre a característica musical e as visualizações, com linha de tendência projetada</p>
+                    </div>
+                    <div class="dash-seletor">
+                        <label for="select_caracteristica">Característica</label>
+                        <select id="select_caracteristica"></select>
+                    </div>
+                </div>
+                <div class="dash-grafico-area dash-dispersao-area">
+                    <canvas id="grafico_dispersao"></canvas>
+                </div>
             </div>
-        </div>
-    </section>
-
+        </section>
     </main>
 </body>
 
