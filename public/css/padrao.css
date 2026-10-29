@@ -567,3 +567,61 @@ body.bw,
         gap: 20px;
     }
 }
+
+.bw .analise-faixa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--bw-espaco);
+    margin-bottom: var(--bw-espaco);
+    padding: 14px 18px;
+    background: var(--bw-surface-hover);
+    border: 1px solid var(--bw-destaque);
+    border-radius: var(--bw-raio);
+}
+
+.bw .analise-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bw .analise-titulo {
+    font-size: var(--bw-fonte-card);
+    font-weight: 800;
+}
+
+.bw .analise-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.bw .analise-tag {
+    padding: 3px 10px;
+    border: 1px solid var(--bw-borda-forte);
+    border-radius: 999px;
+    background: var(--bw-surface);
+    font-size: var(--bw-fonte-pequena);
+}
+
+.bw .analise-contagem {
+    font-size: var(--bw-fonte-pequena);
+}
+
+.bw .analise-limpar {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 18px;
+    border: 1px solid var(--bw-borda-forte);
+    border-radius: var(--bw-raio-controle);
+    color: var(--bw-texto);
+    font-size: var(--bw-fonte-texto);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.bw .analise-limpar:hover {
+    background: var(--bw-surface-hover);
+}

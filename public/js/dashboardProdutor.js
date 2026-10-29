@@ -132,7 +132,7 @@ function montarGraficoBpm() {
             datasets: [
                 {
                     type: 'bar',
-                    label: 'Views médias (milhões)',
+                    label: dadosBpmFaixa.unidade == 'bi' ? 'Views médias (bilhões)' : 'Views médias (milhões)',
                     data: dadosBpmFaixa.views,
                     backgroundColor: cores,
                     borderRadius: 4,
@@ -172,7 +172,7 @@ function montarGraficoBpm() {
                     ticks: {
                         stepSize: 1,
                         callback: function (valor) {
-                            return valor + ' mi';
+                            return valor + ' ' + (dadosBpmFaixa.unidade || 'mi');
                         }
                     },
                     grid: { color: corBorda }
@@ -187,7 +187,7 @@ function montarGraficoRadar() {
     let corDestaque = '#A855F7';
     let corBorda = 'rgba(139, 92, 246, 0.28)';
 
-    titulo_radar.textContent = dadosRadar.genero.toUpperCase() + ' - Perfil musical das músicas de sucesso x todas as músicas';
+    titulo_radar.textContent = dadosRadar.genero.toUpperCase() + ' - ' + (dadosRadar.comparacao || 'Perfil musical das músicas de sucesso x todas as músicas');
 
     graficoRadar = new Chart(grafico_radar, {
         type: 'radar',
@@ -195,7 +195,7 @@ function montarGraficoRadar() {
             labels: dadosRadar.rotulos,
             datasets: [
                 {
-                    label: 'Perfil das músicas de sucesso',
+                    label: dadosRadar.serie || 'Perfil das músicas de sucesso',
                     data: dadosRadar.valores,
                     backgroundColor: 'rgba(168, 85, 247, 0.3)',
                     borderColor: corDestaque,

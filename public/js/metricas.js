@@ -148,7 +148,7 @@ function listarAnalises() {
         html += '<small>Criada em ' + formatarData(a.data) + ' · ' + a.musicas.toLocaleString("pt-BR") + ' músicas</small>';
         html += '</div>';
         html += '<div class="acoes">';
-        html += '<a class="btn primario" href="./dashboardGravadora.html">Ver dashboard</a>';
+        html += '<a class="btn primario" href="./dashboardProdutor.html?analise=' + a.id + '">Ver dashboard</a>';
         html += '<button type="button" class="btn" onclick="editarAnalise(' + a.id + ')">Editar</button>';
         html += '<button type="button" class="btn" onclick="abrirModal(' + a.id + ')">Excluir</button>';
         html += '</div>';

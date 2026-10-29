@@ -1,5 +1,5 @@
 function carregarDispersao() {
-    const musicas = musicasExemplo;
+    const musicas = musicasDaAnalise();
 
     const caracteristicas = {
         dancabilidade: {
