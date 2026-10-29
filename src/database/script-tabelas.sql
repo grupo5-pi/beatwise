@@ -25,7 +25,7 @@ CREATE TABLE funcionario (
   fkCargo INT NOT NULL,
   fkSubalterno INT NULL,
   tokenAcesso_id INT,
-  foto VARCHAR(255),
+  foto TEXT,
   CONSTRAINT constFkEmpresa FOREIGN KEY (fkEmpresa) REFERENCES empresa (id),
   CONSTRAINT constFkCargo FOREIGN KEY (fkCargo) REFERENCES cargo (id),
   CONSTRAINT fk_funcionario_funcionario1 FOREIGN KEY (fkSubalterno) REFERENCES funcionario (id)

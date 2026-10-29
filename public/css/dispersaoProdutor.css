@@ -1,8 +1,8 @@
-.dash-graficos-dispersao {
+.dash-graficos.dash-graficos-dispersao {
     display: block;
     width: 100%;
     max-width: none;
-    margin-top: 20px;
+    margin-top: var(--bw-gutter, 20px);
 }
 
 .dash-graficos-dispersao .dash-grafico {
@@ -24,6 +24,11 @@
     flex-wrap: wrap;
     gap: 16px;
     margin-bottom: 16px;
+}
+
+.bw .dash-dispersao-topo .dash-grafico-titulo,
+.bw .dash-dispersao-topo .dash-grafico-subtitulo {
+    margin-bottom: 4px;
 }
 
 .dash-seletor {
