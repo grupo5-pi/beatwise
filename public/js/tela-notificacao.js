@@ -75,7 +75,7 @@ function htmlColunaAberta(i) {
     }
     html += '</div>';
 
-    html += '<button class="btn-sallet" onclick="salletColuna(' + i + ')"' + desabilitado + '>Sallet</button>';
+    html += '<button class="btn-salvar" onclick="salvarColuna(' + i + ')"' + desabilitado + '>Salvar</button>';
     html += '</div>';
 
     return html;
@@ -120,7 +120,7 @@ function excluirColuna(i) {
     desenharColunas();
 }
 
-function salletColuna(i) {
+function salvarColuna(i) {
     salvo[i] = true;
     desenharColunas();
 
@@ -144,5 +144,32 @@ function montarJSON() {
 
     return JSON.stringify(lista);
 }
+
+function carregarUsuario() {
+    let nome = sessionStorage.getItem('NOME_USUARIO');
+
+    if (nome == null) {
+        nome = 'Usuário';
+    }
+
+    document.getElementById('saudacao').textContent = 'Olá, ' + nome + '!';
+    document.getElementById('nome-usuario').textContent = nome;
+}
+
+desenharColunas();
+
+const sidebar = document.getElementById('sidebar');
+
+sidebar.addEventListener('click', () => {
+    sidebar.classList.add('expandida');
+});
+
+document.addEventListener('click', (evento) => {
+    const clicouFora = !sidebar.contains(evento.target);
+
+    if (clicouFora) {
+        sidebar.classList.remove('expandida');
+    }
+});
 
 desenharColunas();

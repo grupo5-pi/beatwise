@@ -19,6 +19,11 @@ let dadosKpiDuracaoIdeal = {
     texto: 'Músicas nessa faixa têm streams 2x acima da média (980 mil vs média geral)'
 }
 
+let dadosKpiTotalStreams = {
+    valor: '100 milhões - 45%',
+    texto: 'Esse gênero tem a maior quantia de streams somadas da base.'
+}
+
 let dadosBpmFaixa = {
     genero: 'Pop',
     faixas: ['80–90', '90–100', '100–110', '110–120', '120–130', '130–140', '140–150'],
@@ -27,11 +32,17 @@ let dadosBpmFaixa = {
     retornoEsperado: 3
 }
 
+// valores / valoresReais -> músicas de sucesso
+// valoresGeral / valoresReaisGeral -> todas as músicas (linha de comparação)
+// "valores" vai de 0 a 100 (desenha o gráfico), "valoresReais" aparece ao passar o mouse
+// OBS: são dados de exemplo, troque pelos dados reais
 let dadosRadar = {
     genero: 'Pop',
     rotulos: ['BPM', 'Tonalidade', 'Energia', 'Valência', 'Dançabilidade'],
     valores: [65, 50, 80, 70, 75],
-    valoresReais: ['118 BPM', 'Lá menor', '80%', '70%', '75%']
+    valoresReais: ['118 BPM', 'Lá menor', '80%', '70%', '75%'],
+    valoresGeral: [55, 45, 60, 55, 60],
+    valoresReaisGeral: ['108 BPM', 'Dó maior', '60%', '55%', '60%']
 }
 
 
@@ -72,6 +83,9 @@ function carregarKpis() {
 
     kpi_duracao_ideal_valor.textContent = dadosKpiDuracaoIdeal.valor;
     kpi_duracao_ideal_texto.textContent = dadosKpiDuracaoIdeal.texto;
+
+    kpi_total_streams_valor.textContent = dadosKpiTotalStreams.valor;
+    kpi_total_streams_texto.textContent = dadosKpiTotalStreams.texto;
 }
 
 let pluginTextoRetorno = {
@@ -173,7 +187,7 @@ function montarGraficoRadar() {
     let corDestaque = '#A855F7';
     let corBorda = 'rgba(139, 92, 246, 0.28)';
 
-    titulo_radar.textContent = dadosRadar.genero.toUpperCase() + ': perfil musical das músicas de sucesso';
+    titulo_radar.textContent = dadosRadar.genero.toUpperCase() + ' - Perfil musical das músicas de sucesso x todas as músicas';
 
     graficoRadar = new Chart(grafico_radar, {
         type: 'radar',
@@ -181,12 +195,22 @@ function montarGraficoRadar() {
             labels: dadosRadar.rotulos,
             datasets: [
                 {
-                    label: 'Perfil médio',
+                    label: 'Perfil das músicas de sucesso',
                     data: dadosRadar.valores,
                     backgroundColor: 'rgba(168, 85, 247, 0.3)',
                     borderColor: corDestaque,
                     borderWidth: 2,
                     pointBackgroundColor: corDestaque,
+                    pointRadius: 4
+                },
+                {
+                    label: 'Perfil de todas as músicas',
+                    data: dadosRadar.valoresGeral,
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    borderColor: 'white',
+                    borderDash: [6, 6],
+                    borderWidth: 2,
+                    pointBackgroundColor: 'white',
                     pointRadius: 4
                 }
             ]
@@ -195,11 +219,23 @@ function montarGraficoRadar() {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { display: false },
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: { color: 'white' }
+                },
                 tooltip: {
                     callbacks: {
                         label: function (item) {
-                            return item.label + ': ' + dadosRadar.valoresReais[item.dataIndex];
+                            let valorReal = '';
+
+                            if (item.datasetIndex == 0) {
+                                valorReal = dadosRadar.valoresReais[item.dataIndex];
+                            } else {
+                                valorReal = dadosRadar.valoresReaisGeral[item.dataIndex];
+                            }
+
+                            return item.dataset.label + ': ' + valorReal;
                         }
                     }
                 }
