@@ -1,31 +1,30 @@
 function validarAcesso() {
-    var cargo = sessionStorage.CARGO_USUARIO;
+    var cargo = sessionStorage.ID_CARGO;
+        // ('Admin'),
+        // ('Empresa'), 2 
+        // ('Produtor'), 3
+        // ('Marketing'); 4
 
-    if (cargo == 'responsável') {
-        window.location = "../dashboardGravadora.html";
-        // document.getElementById('dashboard-produtor').style.display = "none";
+
+    if (cargo == 2) {
+        // document.getElementById('dashboard-gravadora').style.display = "none";
+        document.getElementById('dashboard-marketing').style.display = "none";
+        document.getElementById('dashboard-produtor').style.display = "none";
+        document.getElementById('recomendacao').style.display = "none";
+        // document.getElementById('funcionarios').style.display = "none";
+
+    } else if (cargo == 4) {
+        document.getElementById('dashboard-gravadora').style.display = "none";
         // document.getElementById('dashboard-marketing').style.display = "none";
-        document.getElementById('recomendacao-feat').style.display = "none";
-        document.getElementById('lista-musicas').style.display = "none";
-        document.getElementById('metricas').style.display = "none";
+        document.getElementById('dashboard-produtor').style.display = "none";
+        // document.getElementById('recomendacao').style.display = "none";
+        document.getElementById('funcionarios').style.display = "none";
 
-    } else if (cargo == 'marketing') {
-        window.location = "../dashboardMarketing.html";
-        // document.getElementById('dashboard-gravadora').style.display = "none";
+    } else if (cargo == 3) {
+        document.getElementById('dashboard-gravadora').style.display = "none";
+        document.getElementById('dashboard-marketing').style.display = "none";
         // document.getElementById('dashboard-produtor').style.display = "none";
-        document.getElementById('recomendacao-feat').style.display = "none";
-        document.getElementById('painel-de-controle').style.display = "none";
-
-    } else if (cargo == 'produtor') {
-        window.location = "../dashboardProdutor.html";
-        // document.getElementById('dashboard-gravadora').style.display = "none";
-        // document.getElementById('dashboard-produtor').style.display = "none";
-        document.getElementById('recomendacao-feat').style.display = "none";
-        document.getElementById('painel-de-controle').style.display = "none";
+        // document.getElementById('recomendacao').style.display = "none";
+        document.getElementById('funcionarios').style.display = "none";
     }
-}
-
-function limparSessao() {
-    sessionStorage.clear();
-    window.location = "../login.html";
 }

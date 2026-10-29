@@ -13,12 +13,14 @@
     <link rel="stylesheet" href="./css/padrao.css">
     <script src="./js/artistaDetalhe.js"></script>
     <script src="./js/sidebar.js" defer></script>
+    <script src="./js/controleDeAcesso.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body class="rec-page bw" onload="carregarArtista()">
+<body class="rec-page bw" onload="carregarArtista(), validarAcesso()">
     <aside class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
@@ -27,46 +29,52 @@
         <hr>
 
         <ul>
-            <li>
+            <li id="dashboard-gravadora">
                 <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
                     <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
                     <div class="texto">Gravadora</div>
                 </a>
             </li>
-            <li>
+            <li id="dashboard-marketing">
                 <a href="./dashboardMarketing.html" title="Dashboard Marketing">
                     <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
                     <div class="texto">Marketing</div>
                 </a>
             </li>
-            <li>
+            <li id="dashboard-produtor">
                 <a href="./dashboardProdutor.html" title="Dashboard Produtor">
                     <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
                     <div class="texto">Produtor</div>
                 </a>
             </li>
-            <li>
+            <li id="lista-musicas">
                 <a href="./listaMusica.html" title="Músicas">
                     <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
                     <div class="texto">Músicas</div>
                 </a>
             </li>
-            <li id="selected">
+            <li class="selected" id="recomendacao">
                 <a href="./recomendacao.html" title="Recomendação">
                     <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
                     <div class="texto">Recomendação</div>
                 </a>
             </li>
-            <li>
+            <li id="metricas">
                 <a href="./metricas.html" title="Métricas">
                     <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
                     <div class="texto">Métricas</div>
                 </a>
             </li>
-            <li>
+            <li id="funcionarios">
                 <a href="./cadastroFuncionario.html" title="Funcionários">
                     <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
                     <div class="texto">Funcionários</div>
+                </a>
+            </li>
+            <li id="notificacoes">
+                <a href="./tela-notificacao.html" title="Notificações">
+                    <div class="icone-box"><img src="./assets/imgs/svg-notificacao.png" alt="" class="icone"></div>
+                    <div class="texto">Notificações</div>
                 </a>
             </li>
         </ul>
