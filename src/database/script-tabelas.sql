@@ -15,7 +15,6 @@ CREATE TABLE empresa (
   telefone CHAR(15)
 );
 
--- 1. Criamos a tabela funcionario ANTES (sem a FK de token por enquanto)
 CREATE TABLE funcionario (
   id INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45),
@@ -31,22 +30,20 @@ CREATE TABLE funcionario (
   CONSTRAINT fk_funcionario_funcionario1 FOREIGN KEY (fkSubalterno) REFERENCES funcionario (id)
 );
 
--- 2. Agora criamos a tabela tokenAcesso (pois funcionario já existe)
 CREATE TABLE tokenAcesso (
     id INT PRIMARY KEY AUTO_INCREMENT,
     fkFuncionario INT NOT NULL,
     tipo VARCHAR(20),
     codigo CHAR(8),
     expiracao DATETIME,
-    statusEnviado TINYINT,
-    usado TINYINT,
-    tentativas INT,
-    falhasEnvio INT,
-    criadoEm DATETIME,
+    statusEnviado TINYINT NOT NULL DEFAULT 0,
+    usado TINYINT NOT NULL DEFAULT 0,
+    tentativas INT NOT NULL DEFAULT 0,
+    falhasEnvio INT NOT NULL DEFAULT 0,
+    criadoEm DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_token_funcionario FOREIGN KEY (fkFuncionario) REFERENCES funcionario(id)
 );
 
--- 3. Adicionamos a FK de tokenAcesso na tabela funcionario via ALTER TABLE
 ALTER TABLE funcionario 
 ADD CONSTRAINT fk_funcionario_tokenAcesso1 
 FOREIGN KEY (tokenAcesso_id) REFERENCES tokenAcesso (id);
@@ -216,12 +213,10 @@ INSERT INTO cargo (nome) VALUES
 
 SELECT * FROM musicaBD LIMIT 100;
 
--- Empresa
 INSERT INTO empresa (razaoSocial, email, cnpj, telefone)
 VALUES ('BeatWise', 'contato@beatwise.com',
         '12.345.678/0001-90', '(11) 98765-4321');
 
--- Funcionários: um para cada cargo
 INSERT INTO funcionario
     (nome, email, senha, fkEmpresa, fkCargo, fkSubalterno)
 VALUES
