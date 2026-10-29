@@ -36,13 +36,13 @@
 
         <div class="perfil">
             <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
-            <div class="usuario" id="nome-usuario">Mateus</div>
+            <div class="usuario" id="nome-usuario"></div>
         </div>
     </aside>
 
     <main class="content">
         <div class="cabecalho">
-            <span><b>Olá, Mateus!</b></span>
+            <span><b id="saudacao"></b></span>
             <h1>Configuração de Notificações</h1>
         </div>
 
@@ -50,24 +50,5 @@
             <div class="container-filho" id="colunas"></div>
         </section>
     </main>
-
-    <script>
-        const sidebar = document.getElementById('sidebar');
-
-        sidebar.addEventListener('click', () => {
-            sidebar.classList.add('expandida');
-        });
-
-        document.addEventListener('click', (evento) => {
-            const clicouFora = !sidebar.contains(evento.target);
-
-            if (clicouFora) {
-                sidebar.classList.remove('expandida');
-            }
-        });
-
-        
-    </script>
-    <script src="js/notificacoes.js"></script>
 </body>
 </html>
