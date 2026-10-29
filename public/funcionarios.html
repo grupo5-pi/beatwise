@@ -9,85 +9,127 @@
 
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/funcionarios.css">
+    <link rel="stylesheet" href="./css/padrao.css">
 
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="./js/sidebar.js" defer></script>
 </head>
 
-<body class="listas" onload="iniciarPagina()">
-    <aside class="sidebar">
-        <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
+<body class="listas bw" onload="iniciarPagina()">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
         <hr>
 
         <ul>
-            <li><a>Dashboard</a></li>
-            <li><a>Músicas</a></li>
-            <li><a>Artistas</a></li>
-            <li id="selected"><a>Funcionários</a></li>
+            <li>
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Gravadora</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li>
+                <a href="./listaMusica.html" title="Músicas">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li>
+                <a href="./recomendacao.html" title="Recomendação">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li>
+                <a href="./metricas.html" title="Métricas">
+                    <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Métricas</div>
+                </a>
+            </li>
+            <li id="selected">
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
         </ul>
 
         <div class="perfil">
-            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
-            <div id="nome-usuario">Lucas</div>
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
         </div>
     </aside>
 
-    <!-- Lista -->
-    <div class="conteudo">
-        <div class="conteudo-topo">
-            <div class="titulos">
-                <h3>Bem vindo(a) <span>Lucas</span></h3>
-                <h1>Funcionários Cadastrados</h1>
+        <!-- Lista -->
+        <div class="conteudo">
+            <div class="conteudo-topo">
+                <div class="titulos">
+                    <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
+                    <h1>Funcionários Cadastrados</h1>
+                </div>
+
+                <nav class="abas">
+                    <a class="aba" href="./cadastroFuncionario.html">Cadastro de Funcionário</a>
+                    <a class="aba ativa" href="./funcionarios.html">Funcionários</a>
+                </nav>
             </div>
 
-            <nav class="abas">
-                <a class="aba" href="./cadastroFuncionario.html">Cadastro de Funcionário</a>
-                <a class="aba ativa" href="./funcionarios.html">Funcionários</a>
-            </nav>
+    <div class="tabela">
+        <div class="pesquisa">
+            <span class="icone-busca">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </span>
+
+            <input id="pesquisa" type="text" placeholder="Buscar por nome, e-mail ou cargo..." oninput="pesquisar()">
         </div>
 
-        <div class="tabela">
-            <div class="pesquisa">
-                <span class="icone-busca">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </span>
-
-                <input id="pesquisa" type="text" placeholder="Buscar por nome, e-mail ou cargo..."
-                    oninput="pesquisar()">
+        <div class="lista">
+            <div class="coluna primary">
+                <div class="top left">Nome</div>
             </div>
-
-            <div class="lista">
-                <div class="coluna primary">
-                    <div class="top left">Nome</div>
-                </div>
-                <div class="coluna">
-                    <div class="top">E-mail</div>
-                </div>
-                <div class="coluna">
-                    <div class="top">Cargo</div>
-                </div>
-                <div class="coluna">
-                    <div class="top direita">Ações</div>
-                </div>
+            <div class="coluna">
+                <div class="top">E-mail</div>
             </div>
-
-            <footer>
-                <div id="exibicao"></div>
-
-                <!-- Paginação -->
-                <div class="paginacao">
-                    <button id="anterior" onclick="voltarPagina()">❮</button>
-                    <span id="pagina">Página 1</span>
-                    <button id="proxima" onclick="avancarPagina()">❯</button>
-                </div>
-            </footer>
+            <div class="coluna">
+                <div class="top">Cargo</div>
+            </div>
+            <div class="coluna">
+                <div class="top direita">Ações</div>
+            </div>
         </div>
+
+        <footer>
+            <div id="exibicao"></div>
+
+            <!-- Paginação -->
+            <div class="paginacao">
+                <button id="anterior" onclick="voltarPagina()">❮</button>
+                <span id="pagina">Página 1</span>
+                <button id="proxima" onclick="avancarPagina()">❯</button>
+            </div>
+        </footer>
+    </div>
     </div>
 
     <!-- POPUP: EDITAR -->
@@ -135,200 +177,200 @@
     </div>
 
     <script>
-    const usuarioId = sessionStorage.ID_FUNCIONARIO;
-    if (!usuarioId) window.location.href = "./login.html";
+        const usuarioId = sessionStorage.ID_FUNCIONARIO;
+        if (!usuarioId) window.location.href = "./login.html";
 
-    const POR_PAGINA = 10;
+        const POR_PAGINA = 10;
 
-    const ICONE_EDITAR = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
-    const ICONE_EXCLUIR = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`;
+        const ICONE_EDITAR = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
+        const ICONE_EXCLUIR = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`;
 
-    let funcionarios = [];
-    let filtrados = [];
-    let paginaAtual = 1;
-    let selecionado = null;
+        let funcionarios = [];
+        let filtrados = [];
+        let paginaAtual = 1;
+        let selecionado = null;
 
-    async function iniciarPagina() {
-        await carregarFuncionarios();
-    }
+        async function iniciarPagina() {
+            await carregarFuncionarios();
+        }
 
-    async function carregarFuncionarios() {
-        try {
-            const resposta = await fetch('/cadastroFuncionario/listar/' + usuarioId);
+        async function carregarFuncionarios() {
+            try {
+                const resposta = await fetch('/cadastroFuncionario/listar/' + usuarioId);
 
-            if (!resposta.ok) {
-                const corpo = await resposta.json().catch(() => ({}));
-                throw new Error(corpo.mensagem || 'HTTP ' + resposta.status);
+                if (!resposta.ok) {
+                    const corpo = await resposta.json().catch(() => ({}));
+                    throw new Error(corpo.mensagem || 'HTTP ' + resposta.status);
+                }
+
+                funcionarios = await resposta.json();
+                aplicarFiltro();
+                renderizar();
+            } catch (erro) {
+                console.error('Erro ao carregar funcionários:', erro);
+                document.getElementById('exibicao').textContent = 'Erro: ' + erro.message;
             }
+        }
 
-            funcionarios = await resposta.json();
+        function normalizar(texto) {
+            return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function aplicarFiltro() {
+            const termo = normalizar(document.getElementById('pesquisa').value.trim());
+            filtrados = funcionarios.filter(f =>
+                normalizar(`${f.nome} ${f.email} ${f.cargo}`).includes(termo)
+            );
+        }
+
+        function pesquisar() {
             aplicarFiltro();
-            renderizar();
-        } catch (erro) {
-            console.error('Erro ao carregar funcionários:', erro);
-            document.getElementById('exibicao').textContent = 'Erro: ' + erro.message;
-        }
-    }
-
-    function normalizar(texto) {
-        return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    }
-
-    function aplicarFiltro() {
-        const termo = normalizar(document.getElementById('pesquisa').value.trim());
-        filtrados = funcionarios.filter(f =>
-            normalizar(`${f.nome} ${f.email} ${f.cargo}`).includes(termo)
-        );
-    }
-
-    function pesquisar() {
-        aplicarFiltro();
-        paginaAtual = 1;
-        renderizar();
-    }
-
-    function criarCelula(texto) {
-        const div = document.createElement('div');
-        div.className = 'celula';
-        div.textContent = texto;
-        div.title = texto;
-        return div;
-    }
-
-    function criarAcoes(funcionario) {
-        const div = document.createElement('div');
-        div.className = 'celula acoes';
-
-        const editar = document.createElement('a');
-        editar.className = 'btn-icone';
-        editar.href = '#modal-editar';
-        editar.title = 'Editar';
-        editar.innerHTML = ICONE_EDITAR;
-        editar.addEventListener('click', () => abrirEditar(funcionario));
-
-        const excluir = document.createElement('a');
-        excluir.className = 'btn-icone';
-        excluir.href = '#modal-excluir';
-        excluir.title = 'Excluir';
-        excluir.innerHTML = ICONE_EXCLUIR;
-        excluir.addEventListener('click', () => { selecionado = funcionario; });
-
-        div.append(editar, excluir);
-        return div;
-    }
-
-    function renderizar() {
-        const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA));
-        if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
-
-        const inicio = (paginaAtual - 1) * POR_PAGINA;
-        const fim = Math.min(inicio + POR_PAGINA, filtrados.length);
-        const pagina = filtrados.slice(inicio, fim);
-
-        const colunas = document.querySelectorAll('.lista .coluna');
-        colunas.forEach(coluna => coluna.querySelectorAll('.celula').forEach(c => c.remove()));
-
-        pagina.forEach(f => {
-            colunas[0].appendChild(criarCelula(f.nome));
-            colunas[1].appendChild(criarCelula(f.email));
-            colunas[2].appendChild(criarCelula(f.cargo));
-            colunas[3].appendChild(criarAcoes(f));
-        });
-
-        document.getElementById('exibicao').textContent = filtrados.length
-            ? `Exibindo ${inicio + 1}-${fim} de ${filtrados.length}`
-            : 'Nenhum funcionário encontrado';
-
-        document.getElementById('pagina').textContent = `Página ${paginaAtual} de ${totalPaginas}`;
-        document.getElementById('anterior').disabled = paginaAtual === 1;
-        document.getElementById('proxima').disabled = paginaAtual === totalPaginas;
-    }
-
-    function voltarPagina() {
-        if (paginaAtual > 1) {
-            paginaAtual--;
+            paginaAtual = 1;
             renderizar();
         }
-    }
 
-    function avancarPagina() {
-        const totalPaginas = Math.ceil(filtrados.length / POR_PAGINA);
-        if (paginaAtual < totalPaginas) {
-            paginaAtual++;
-            renderizar();
+        function criarCelula(texto) {
+            const div = document.createElement('div');
+            div.className = 'celula';
+            div.textContent = texto;
+            div.title = texto;
+            return div;
         }
-    }
 
-    /* POPUPS */
-    function abrirEditar(funcionario) {
-        selecionado = funcionario;
-        document.getElementById('edit-nome').value = funcionario.nome;
-        document.getElementById('edit-cargo').value = funcionario.cargo;
-        document.getElementById('edit-email').value = funcionario.email;
-        document.getElementById('edit-senha').value = '';
-    }
+        function criarAcoes(funcionario) {
+            const div = document.createElement('div');
+            div.className = 'celula acoes';
 
-    function fecharModal() {
-        location.hash = '#';
-    }
+            const editar = document.createElement('a');
+            editar.className = 'btn-icone';
+            editar.href = '#modal-editar';
+            editar.title = 'Editar';
+            editar.innerHTML = ICONE_EDITAR;
+            editar.addEventListener('click', () => abrirEditar(funcionario));
 
-    async function salvarEdicao(evento) {
-        evento.preventDefault();
-        if (!selecionado) return;
+            const excluir = document.createElement('a');
+            excluir.className = 'btn-icone';
+            excluir.href = '#modal-excluir';
+            excluir.title = 'Excluir';
+            excluir.innerHTML = ICONE_EXCLUIR;
+            excluir.addEventListener('click', () => { selecionado = funcionario; });
 
-        const dados = {
-            idAdminServer: usuarioId,
-            nomeServer: document.getElementById('edit-nome').value.trim(),
-            cargoServer: document.getElementById('edit-cargo').value.trim(),
-            emailServer: document.getElementById('edit-email').value.trim(),
-            senhaServer: document.getElementById('edit-senha').value
-        };
+            div.append(editar, excluir);
+            return div;
+        }
 
-        try {
-            const resposta = await fetch('/cadastroFuncionario/atualizar/' + selecionado.id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dados)
+        function renderizar() {
+            const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA));
+            if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
+
+            const inicio = (paginaAtual - 1) * POR_PAGINA;
+            const fim = Math.min(inicio + POR_PAGINA, filtrados.length);
+            const pagina = filtrados.slice(inicio, fim);
+
+            const colunas = document.querySelectorAll('.lista .coluna');
+            colunas.forEach(coluna => coluna.querySelectorAll('.celula').forEach(c => c.remove()));
+
+            pagina.forEach(f => {
+                colunas[0].appendChild(criarCelula(f.nome));
+                colunas[1].appendChild(criarCelula(f.email));
+                colunas[2].appendChild(criarCelula(f.cargo));
+                colunas[3].appendChild(criarAcoes(f));
             });
 
-            if (!resposta.ok) {
-                const corpo = await resposta.json().catch(() => ({}));
-                throw new Error(corpo.mensagem || 'Erro ao atualizar o funcionário.');
-            }
+            document.getElementById('exibicao').textContent = filtrados.length
+                ? `Exibindo ${inicio + 1}-${fim} de ${filtrados.length}`
+                : 'Nenhum funcionário encontrado';
 
-            fecharModal();
-            await carregarFuncionarios();
-        } catch (erro) {
-            console.error(erro);
-            alert(erro.message);
+            document.getElementById('pagina').textContent = `Página ${paginaAtual} de ${totalPaginas}`;
+            document.getElementById('anterior').disabled = paginaAtual === 1;
+            document.getElementById('proxima').disabled = paginaAtual === totalPaginas;
         }
-    }
 
-    async function confirmarExclusao() {
-        if (!selecionado) return;
-
-        try {
-            const resposta = await fetch('/cadastroFuncionario/excluir/' + selecionado.id, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ idAdminServer: usuarioId })
-            });
-
-            if (!resposta.ok) {
-                const corpo = await resposta.json().catch(() => ({}));
-                throw new Error(corpo.mensagem || 'Erro ao excluir o funcionário.');
+        function voltarPagina() {
+            if (paginaAtual > 1) {
+                paginaAtual--;
+                renderizar();
             }
-
-            selecionado = null;
-            fecharModal();
-            await carregarFuncionarios();
-        } catch (erro) {
-            console.error(erro);
-            fecharModal();
-            alert(erro.message);
         }
-    }
-</script>
+
+        function avancarPagina() {
+            const totalPaginas = Math.ceil(filtrados.length / POR_PAGINA);
+            if (paginaAtual < totalPaginas) {
+                paginaAtual++;
+                renderizar();
+            }
+        }
+
+        /* POPUPS */
+        function abrirEditar(funcionario) {
+            selecionado = funcionario;
+            document.getElementById('edit-nome').value = funcionario.nome;
+            document.getElementById('edit-cargo').value = funcionario.cargo;
+            document.getElementById('edit-email').value = funcionario.email;
+            document.getElementById('edit-senha').value = '';
+        }
+
+        function fecharModal() {
+            location.hash = '#';
+        }
+
+        async function salvarEdicao(evento) {
+            evento.preventDefault();
+            if (!selecionado) return;
+
+            const dados = {
+                idAdminServer: usuarioId,
+                nomeServer: document.getElementById('edit-nome').value.trim(),
+                cargoServer: document.getElementById('edit-cargo').value.trim(),
+                emailServer: document.getElementById('edit-email').value.trim(),
+                senhaServer: document.getElementById('edit-senha').value
+            };
+
+            try {
+                const resposta = await fetch('/cadastroFuncionario/atualizar/' + selecionado.id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+
+                if (!resposta.ok) {
+                    const corpo = await resposta.json().catch(() => ({}));
+                    throw new Error(corpo.mensagem || 'Erro ao atualizar o funcionário.');
+                }
+
+                fecharModal();
+                await carregarFuncionarios();
+            } catch (erro) {
+                console.error(erro);
+                alert(erro.message);
+            }
+        }
+
+        async function confirmarExclusao() {
+            if (!selecionado) return;
+
+            try {
+                const resposta = await fetch('/cadastroFuncionario/excluir/' + selecionado.id, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ idAdminServer: usuarioId })
+                });
+
+                if (!resposta.ok) {
+                    const corpo = await resposta.json().catch(() => ({}));
+                    throw new Error(corpo.mensagem || 'Erro ao excluir o funcionário.');
+                }
+
+                selecionado = null;
+                fecharModal();
+                await carregarFuncionarios();
+            } catch (erro) {
+                console.error(erro);
+                fecharModal();
+                alert(erro.message);
+            }
+        }
+    </script>
 </body>
 
 </html>

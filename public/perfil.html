@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,34 +11,78 @@
   <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
 
   <link rel="stylesheet" href="./css/style.css">
-<link rel="stylesheet" href="./css/dashboard.css">
-<link rel="stylesheet" href="./css/perfil.css">
+  <link rel="stylesheet" href="./css/dashboardGeral.css">
+  <link rel="stylesheet" href="./css/perfil.css">
+  <link rel="stylesheet" href="./css/padrao.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="./js/sidebar.js" defer></script>
 </head>
 
-<body>
-  <aside class="sidebar">
-  <img src="./assets/imgs/Logo_nav.png" alt="logo da BeatWise">
-  <hr>
+<body class="bw">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
+        <hr>
 
-  <ul>
-    <li><a href="./dashboard.html">Dashboard</a></li>
-    <li><a href="./musicas.html">Músicas</a></li>
-    <li><a href="./artistas.html">Artistas</a></li>
-  </ul>
+        <ul>
+            <li>
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Gravadora</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li>
+                <a href="./listaMusica.html" title="Músicas">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li>
+                <a href="./recomendacao.html" title="Recomendação">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li>
+                <a href="./metricas.html" title="Métricas">
+                    <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Métricas</div>
+                </a>
+            </li>
+            <li>
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
+        </ul>
 
-  <div class="perfil">
-    <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
-    <div id="nome-usuario"></div>
-  </div>
-</aside>
+        <div class="perfil">
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
+        </div>
+    </aside>
 
   <div class="conteudo">
     <div class="conteudo-topo">
       <div class="titulos">
-        <h3>Bem vindo(a) <span id="boas-nome"></span></h3>
+        <h3>Bem vindo(a) <span id="boas-nome" data-usuario="primeiro-nome"></span></h3>
         <h1>Alterar Perfil</h1>
       </div>
       <button type="button" class="btn-sair" id="btn-sair">
@@ -58,7 +105,7 @@
         </div>
         <div>
           <p class="resumo-nome" id="resumo-nome"></p>
-<p class="resumo-email" id="resumo-email"></p>
+          <p class="resumo-email" id="resumo-email"></p>
         </div>
       </div>
 
@@ -97,7 +144,7 @@
         <div class="perfil-campo">
           <label for="nome">Nome completo</label>
           <div class="campo-input">
-           <input type="text" id="nome" readonly>
+            <input type="text" id="nome" readonly>
             <button type="button" class="icone-btn" data-editar="nome" aria-label="Editar nome">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 20h9" />
@@ -196,283 +243,285 @@
   </div>
 
   <script>
-  var usuarioId = sessionStorage.ID_FUNCIONARIO;
-  if (!usuarioId) window.location.href = './login.html';
+    var usuarioId = sessionStorage.ID_FUNCIONARIO;
+    if (!usuarioId) window.location.href = './login.html';
 
-  /* ---------- Falar com o servidor ---------- */
-  async function api(url, opcoes) {
-    opcoes = opcoes || {};
-    var resposta = await fetch(url, Object.assign({
-      headers: { 'Content-Type': 'application/json' }
-    }, opcoes));
+    /* ---------- Falar com o servidor ---------- */
+    async function api(url, opcoes) {
+      opcoes = opcoes || {};
+      var resposta = await fetch(url, Object.assign({
+        headers: { 'Content-Type': 'application/json' }
+      }, opcoes));
 
-    var dados = {};
-    try { dados = await resposta.json(); } catch (e) {}
+      var dados = {};
+      try { dados = await resposta.json(); } catch (e) { }
 
-    if (!resposta.ok) throw new Error(dados.mensagem || 'Erro inesperado. Tente novamente.');
-    return dados;
-  }
-
-  /* ---------- Mostrar os dados na tela ---------- */
-  function mostrarNome(nome) {
-    var primeiro = nome.split(' ')[0];
-    document.getElementById('nome').value = nome;
-    document.getElementById('resumo-nome').textContent = nome;
-    document.getElementById('nome-usuario').textContent = primeiro;
-    document.getElementById('boas-nome').textContent = primeiro;
-  }
-
-  function mostrarFoto(url) {
-  if (!url) return;
-  var img = document.getElementById('foto-preview');
-  img.src = url;
-  img.hidden = false;
-  document.getElementById('foto-texto').hidden = true;
-  document.getElementById('sidebar-foto').src = url;
-}
-
-  async function carregarPerfil() {
-    try {
-      var p = await api('/funcionarios/perfil/' + usuarioId);
-      mostrarNome(p.nome);
-      mostrarFoto(p.foto);
-      document.getElementById('email').value = p.email;
-      document.getElementById('resumo-email').textContent = p.email;
-      document.getElementById('empresa').value = p.empresa;
-      document.getElementById('cargo').value = p.cargo;
-      document.getElementById('senha').value = '••••••••';
-    } catch (erro) {
-      abrirAviso({ tipo: 'erro', titulo: 'Erro', texto: erro.message });
+      if (!resposta.ok) throw new Error(dados.mensagem || 'Erro inesperado. Tente novamente.');
+      return dados;
     }
-  }
 
-  /* ---------- Pop-up genérico ---------- */
-  var modalAviso = document.getElementById('modal-aviso');
-  var avisoOk = document.getElementById('aviso-ok');
-  var avisoCancelar = document.getElementById('aviso-cancelar');
-  var avisoCallback = null;
-
-  function abrirAviso(o) {
-    var tipo = o.tipo || 'info';
-    var icones = { sucesso: '✓', erro: '✕', perigo: '!', info: 'i' };
-    var icone = document.getElementById('aviso-icone');
-
-    icone.className = 'modal-icone ' + tipo;
-    icone.textContent = icones[tipo];
-    document.getElementById('aviso-titulo').textContent = o.titulo;
-    document.getElementById('aviso-texto').textContent = o.texto;
-
-    avisoOk.textContent = o.confirmar || 'OK';
-    avisoOk.className = 'btn-modal ' + (tipo === 'perigo' ? 'btn-modal-perigo' : 'btn-modal-pri');
-    avisoCancelar.hidden = !o.cancelar;
-    avisoCancelar.textContent = o.cancelar || 'Cancelar';
-
-    avisoCallback = o.aoConfirmar || null;
-    modalAviso.hidden = false;
-    avisoOk.focus();
-  }
-
-  function fecharAviso() {
-    modalAviso.hidden = true;
-    avisoCallback = null;
-  }
-
-  avisoOk.addEventListener('click', function () {
-    var cb = avisoCallback;
-    fecharAviso();
-    if (cb) cb();
-  });
-  avisoCancelar.addEventListener('click', fecharAviso);
-
-  /* ---------- Pop-up de senha ---------- */
-  var modalSenha = document.getElementById('modal-senha');
-  var formSenha = document.getElementById('form-senha');
-  var senhaErro = document.getElementById('senha-erro');
-
-  function abrirModalSenha() {
-    formSenha.reset();
-    senhaErro.textContent = '';
-    modalSenha.hidden = false;
-    document.getElementById('senha-antiga').focus();
-  }
-
-  function fecharModalSenha() {
-    modalSenha.hidden = true;
-    formSenha.reset();
-  }
-
-  document.getElementById('btn-alterar-senha').addEventListener('click', abrirModalSenha);
-  document.getElementById('senha-cancelar').addEventListener('click', fecharModalSenha);
-
-  formSenha.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    var antiga = document.getElementById('senha-antiga').value;
-    var nova = document.getElementById('senha-nova').value;
-    var confirma = document.getElementById('senha-confirma').value;
-
-    if (!antiga || !nova || !confirma) { senhaErro.textContent = 'Preencha todos os campos.'; return; }
-    if (nova.length < 8) { senhaErro.textContent = 'A nova senha deve ter pelo menos 8 caracteres.'; return; }
-    if (nova === antiga) { senhaErro.textContent = 'A nova senha deve ser diferente da atual.'; return; }
-    if (nova !== confirma) { senhaErro.textContent = 'A confirmação não coincide com a nova senha.'; return; }
-
-    try {
-      await api('/funcionarios/perfil/' + usuarioId + '/senha', {
-        method: 'PUT',
-        body: JSON.stringify({ senhaAtual: antiga, novaSenha: nova, confirmacao: confirma })
-      });
-      fecharModalSenha();
-      abrirAviso({ tipo: 'sucesso', titulo: 'Senha alterada', texto: 'Sua senha foi atualizada com sucesso.' });
-    } catch (erro) {
-      senhaErro.textContent = erro.message;
+    /* ---------- Mostrar os dados na tela ---------- */
+    function mostrarNome(nome) {
+      var primeiro = nome.split(' ')[0];
+      document.getElementById('nome').value = nome;
+      document.getElementById('resumo-nome').textContent = nome;
+      document.getElementById('nome-usuario').textContent = primeiro;
+      if (window.Sidebar) Sidebar.atualizarUsuario({ nome: nome });
+      document.getElementById('boas-nome').textContent = primeiro;
     }
-  });
 
-  /* ---------- Fechar pop-ups com ESC ou clicando fora ---------- */
-  document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    if (!modalSenha.hidden) fecharModalSenha();
-    else if (!modalAviso.hidden) fecharAviso();
-  });
-  modalAviso.addEventListener('click', function (e) { if (e.target === modalAviso) fecharAviso(); });
-  modalSenha.addEventListener('click', function (e) { if (e.target === modalSenha) fecharModalSenha(); });
+    function mostrarFoto(url) {
+      if (!url) return;
+      var img = document.getElementById('foto-preview');
+      img.src = url;
+      img.hidden = false;
+      document.getElementById('foto-texto').hidden = true;
+      document.getElementById('sidebar-foto').src = url;
+      if (window.Sidebar) Sidebar.atualizarUsuario({ foto: url });
+    }
 
-  /* ---------- Editar nome ---------- */
-  document.querySelectorAll('[data-editar]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var input = document.getElementById(btn.dataset.editar);
-      input.readOnly = false;
-      input.focus();
+    async function carregarPerfil() {
+      try {
+        var p = await api('/funcionarios/perfil/' + usuarioId);
+        mostrarNome(p.nome);
+        mostrarFoto(p.foto);
+        document.getElementById('email').value = p.email;
+        document.getElementById('resumo-email').textContent = p.email;
+        document.getElementById('empresa').value = p.empresa;
+        document.getElementById('cargo').value = p.cargo;
+        document.getElementById('senha').value = '••••••••';
+      } catch (erro) {
+        abrirAviso({ tipo: 'erro', titulo: 'Erro', texto: erro.message });
+      }
+    }
+
+    /* ---------- Pop-up genérico ---------- */
+    var modalAviso = document.getElementById('modal-aviso');
+    var avisoOk = document.getElementById('aviso-ok');
+    var avisoCancelar = document.getElementById('aviso-cancelar');
+    var avisoCallback = null;
+
+    function abrirAviso(o) {
+      var tipo = o.tipo || 'info';
+      var icones = { sucesso: '✓', erro: '✕', perigo: '!', info: 'i' };
+      var icone = document.getElementById('aviso-icone');
+
+      icone.className = 'modal-icone ' + tipo;
+      icone.textContent = icones[tipo];
+      document.getElementById('aviso-titulo').textContent = o.titulo;
+      document.getElementById('aviso-texto').textContent = o.texto;
+
+      avisoOk.textContent = o.confirmar || 'OK';
+      avisoOk.className = 'btn-modal ' + (tipo === 'perigo' ? 'btn-modal-perigo' : 'btn-modal-pri');
+      avisoCancelar.hidden = !o.cancelar;
+      avisoCancelar.textContent = o.cancelar || 'Cancelar';
+
+      avisoCallback = o.aoConfirmar || null;
+      modalAviso.hidden = false;
+      avisoOk.focus();
+    }
+
+    function fecharAviso() {
+      modalAviso.hidden = true;
+      avisoCallback = null;
+    }
+
+    avisoOk.addEventListener('click', function () {
+      var cb = avisoCallback;
+      fecharAviso();
+      if (cb) cb();
     });
-  });
+    avisoCancelar.addEventListener('click', fecharAviso);
 
-  /* ---------- Foto (reduz no navegador e salva no banco) ---------- */
-var fotoInput = document.getElementById('foto-input');
-document.getElementById('foto-btn').addEventListener('click', function () { fotoInput.click(); });
+    /* ---------- Pop-up de senha ---------- */
+    var modalSenha = document.getElementById('modal-senha');
+    var formSenha = document.getElementById('form-senha');
+    var senhaErro = document.getElementById('senha-erro');
 
-function reduzirImagem(arquivo, lado, callback) {
-  var leitor = new FileReader();
-  leitor.onload = function () {
-    var img = new Image();
-    img.onload = function () {
-      // Recorta o centro em quadrado e reduz para lado x lado
-      var menor = Math.min(img.width, img.height);
-      var canvas = document.createElement('canvas');
-      canvas.width = lado;
-      canvas.height = lado;
-      canvas.getContext('2d').drawImage(
-        img,
-        (img.width - menor) / 2, (img.height - menor) / 2, menor, menor,
-        0, 0, lado, lado
-      );
-      callback(canvas.toDataURL('image/jpeg', 0.8));
-    };
-    img.src = leitor.result;
-  };
-  leitor.readAsDataURL(arquivo);
-}
+    function abrirModalSenha() {
+      formSenha.reset();
+      senhaErro.textContent = '';
+      modalSenha.hidden = false;
+      document.getElementById('senha-antiga').focus();
+    }
 
-fotoInput.addEventListener('change', function () {
-  var arquivo = fotoInput.files[0];
-  if (!arquivo) return;
+    function fecharModalSenha() {
+      modalSenha.hidden = true;
+      formSenha.reset();
+    }
 
-  if (arquivo.type.indexOf('image/') !== 0) {
-    abrirAviso({ tipo: 'erro', titulo: 'Arquivo inválido', texto: 'Escolha uma imagem.' });
-    fotoInput.value = '';
-    return;
-  }
+    document.getElementById('btn-alterar-senha').addEventListener('click', abrirModalSenha);
+    document.getElementById('senha-cancelar').addEventListener('click', fecharModalSenha);
 
-  reduzirImagem(arquivo, 400, async function (dataUrl) {
-    try {
-      await api('/funcionarios/perfil/' + usuarioId + '/foto', {
-        method: 'PUT',
-        body: JSON.stringify({ foto: dataUrl })
+    formSenha.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      var antiga = document.getElementById('senha-antiga').value;
+      var nova = document.getElementById('senha-nova').value;
+      var confirma = document.getElementById('senha-confirma').value;
+
+      if (!antiga || !nova || !confirma) { senhaErro.textContent = 'Preencha todos os campos.'; return; }
+      if (nova.length < 8) { senhaErro.textContent = 'A nova senha deve ter pelo menos 8 caracteres.'; return; }
+      if (nova === antiga) { senhaErro.textContent = 'A nova senha deve ser diferente da atual.'; return; }
+      if (nova !== confirma) { senhaErro.textContent = 'A confirmação não coincide com a nova senha.'; return; }
+
+      try {
+        await api('/funcionarios/perfil/' + usuarioId + '/senha', {
+          method: 'PUT',
+          body: JSON.stringify({ senhaAtual: antiga, novaSenha: nova, confirmacao: confirma })
+        });
+        fecharModalSenha();
+        abrirAviso({ tipo: 'sucesso', titulo: 'Senha alterada', texto: 'Sua senha foi atualizada com sucesso.' });
+      } catch (erro) {
+        senhaErro.textContent = erro.message;
+      }
+    });
+
+    /* ---------- Fechar pop-ups com ESC ou clicando fora ---------- */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (!modalSenha.hidden) fecharModalSenha();
+      else if (!modalAviso.hidden) fecharAviso();
+    });
+    modalAviso.addEventListener('click', function (e) { if (e.target === modalAviso) fecharAviso(); });
+    modalSenha.addEventListener('click', function (e) { if (e.target === modalSenha) fecharModalSenha(); });
+
+    /* ---------- Editar nome ---------- */
+    document.querySelectorAll('[data-editar]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var input = document.getElementById(btn.dataset.editar);
+        input.readOnly = false;
+        input.focus();
       });
-      mostrarFoto(dataUrl);
-      abrirAviso({ tipo: 'sucesso', titulo: 'Foto atualizada', texto: 'Sua foto de perfil foi salva.' });
-    } catch (erro) {
-      abrirAviso({ tipo: 'erro', titulo: 'Não foi possível salvar a foto', texto: erro.message });
-    } finally {
-      fotoInput.value = '';
+    });
+
+    /* ---------- Foto (reduz no navegador e salva no banco) ---------- */
+    var fotoInput = document.getElementById('foto-input');
+    document.getElementById('foto-btn').addEventListener('click', function () { fotoInput.click(); });
+
+    function reduzirImagem(arquivo, lado, callback) {
+      var leitor = new FileReader();
+      leitor.onload = function () {
+        var img = new Image();
+        img.onload = function () {
+          // Recorta o centro em quadrado e reduz para lado x lado
+          var menor = Math.min(img.width, img.height);
+          var canvas = document.createElement('canvas');
+          canvas.width = lado;
+          canvas.height = lado;
+          canvas.getContext('2d').drawImage(
+            img,
+            (img.width - menor) / 2, (img.height - menor) / 2, menor, menor,
+            0, 0, lado, lado
+          );
+          callback(canvas.toDataURL('image/jpeg', 0.8));
+        };
+        img.src = leitor.result;
+      };
+      leitor.readAsDataURL(arquivo);
     }
-  });
-});
 
-  /* ---------- Salvar ---------- */
-  document.getElementById('form-perfil').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var nome = document.getElementById('nome').value.trim();
+    fotoInput.addEventListener('change', function () {
+      var arquivo = fotoInput.files[0];
+      if (!arquivo) return;
 
-    if (nome.length < 3) {
-      abrirAviso({ tipo: 'erro', titulo: 'Nome inválido', texto: 'Informe seu nome completo para continuar.' });
-      return;
-    }
+      if (arquivo.type.indexOf('image/') !== 0) {
+        abrirAviso({ tipo: 'erro', titulo: 'Arquivo inválido', texto: 'Escolha uma imagem.' });
+        fotoInput.value = '';
+        return;
+      }
 
-    abrirAviso({
-      tipo: 'info',
-      titulo: 'Salvar alterações?',
-      texto: 'Os dados do seu perfil serão atualizados.',
-      confirmar: 'Salvar',
-      cancelar: 'Cancelar',
-      aoConfirmar: async function () {
+      reduzirImagem(arquivo, 400, async function (dataUrl) {
         try {
-          var r = await api('/funcionarios/perfil/' + usuarioId + '/nome', {
+          await api('/funcionarios/perfil/' + usuarioId + '/foto', {
             method: 'PUT',
-            body: JSON.stringify({ nome: nome })
+            body: JSON.stringify({ foto: dataUrl })
           });
-          mostrarNome(r.nome);
-          document.getElementById('nome').readOnly = true;
-          sessionStorage.NOME_USUARIO = r.nome;
-          abrirAviso({ tipo: 'sucesso', titulo: 'Alterações salvas', texto: 'Seu perfil foi atualizado com sucesso.' });
+          mostrarFoto(dataUrl);
+          abrirAviso({ tipo: 'sucesso', titulo: 'Foto atualizada', texto: 'Sua foto de perfil foi salva.' });
         } catch (erro) {
-          abrirAviso({ tipo: 'erro', titulo: 'Não foi possível salvar', texto: erro.message });
+          abrirAviso({ tipo: 'erro', titulo: 'Não foi possível salvar a foto', texto: erro.message });
+        } finally {
+          fotoInput.value = '';
         }
-      }
+      });
     });
-  });
 
-  /* ---------- Excluir ---------- */
-  document.getElementById('btn-excluir').addEventListener('click', function () {
-    abrirAviso({
-      tipo: 'perigo',
-      titulo: 'Excluir conta?',
-      texto: 'Essa ação não pode ser desfeita. Todos os seus dados serão removidos.',
-      confirmar: 'Excluir',
-      cancelar: 'Cancelar',
-      aoConfirmar: async function () {
-        try {
-          await api('/funcionarios/perfil/' + usuarioId, { method: 'DELETE' });
+    /* ---------- Salvar ---------- */
+    document.getElementById('form-perfil').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var nome = document.getElementById('nome').value.trim();
+
+      if (nome.length < 3) {
+        abrirAviso({ tipo: 'erro', titulo: 'Nome inválido', texto: 'Informe seu nome completo para continuar.' });
+        return;
+      }
+
+      abrirAviso({
+        tipo: 'info',
+        titulo: 'Salvar alterações?',
+        texto: 'Os dados do seu perfil serão atualizados.',
+        confirmar: 'Salvar',
+        cancelar: 'Cancelar',
+        aoConfirmar: async function () {
+          try {
+            var r = await api('/funcionarios/perfil/' + usuarioId + '/nome', {
+              method: 'PUT',
+              body: JSON.stringify({ nome: nome })
+            });
+            mostrarNome(r.nome);
+            document.getElementById('nome').readOnly = true;
+            sessionStorage.NOME_USUARIO = r.nome;
+            abrirAviso({ tipo: 'sucesso', titulo: 'Alterações salvas', texto: 'Seu perfil foi atualizado com sucesso.' });
+          } catch (erro) {
+            abrirAviso({ tipo: 'erro', titulo: 'Não foi possível salvar', texto: erro.message });
+          }
+        }
+      });
+    });
+
+    /* ---------- Excluir ---------- */
+    document.getElementById('btn-excluir').addEventListener('click', function () {
+      abrirAviso({
+        tipo: 'perigo',
+        titulo: 'Excluir conta?',
+        texto: 'Essa ação não pode ser desfeita. Todos os seus dados serão removidos.',
+        confirmar: 'Excluir',
+        cancelar: 'Cancelar',
+        aoConfirmar: async function () {
+          try {
+            await api('/funcionarios/perfil/' + usuarioId, { method: 'DELETE' });
+            sessionStorage.clear();
+            abrirAviso({
+              tipo: 'sucesso',
+              titulo: 'Conta excluída',
+              texto: 'Sua conta foi removida. Você será redirecionado ao login.',
+              aoConfirmar: function () { window.location.href = './login.html'; }
+            });
+          } catch (erro) {
+            abrirAviso({ tipo: 'erro', titulo: 'Não foi possível excluir', texto: erro.message });
+          }
+        }
+      });
+    });
+
+    /* ---------- Sair ---------- */
+    document.getElementById('btn-sair').addEventListener('click', function () {
+      abrirAviso({
+        tipo: 'info',
+        titulo: 'Sair da conta?',
+        texto: 'Você precisará fazer login novamente para acessar.',
+        confirmar: 'Sair',
+        cancelar: 'Continuar aqui',
+        aoConfirmar: function () {
           sessionStorage.clear();
-          abrirAviso({
-            tipo: 'sucesso',
-            titulo: 'Conta excluída',
-            texto: 'Sua conta foi removida. Você será redirecionado ao login.',
-            aoConfirmar: function () { window.location.href = './login.html'; }
-          });
-        } catch (erro) {
-          abrirAviso({ tipo: 'erro', titulo: 'Não foi possível excluir', texto: erro.message });
+          window.location.href = './login.html';
         }
-      }
+      });
     });
-  });
 
-  /* ---------- Sair ---------- */
-  document.getElementById('btn-sair').addEventListener('click', function () {
-    abrirAviso({
-      tipo: 'info',
-      titulo: 'Sair da conta?',
-      texto: 'Você precisará fazer login novamente para acessar.',
-      confirmar: 'Sair',
-      cancelar: 'Continuar aqui',
-      aoConfirmar: function () {
-        sessionStorage.clear();
-        window.location.href = './login.html';
-      }
-    });
-  });
-
-  carregarPerfil();
-</script>
+    carregarPerfil();
+  </script>
 </body>
 
 </html>

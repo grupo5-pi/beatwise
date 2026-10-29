@@ -9,93 +9,140 @@
 
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/recomendacao.css">
+    <link rel="stylesheet" href="./css/padrao.css">
     <script src="./js/featsCadastrados.js" defer></script>
+    <script src="./js/sidebar.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body class="rec-page">
-    <aside class="sidebar">
-        <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
+<body class="rec-page bw">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
         <hr>
 
         <ul>
-            <li><a href="./dashboard.html">Dashboard</a></li>
-            <li><a href="./listaMusica.html">Músicas</a></li>
-            <li id="selected"><a href="./recomendacao.html">Recomendação</a></li>
+            <li>
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Gravadora</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li>
+                <a href="./listaMusica.html" title="Músicas">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li id="selected">
+                <a href="./recomendacao.html" title="Recomendação">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li>
+                <a href="./metricas.html" title="Métricas">
+                    <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Métricas</div>
+                </a>
+            </li>
+            <li>
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
         </ul>
 
         <div class="perfil">
-            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
-            <div class="usuario" id="nome-usuario">Yasmin</div>
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
         </div>
     </aside>
 
-    <main class="rec-content">
-        <div class="rec-topo">
-            <div>
-                <p class="rec-boas-vindas">Bem-vindo(a), Yasmin</p>
-                <h1 class="rec-titulo">Feats cadastrados</h1>
+        <main class="rec-content">
+            <div class="conteudo-topo">
+            <div class="titulos">
+                <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
+                <h1>Feats cadastrados</h1>
             </div>
 
-            <nav class="rec-abas">
-                <a href="./recomendacao.html" class="rec-aba">Recomendação Feat</a>
-                <a href="./featsCadastrados.html" class="rec-aba rec-aba-ativa">Feats cadastrados</a>
-            </nav>
-        </div>
+                <nav class="rec-abas">
+                    <a href="./recomendacao.html" class="rec-aba">Recomendação Feat</a>
+                    <a href="./featsCadastrados.html" class="rec-aba rec-aba-ativa">Feats cadastrados</a>
+                </nav>
+            </div>
 
-        <h2 class="rec-subtitulo">Acesse recomendações anteriores</h2>
+    <h2 class="rec-subtitulo">Acesse recomendações anteriores</h2>
 
-        <div class="rec-painel">
-            <div id="rec-lista" class="rec-cards rec-cards-lista">
-                <div class="rec-card">
-                    <span class="rec-card-nome">Recomendação 1</span>
-                    <span class="rec-card-info">Dua Lipa, Luísa Sonza, Veigh</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
+    <div class="rec-painel">
+        <div id="rec-lista" class="rec-cards rec-cards-lista">
+            <div class="rec-card">
+                <span class="rec-card-nome">Recomendação 1</span>
+                <span class="rec-card-info">Dua Lipa, Luísa Sonza, Veigh</span>
+                <div class="rec-card-acoes">
+                    <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                    <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
                 </div>
-                <div class="rec-card">
-                    <span class="rec-card-nome">Recomendação 2</span>
-                    <span class="rec-card-info">The Weeknd, Anitta, Matuê</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
+            </div>
+            <div class="rec-card">
+                <span class="rec-card-nome">Recomendação 2</span>
+                <span class="rec-card-info">The Weeknd, Anitta, Matuê</span>
+                <div class="rec-card-acoes">
+                    <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                    <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
                 </div>
-                <div class="rec-card">
-                    <span class="rec-card-nome">Recomendação 3</span>
-                    <span class="rec-card-info">Taylor Swift, Jão, Billie Eilish</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
+            </div>
+            <div class="rec-card">
+                <span class="rec-card-nome">Recomendação 3</span>
+                <span class="rec-card-info">Taylor Swift, Jão, Billie Eilish</span>
+                <div class="rec-card-acoes">
+                    <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                    <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
                 </div>
-                <div class="rec-card">
-                    <span class="rec-card-nome">Recomendação 4</span>
-                    <span class="rec-card-info">Bruno Mars, Ed Sheeran, Post Malone</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
+            </div>
+            <div class="rec-card">
+                <span class="rec-card-nome">Recomendação 4</span>
+                <span class="rec-card-info">Bruno Mars, Ed Sheeran, Post Malone</span>
+                <div class="rec-card-acoes">
+                    <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                    <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
                 </div>
-                <div class="rec-card">
-                    <span class="rec-card-nome">Recomendação 5</span>
-                    <span class="rec-card-info">Marília Mendonça, Michel Teló, Anitta</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
+            </div>
+            <div class="rec-card">
+                <span class="rec-card-nome">Recomendação 5</span>
+                <span class="rec-card-info">Marília Mendonça, Michel Teló, Anitta</span>
+                <div class="rec-card-acoes">
+                    <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                    <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
                 </div>
-                <div class="rec-card">
-                    <span class="rec-card-nome">Recomendação 6</span>
-                    <span class="rec-card-info">Drake, Travis Scott, Veigh</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
+            </div>
+            <div class="rec-card">
+                <span class="rec-card-nome">Recomendação 6</span>
+                <span class="rec-card-info">Drake, Travis Scott, Veigh</span>
+                <div class="rec-card-acoes">
+                    <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                    <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
                 </div>
             </div>
         </div>
+    </div>
     </main>
 
     <div id="modal_editar" class="rec-modal" style="display: none;">
@@ -105,7 +152,8 @@
             <input type="text" id="input_nome_edicao" maxlength="40">
             <div class="rec-acoes">
                 <button type="button" class="rec-botao" onclick="salvarEdicao()">Salvar</button>
-                <button type="button" class="rec-botao rec-botao-secundario" onclick="cancelarEdicao()">Cancelar</button>
+                <button type="button" class="rec-botao rec-botao-secundario"
+                    onclick="cancelarEdicao()">Cancelar</button>
             </div>
         </div>
     </div>

@@ -9,19 +9,64 @@
 
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/cadastroFuncionario.css">
+    <link rel="stylesheet" href="./css/padrao.css">
+    <script src="./js/sidebar.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body>
-    <aside class="sidebar">
-        <img src="./assets/imgs/Logo_nav.png" alt="logo da BeatWise">
+<body class="bw">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
         <hr>
 
         <ul>
-            <li><a href="./dashboard.html">Dashboard</a></li>
-            <li><a href="./musicas.html">Músicas</a></li>
-            <li><a href="./artistas.html">Artistas</a></li>
-            <li><a href="./recomendacao.html">Recomendação</a></li>
-            <li id="selected"><a href="./cadastroFuncionario.html">Funcionário</a></li>
+            <li>
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Gravadora</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li>
+                <a href="./listaMusica.html" title="Músicas">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li>
+                <a href="./recomendacao.html" title="Recomendação">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li>
+                <a href="./metricas.html" title="Métricas">
+                    <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Métricas</div>
+                </a>
+            </li>
+            <li id="selected">
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
         </ul>
 
         <div class="perfil">
@@ -33,7 +78,7 @@
     <div class="conteudo">
         <div class="conteudo-topo">
             <div class="titulos">
-                <h3>Bem vindo(a), <span id="boas-nome"></span></h3>
+                <h3>Bem vindo(a) <span id="boas-nome" data-usuario="primeiro-nome"></span></h3>
                 <h1>Cadastro de Funcionário</h1>
             </div>
 
@@ -74,8 +119,6 @@
                     <div class="campo-input">
                         <select id="cargo" name="cargo" required>
                             <option value="">Selecione o cargo</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Empresa">Empresa</option>
                             <option value="Produtor">Produtor</option>
                             <option value="Marketing">Marketing</option>
                         </select>

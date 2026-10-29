@@ -30,13 +30,23 @@ body {
 .sidebar {
     display: flex;
     flex-direction: column;
-    position: fixed;
-    left: 0;
-    height: 100%;
-    width: 16.3%;
-    background: linear-gradient(280deg,rgba(0, 0, 0, 1) 22%, rgba(14, 2, 33, 1) 46%, rgba(14, 2, 33, 1) 89%);
+    height: 100vh;
+    width: 80px;
+    flex-shrink: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.3s ease;
+    cursor: pointer;
+    background: linear-gradient(280deg, rgba(0, 0, 0, 1) 22%, rgba(14, 2, 33, 1) 46%, rgba(14, 2, 33, 1) 89%);
     border-right: solid 5px var(--color-bw-accent);
-    z-index: 999; 
+    position: sticky; /* acompanha a rolagem da página */
+    top: 0;
+    align-self: flex-start;
+    z-index: 999;
+}
+
+.sidebar.expandida {
+    width: 270px;
 }
 
 .sidebar hr {
@@ -45,38 +55,84 @@ body {
     border: none;
 }
 
-.sidebar img {
-    width: 100%;
-    margin: 22px 0px;
-}
-
+/* Área da Lista do Menu */
 .sidebar ul {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     color: white;
-    height: 23%;
-    width: 100%;
+    width: 85%;
     margin-top: 20px;
+    padding: 0 0 0 5%;
+    gap: 8px;
 }
 
+/* Cada item do menu (Ícone + Texto lado a lado) */
 .sidebar ul li {
     display: flex;
     align-items: center;
-    border-radius: 20px;
-    width: 90%;
-    height: 28%;
-    font-size: 22px;
+    justify-content: center; 
+    border-radius: 14px;
+    width: 100%;
+    min-height: 40px;
+    margin: 0;
+    font-size: 23px;
+    cursor: pointer;
+    border: solid 1.5px transparent;
+    box-sizing: border-box;
 }
 
-.sidebar ul li:hover {
-    border: solid 1.5px var(--color-bw-accent);
-    background: linear-gradient(309deg, rgba(109, 40, 217, 1) 0%, rgba(0, 0, 0, 1) 55%, rgba(45, 36, 201, 1) 100%);
-    background-size: 200% 200%;
-    animation: fundo 4s ease-in-out alternate infinite;
+/* Caixa do ícone perfeitamente centralizada */
+.sidebar ul li .icone-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px; /* 80 (sidebar) - 5 (borda) - 24 (folga) - 3 (borda do item) */
+    height: 32px;
+    flex-shrink: 0;
 }
 
+/* Imagem do ícone ajustada dentro da caixa */
+.sidebar ul li img.icone,
+.sidebar ul li .icone-box img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+/* Comportamento do texto ao expandir/recolher */
+.sidebar .texto,
+.sidebar #nome-usuario {
+    max-width: 0;
+    margin-left: 0;
+    overflow: hidden;
+    opacity: 0;
+    white-space: nowrap;
+    transition: max-width 0.3s ease, margin-left 0.3s ease, opacity 0.2s ease;
+}
+
+.sidebar.expandida .texto {
+    max-width: 200px;
+    margin-left: 4px;
+    opacity: 1;
+    transition-delay: 0.1s;
+}
+
+.sidebar.expandida #nome-usuario {
+    max-width: 200px;
+    margin-left: 15px;
+    opacity: 1;
+    transition-delay: 0.1s;
+}
+
+.sidebar.expandida ul li {
+    width: 100%;
+    justify-content: flex-start;
+}
+
+/* Efeito Hover e Item Selecionado */
+.sidebar ul li:hover,
 #selected {
     border: solid 1.5px var(--color-bw-accent);
     background: linear-gradient(309deg, rgba(109, 40, 217, 1) 0%, rgba(0, 0, 0, 1) 55%, rgba(45, 36, 201, 1) 100%);
@@ -88,38 +144,99 @@ body {
     0% {
         background-position: 0% 50%;
     }
-
     100% {
         background-position: 100% 0%;
     }
 }
 
-.sidebar ul li a {
-    margin-left: 30px;
-}
-
+/* Perfil do Usuário na Base da Sidebar */
 .sidebar .perfil {
     display: flex;
     align-items: center;
-    height: 8%;
+    height: 70px;
     background-color: black;
     border-top: solid 2px var(--color-bw-accent);
     margin-top: auto;
+    padding: 0 15px;
 }
 
 .sidebar .perfil img {
-    height: 70%;
-    width: 19%;
+    height: 44px;
+    width: 44px;
     background-color: #2a1441;
     border-radius: 50%;
-    margin-left: 15px;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+/* Logo da Sidebar */
+.sidebar .logo-area {
+    position: relative;
+    height: 70px;
+    margin: 20px 0;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar .logo-area img {
+    position: absolute;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar .logo-icone {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    opacity: 1;
+}
+
+.sidebar.expandida .logo-icone {
+    opacity: 0;
+}
+
+.sidebar .logo-banner {
+    width: 90%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+}
+
+.sidebar.expandida .logo-banner {
+    opacity: 1;
+}
+
+.sidebar ul li a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    align-self: stretch; /* a área toda do item é clicável */
+    text-decoration: none;
+    color: inherit;
+    gap: 0;
 }
 
 .sidebar .perfil #nome-usuario {
     color: white;
-    font-size: 22px;
-    margin-left: 15px;
+    font-size: 24px;
 }
+
+/* Layout das telas com sidebar: ela fica ao lado do conteúdo (não é mais fixed),
+   então o body vira flex e a área principal ocupa o espaço que sobra. */
+body:has(> .sidebar) {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: auto;
+    min-height: 100vh;
+}
+
+body:has(> .sidebar) > :is(main, .conteudo, .content, .rec-content, .dash-content) {
+    flex: 1;
+    min-width: 0;
+}
+
 
 /*Header*/
 header {

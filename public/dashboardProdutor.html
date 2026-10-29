@@ -10,52 +10,131 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/dashboardProdutor.css">
     <link rel="stylesheet" href="./css/dispersaoProdutor.css">
+    <link rel="stylesheet" href="./css/padrao.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
     <script src="./js/musicasExemplo.js"></script>
     <script src="./js/dispersaoProdutor.js"></script>
     <script src="./js/dashboardProdutor.js"></script>
+    <script src="./js/sidebar.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body class="dash-page" onload="carregarDashboardProdutor(); carregarDispersao()">
-    <aside class="sidebar">
-        <img src="./assets/imgs/banner.jpeg" alt="logo da BeatWise">
+<body class="dash-page bw" onload="carregarDashboardProdutor(); carregarDispersao()">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
         <hr>
 
         <ul>
-            <li id="selected"><a href="./dashboardProdutor.html">Dashboard</a></li>
-            <li><a href="./listaMusica.html">Músicas</a></li>
-            <li><a href="./recomendacao.html">Recomendação</a></li>
+            <li>
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Gravadora</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li id="selected">
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li>
+                <a href="./listaMusica.html" title="Músicas">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li>
+                <a href="./recomendacao.html" title="Recomendação">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li>
+                <a href="./metricas.html" title="Métricas">
+                    <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Métricas</div>
+                </a>
+            </li>
+            <li>
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
         </ul>
 
         <div class="perfil">
-            <img src="./assets/imgs/logo_B.png" alt="foto de perfil">
-            <div class="usuario" id="nome-usuario">Yasmin</div>
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
         </div>
     </aside>
 
-    <main class="dash-content">
-        <div class="dash-topo">
-            <div>
-                <p class="dash-boas-vindas">Bem-vindo(a), Yasmin</p>
-                <h1 class="dash-titulo">Produção Musical</h1>
+        <main class="dash-content">
+            <div class="conteudo-topo">
+                <div class="titulos">
+                    <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
+                    <h1>Produção Musical</h1>
+                </div>
             </div>
 
+    <section class="dash-alertas" id="lista_alertas"></section>
+
+    <section class="dash-kpis">
+        <div class="dash-kpi">
+            <span class="dash-kpi-titulo">Fator decisivo</span>
+            <span class="dash-kpi-valor" id="kpi_fator_valor"></span>
+            <span class="dash-kpi-texto" id="kpi_fator_texto"></span>
+        </div>
+        <div class="dash-kpi">
+            <span class="dash-kpi-titulo">Duração Ideal</span>
+            <span class="dash-kpi-valor" id="kpi_duracao_ideal_valor"></span>
+            <span class="dash-kpi-texto" id="kpi_duracao_ideal_texto"></span>
         </div>
 
-        <section class="dash-alertas" id="lista_alertas"></section>
+        <div class="dash-kpi">
+            <span class="dash-kpi-titulo">Duração ideal</span>
+            <span class="dash-kpi-valor" id="kpi_duracao_valor">2:30 - 3:30</span>
+            <span class="dash-kpi-texto" id="kpi_duracao_texto">Músicas nessa faixa têm streams 2x acima da média (980
+                mil vs média geral)</span>
+        </div>
+    </section>
 
-        <section class="dash-kpis">
-            <div class="dash-kpi">
-                <span class="dash-kpi-titulo">Fator decisivo</span>
-                <span class="dash-kpi-valor" id="kpi_fator_valor"></span>
-                <span class="dash-kpi-texto" id="kpi_fator_texto"></span>
+    <section class="dash-graficos">
+        <div class="dash-grafico">
+            <h2 class="dash-grafico-titulo" id="titulo_bpm"></h2>
+            <p class="dash-grafico-subtitulo">Views médias (milhões) por faixa de BPM</p>
+            <div class="dash-grafico-area">
+                <canvas id="grafico_bpm"></canvas>
             </div>
-            <div class="dash-kpi">
-                <span class="dash-kpi-titulo">Duração Ideal</span>
-                <span class="dash-kpi-valor" id="kpi_duracao_ideal_valor"></span>
-                <span class="dash-kpi-texto" id="kpi_duracao_ideal_texto"></span>
+        </div>
+        <div class="dash-grafico-radar">
+            <h2 class="dash-grafico-titulo" id="titulo_radar"></h2>
+            <p class="dash-grafico-subtitulo">Características musicais</p>
+            <div class="dash-grafico-area">
+                <canvas id="grafico_radar"></canvas>
             </div>
+        </div>
+    </section>
+
+    <section class="dash-graficos dash-graficos-dispersao">
+        <div class="dash-grafico">
+            <div class="dash-dispersao-topo">
+                <div>
+                    <h2 class="dash-grafico-titulo">Dispersão de views por característica</h2>
+                    <p class="dash-grafico-subtitulo">Relação entre a característica musical e as visualizações, com
+                        linha de tendência projetada</p>
             <div class="dash-kpi">
                 <span class="dash-kpi-titulo">Total de Streams por Gênero</span>
                 <span class="dash-kpi-valor" id="kpi_total_streams_valor"></span>
@@ -71,35 +150,18 @@
                 <div class="dash-grafico-area">
                     <canvas id="grafico_bpm"></canvas>
                 </div>
-            </div>
-            <div class="dash-grafico-radar">
-                <h2 class="dash-grafico-titulo" id="titulo_radar"></h2>
-                <p class="dash-grafico-subtitulo">Características musicais</p>
-                <div class="dash-grafico-area">
-                    <canvas id="grafico_radar"></canvas>
+
+                <div class="dash-seletor">
+                    <label for="select_caracteristica">Característica</label>
+                    <select id="select_caracteristica"></select>
                 </div>
             </div>
-        </section>
 
-        <section class="dash-graficos dash-graficos-dispersao">
-            <div class="dash-grafico">
-                <div class="dash-dispersao-topo">
-                    <div>
-                        <h2 class="dash-grafico-titulo">Dispersão de views por característica</h2>
-                        <p class="dash-grafico-subtitulo">Relação entre a característica musical e as visualizações, com linha de tendência projetada</p>
-                    </div>
-
-                    <div class="dash-seletor">
-                        <label for="select_caracteristica">Característica</label>
-                        <select id="select_caracteristica"></select>
-                    </div>
-                </div>
-
-                <div class="dash-grafico-area dash-dispersao-area">
-                    <canvas id="grafico_dispersao"></canvas>
-                </div>
+            <div class="dash-grafico-area dash-dispersao-area">
+                <canvas id="grafico_dispersao"></canvas>
             </div>
-        </section>
+        </div>
+    </section>
 
     </main>
 </body>

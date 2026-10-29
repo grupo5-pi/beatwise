@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métricas | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/metricas.css?v=7">
+    <link rel="stylesheet" href="./css/padrao.css">
+    <script src="./js/sidebar.js" defer></script>
+    <script src="./js/metricas.js?v=7"></script>
+</head>
+
+<body class="metricas bw" onload="iniciarPagina()">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
+        <hr>
+
+        <ul>
+            <li>
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Gravadora</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li>
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li>
+                <a href="./listaMusica.html" title="Músicas">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li>
+                <a href="./recomendacao.html" title="Recomendação">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li id="selected">
+                <a href="./metricas.html" title="Métricas">
+                    <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Métricas</div>
+                </a>
+            </li>
+            <li>
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
+        </ul>
+
+        <div class="perfil">
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
+        </div>
+    </aside>
+
+    <main class="conteudo">
+        <div class="conteudo-topo">
+            <div class="titulos">
+                <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
+                <h1 id="titulo-pagina">Métricas</h1>
+            </div>
+
+            <div class="abas">
+                <button type="button" id="aba-lista" class="aba ativa" onclick="mostrarLista()">Minhas Análises</button>
+                <button type="button" id="aba-nova" class="aba" onclick="novaAnalise()">Nova Análise</button>
+            </div>
+        </div>
+
+        <section id="tela-lista" class="tela">
+            <div class="barra-filtros">
+                <label class="busca">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input id="busca" type="text" placeholder="Buscar análise por nome..." oninput="listarAnalises()">
+                </label>
+
+                <label class="ordenar">
+                    Ordenar:
+                    <select id="ordem" onchange="listarAnalises()">
+                        <option value="recentes">Mais recentes</option>
+                        <option value="antigas">Mais antigas</option>
+                        <option value="nome">Nome (A–Z)</option>
+                        <option value="musicas">Mais músicas</option>
+                    </select>
+                </label>
+
+                <span id="total" class="total"></span>
+            </div>
+
+            <div id="lista-analises" class="lista-analises"></div>
+            <p id="rodape-lista" class="rodape-lista"></p>
+        </section>
+
+        <section id="tela-form" class="tela" hidden>
+            <form id="form-analise" class="form" onsubmit="salvar(event)" novalidate>
+                <div class="campo">
+                    <label for="nome">Nome da análise *</label>
+                    <input id="nome" type="text" maxlength="60" placeholder="Ex.: Campanha de lançamento – Verão">
+                </div>
+
+                <div class="campo">
+                    <span class="rotulo">Período de lançamento</span>
+                    <div class="chips" id="chips-periodo">
+                        <button type="button" class="chip" data-periodo="5anos" onclick="escolherPeriodo('5anos')">Últimos 5 anos</button>
+                        <button type="button" class="chip" data-periodo="10anos" onclick="escolherPeriodo('10anos')">Últimos 10 anos</button>
+                        <button type="button" class="chip" data-periodo="todos" onclick="escolherPeriodo('todos')">Toda a base</button>
+                        <button type="button" class="chip" data-periodo="personalizado" onclick="escolherPeriodo('personalizado')">Personalizado</button>
+                    </div>
+                </div>
+
+                <div class="linha-anos">
+                    <div class="campo">
+                        <label for="ano-inicio">De (ano)</label>
+                        <input id="ano-inicio" type="number" min="1900" placeholder="AAAA">
+                    </div>
+                    <div class="campo">
+                        <label for="ano-fim">Até (ano)</label>
+                        <input id="ano-fim" type="number" min="1900" placeholder="AAAA">
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <span class="rotulo">Gênero</span>
+                    <div class="chips" id="chips-genero"></div>
+                </div>
+
+                <div class="titulo-secao">
+                    <h2>Características musicais</h2>
+                    <button type="button" class="link" onclick="limparCaracteristicas()">Limpar faixas</button>
+                </div>
+
+                <div class="linha-sliders" id="sliders"></div>
+
+                <div class="contador">
+                    <span id="contador-rotulo">Músicas na base (sem filtros)</span>
+                    <strong id="contador-valor">—</strong>
+                </div>
+
+                <p id="mensagem-form" class="mensagem"></p>
+
+                <div class="acoes-form">
+                    <button type="submit" id="btn-salvar" class="btn primario">Salvar</button>
+                    <button type="button" class="btn" onclick="mostrarLista()">Cancelar</button>
+                    <button type="button" id="btn-excluir-form" class="btn perigo" hidden onclick="abrirModal(idEditando)">Excluir análise</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <div id="modal-excluir" class="modal-fundo" hidden>
+        <div class="modal">
+            <h2>Excluir análise?</h2>
+            <p id="modal-texto"></p>
+            <div class="acoes-modal">
+                <button type="button" class="btn" onclick="fecharModal()">Cancelar</button>
+                <button type="button" id="btn-confirmar-exclusao" class="btn perigo-cheio" onclick="confirmarExclusao()">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
