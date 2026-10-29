@@ -24,7 +24,7 @@ function escapar(texto) {
 async function validarAdmin(idAdmin) {
     if (!Number.isInteger(idAdmin)) return null;
     var admin = await cadastroFuncionarioModel.buscarAdminPorId(idAdmin);
-    if (admin.length == 0 || admin[0].cargo != "Admin" &&  admin[0].cargo != "Empresa") return null;
+    if (admin.length == 0 || admin[0].cargo != "Admin" && admin[0].cargo != "Empresa") return null;
     return admin[0];
 }
 
@@ -49,7 +49,7 @@ async function cadastrarFuncionario(req, res) {
         }
 
         var admin = await cadastroFuncionarioModel.buscarAdminPorId(idAdmin);
-        if (admin.length == 0 || admin[0].cargo != "Admin") {
+        if (admin.length == 0 || admin[0].cargo != "Admin" && admin[0].cargo != "Empresa") {
             return res.status(403).json({ mensagem: "Apenas administradores podem cadastrar funcionários." });
         }
 
@@ -70,11 +70,11 @@ async function cadastrarFuncionario(req, res) {
             cargoEncontrado[0].id
         );
 
-        var letras = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-        var codigo = "";
-        for (var i = 0; i < 8; i++) {
-            codigo += letras[crypto.randomInt(letras.length)];
-        }
+        // var letras = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        // var codigo = "";
+        // for (var i = 0; i < 8; i++) {
+        //     codigo += letras[crypto.randomInt(letras.length)];
+        // }
         await cadastroFuncionarioModel.criarToken(escapar(email), codigo);
 
         res.status(201).json({ ok: true });
