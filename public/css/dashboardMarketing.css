@@ -190,6 +190,16 @@ body {
     color: #f87171; 
 }
 
+.positivo {
+    color: #4ADE80 !important; /* Verde brilhante */
+    font-weight: 600;
+}
+
+.negativo {
+    color: #c70000 !important; /* Vermelho claro */
+    font-weight: 600;
+}
+
 /* Gráficos */
 .graficos {
     display: grid;

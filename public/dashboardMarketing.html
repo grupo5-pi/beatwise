@@ -241,9 +241,10 @@
             let clipeGanha = comClipe >= semClipe;
             let maior = Math.max(comClipe, semClipe);
             let menor = Math.min(comClipe, semClipe);
+            let diferencaClipe = maior - menor;
 
             dadosKpis[0].dado = clipeGanha ? 'Com Clipe' : 'Sem Clipe';
-            dadosKpis[0].descricao = `Músicas ${clipeGanha ? 'com' : 'sem'} clipe têm maior taxa de engajamento: ${fmt(maior)}% contra ${fmt(menor)}% ${clipeGanha ? 'sem' : 'com'} clipe (+${fmt(maior - menor)}%)`;
+            dadosKpis[0].descricao = `Músicas ${clipeGanha ? 'com' : 'sem'} clipe têm maior taxa de engajamento: ${fmt(maior)}% contra ${fmt(menor)}% (${clipeGanha ? 'com' : 'sem'} clipe) <span class="${clipeGanha ? 'positivo' : 'negativo'}">+${fmt(diferencaClipe)}%</span>`;
             dadosKpis[0].positivo = clipeGanha;
 
             // KPI 2 - Música com maior taxa de likes (top 5 YouTube)
@@ -263,7 +264,7 @@
             let acima = (taxaMelhor - mediaTop5) / mediaTop5 * 100;
 
             dadosKpis[1].dado = tituloCurto(melhor.nome);
-            dadosKpis[1].descricao = `${melhor.nome} converte ${fmt(taxaMelhor, 2)}% das views em likes: ${fmt(acima, 0)}% acima da média do top 5`;
+            dadosKpis[1].descricao = `${melhor.nome} converte ${fmt(taxaMelhor, 2)}% das views em likes: <span class="positivo">+${fmt(acima, 0)}%</span> acima da média`;
             dadosKpis[1].positivo = true;
 
             // KPI 3 - Melhor plataforma
@@ -272,15 +273,15 @@
             let nomePlat = spotifyGanha ? 'Spotify' : 'YouTube';
 
             dadosKpis[2].dado = nomePlat;
-            dadosKpis[2].descricao = `O ${nomePlat} apresenta maior taxa de aproveitamento: +${fmt(difPlat, 0)}%`;
-            dadosKpis[2].positivo = true;
+            dadosKpis[2].descricao = `O ${nomePlat} apresenta maior taxa de aproveitamento: <span class="${spotifyGanha ? 'positivo' : 'negativo'}">+${fmt(difPlat, 0)}%</span>`;
+            dadosKpis[2].positivo = spotifyGanha;
 
             // KPI 4 - Feat x Solo
             let featGanha = feat >= solo;
             let difFeat = Math.abs(feat - solo) / Math.min(feat, solo) * 100;
 
             dadosKpis[3].dado = featGanha ? 'Feat' : 'Solo';
-            dadosKpis[3].descricao = `Músicas ${featGanha ? 'feat' : 'solo'} têm maior taxa de engajamento: +${fmt(difFeat, 0)}%`;
+            dadosKpis[3].descricao = `Músicas ${featGanha ? 'feat' : 'solo'} têm maior taxa de engajamento: <span class="${featGanha ? 'positivo' : 'negativo'}">+${fmt(difFeat, 0)}%</span>`;
             dadosKpis[3].positivo = featGanha;
 
             // Renderização
