@@ -33,7 +33,7 @@ CREATE TABLE funcionario (
 
 -- 2. Agora criamos a tabela tokenAcesso (pois funcionario já existe)
 CREATE TABLE tokenAcesso (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     fkFuncionario INT NOT NULL,
     tipo VARCHAR(20),
     codigo CHAR(8),
@@ -55,13 +55,11 @@ CREATE TABLE log_apache (
   id INT PRIMARY KEY AUTO_INCREMENT,
   alerta VARCHAR(45),
   descricao VARCHAR(200),
-  data DATETIME,
-  fkFuncionario INT NOT NULL,
-  CONSTRAINT constFkFuncionario FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
+  data DATETIME
 );
 
 CREATE TABLE log_site (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   aviso VARCHAR(45),
   descricao VARCHAR(255),
   pagina VARCHAR(45),
@@ -71,18 +69,18 @@ CREATE TABLE log_site (
 );
 
 CREATE TABLE albumBD (
-  id INT PRIMARY KEY,
-  nome VARCHAR(45) NOT NULL
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  nome VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE artistaBD (
-  id INT PRIMARY KEY,
-  nome VARCHAR(45) NOT NULL
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE musicaBD (
-  id INT PRIMARY KEY,
-  nome VARCHAR(45) NOT NULL,
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  nome VARCHAR(200) NOT NULL,
   fkAlbumBD INT NOT NULL,
   CONSTRAINT fk_musicaBD_albumBD1 FOREIGN KEY (fkAlbumBD) REFERENCES albumBD (id)
 );
@@ -98,30 +96,30 @@ CREATE TABLE musicaArtistaBD (
 CREATE TABLE spotifyBD (
   id INT PRIMARY KEY AUTO_INCREMENT,
   fkMusicaBD INT NOT NULL,
-  url VARCHAR(255),
-  dancabilidade DECIMAL(4,3),
-  energia DECIMAL(4,3),
-  tonalidade DECIMAL(3,1),
-  intensidadeSonora DECIMAL(5,4),
-  acustica DECIMAL(7,6),
-  instrumentalidade DECIMAL(6,5),
-  vivicidade DECIMAL(5,4),
-  valenciaPositividade DECIMAL(4,3),
-  tempoBPM DECIMAL(6,3),
-  duracaoMs DECIMAL(6,1),
-  fluxo VARCHAR(15),
+  url VARCHAR(400),
+  dancabilidade DOUBLE,
+  energia DOUBLE,
+  tonalidade INT,
+  intensidadeSonora DOUBLE,
+  acustica DOUBLE,
+  instrumentalidade DOUBLE,
+  vivicidade DOUBLE,
+  valenciaPositividade DOUBLE,
+  tempoBPM DOUBLE,
+  duracaoMs LONG,
+  fluxo LONG,
   CONSTRAINT fk_spotify_musicaBD1 FOREIGN KEY (fkMusicaBD) REFERENCES musicaBD (id)
 );
 
 CREATE TABLE youtubeBD (
   id INT PRIMARY KEY AUTO_INCREMENT,
   fkMusicaBD INT NOT NULL,
-  url VARCHAR(255),
-  titulo VARCHAR(30),
-  canal VARCHAR(30),
-  visitas DECIMAL(10,1),
-  curtidas DECIMAL(9,1),
-  comentarios DECIMAL(7,1),
+  url VARCHAR(400),
+  titulo VARCHAR(250),
+  canal VARCHAR(100),
+  visitas LONG,
+  curtidas INT,
+  comentarios INT,
   descricao VARCHAR(1000),
   licenciado TINYINT(1),
   videoOficial TINYINT(1),
@@ -137,7 +135,7 @@ CREATE TABLE acesso (
 );
 
 CREATE TABLE sugestaoFeat (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45) NOT NULL,
   featUm VARCHAR(45) NOT NULL,
   featDois VARCHAR(45) NOT NULL,
@@ -147,7 +145,7 @@ CREATE TABLE sugestaoFeat (
 );
 
 CREATE TABLE metricaDash (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45) NOT NULL,
   data_inicial DATE,
   data_final DATE,
@@ -166,13 +164,13 @@ CREATE TABLE metricaDash (
 );
 
 CREATE TABLE notificacao (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   fkFuncionario INT NOT NULL,
   CONSTRAINT fk_notificacao_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
 );
 
 CREATE TABLE notificacao_acesso (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   usuario TINYINT,
   data TINYINT,
   horario TINYINT,
@@ -182,7 +180,7 @@ CREATE TABLE notificacao_acesso (
 );
 
 CREATE TABLE notificacao_atualizacoes (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   novas_funcionalidades TINYINT,
   correcoes TINYINT,
   manutencoes TINYINT,
@@ -192,7 +190,7 @@ CREATE TABLE notificacao_atualizacoes (
 );
 
 CREATE TABLE notificacao_informativas (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   novidades TINYINT,
   dicas TINYINT,
   comunicados TINYINT,
@@ -202,7 +200,7 @@ CREATE TABLE notificacao_informativas (
 );
 
 CREATE TABLE notificacao_frequencia (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   diaria TINYINT,
   semanal TINYINT,
   mensal TINYINT,

@@ -70,11 +70,11 @@ async function cadastrarFuncionario(req, res) {
             cargoEncontrado[0].id
         );
 
-        // var letras = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-        // var codigo = "";
-        // for (var i = 0; i < 8; i++) {
-        //     codigo += letras[crypto.randomInt(letras.length)];
-        // }
+        var letras = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        var codigo = "";
+        for (var i = 0; i < 8; i++) {
+            codigo += letras[crypto.randomInt(letras.length)];
+        }
         await cadastroFuncionarioModel.criarToken(escapar(email), codigo);
 
         res.status(201).json({ ok: true });
