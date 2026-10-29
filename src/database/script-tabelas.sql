@@ -220,7 +220,7 @@ SELECT * FROM musicaBD LIMIT 100;
 
 -- Empresa
 INSERT INTO empresa (razaoSocial, email, cnpj, telefone)
-VALUES ('BeatWise', 'contato@beatwise.com.br',
+VALUES ('BeatWise', 'contato@beatwise.com',
         '12.345.678/0001-90', '(11) 98765-4321');
 
 -- Funcionários: um para cada cargo
@@ -228,6 +228,6 @@ INSERT INTO funcionario
     (nome, email, senha, fkEmpresa, fkCargo, fkSubalterno)
 VALUES
     ('Administrador', 'admin@beatwise.com', 'Admin123#', 1, 1, NULL),
-    ('Responsavel Empresa', 'empresa@beatwise.com', 'Empresa123#', 1, 2, 1),
-    ('Produtor Musical', 'produtor@beatwise.com', 'Produtor123#', 1, 3, 2),
-    ('Analista Marketing', 'marketing@beatwise.com', 'Marketing123#', 1, 4, 2);
+    ('Responsável', 'empresa@beatwise.com', 'Empresa123#', 1, 2, 1),
+    ('Produtor', 'produtor@beatwise.com', 'Produtor123#', 1, 3, 2),
+    ('Marketing', 'marketing@beatwise.com', 'Marketing123#', 1, 4, 2);
