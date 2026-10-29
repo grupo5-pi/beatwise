@@ -18,22 +18,10 @@ function carregarDispersao() {
             max: 11,
             passo: 1
         },
-        intensidadeSonora: {
-            rotulo: 'Intensidade sonora (dB)',
-            min: -46.251,
-            max: 0.92
-        },
         acustica: {
             rotulo: 'Acústica',
             min: 0,
             max: 0.996
-        },
-        instrumentalidade: {
-            rotulo: 'Instrumentalidade',
-            min: 0,
-            max: 1,
-            transformar: valor => Math.sqrt(valor),
-            inverter: valor => valor ** 2
         },
         vivicidade: {
             rotulo: 'Vivacidade',
