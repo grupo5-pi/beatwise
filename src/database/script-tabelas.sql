@@ -14,6 +14,18 @@ CREATE TABLE empresa (
   telefone CHAR(15)
 );
 
+CREATE TABLE tokenAcesso (
+  id INT PRIMARY KEY,
+  tipo VARCHAR(20),
+  codigo CHAR(8),
+  expiracao DATETIME,
+  statusEnviado TINYINT,
+  usado TINYINT,
+  tentativas INT,
+  falhasEnvio INT,
+  criadoEm DATETIME
+);
+
 CREATE TABLE funcionario (
   id INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45),
@@ -21,30 +33,31 @@ CREATE TABLE funcionario (
   senha VARCHAR(100),
   fkEmpresa INT NOT NULL,
   fkCargo INT NOT NULL,
-  fkSubalterno INT NOT NULL,
+  fkSubalterno INT,
+  tokenAcesso_id INT,
   CONSTRAINT constFkEmpresa FOREIGN KEY (fkEmpresa) REFERENCES empresa (id),
   CONSTRAINT constFkCargo FOREIGN KEY (fkCargo) REFERENCES cargo (id),
-  CONSTRAINT fk_funcionario_funcionario1 FOREIGN KEY (fkSubalterno) REFERENCES funcionario (id)
+  CONSTRAINT fk_funcionario_funcionario1 FOREIGN KEY (fkSubalterno) REFERENCES funcionario (id),
+  CONSTRAINT fk_funcionario_tokenAcesso1 FOREIGN KEY (tokenAcesso_id) REFERENCES tokenAcesso (id)
 );
 
 CREATE TABLE log_apache (
   id INT PRIMARY KEY AUTO_INCREMENT,
   alerta VARCHAR(45),
+  descricao VARCHAR(200),
   data DATETIME,
-  descricao VARCHAR(255),
   fkFuncionario INT NOT NULL,
-	CONSTRAINT constFkFuncionario FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
+  CONSTRAINT constFkFuncionario FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
 );
 
 CREATE TABLE log_site (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    alerta VARCHAR(45),
-    data DATETIME,
-    descricao VARCHAR(255),
-    pagina VARCHAR(45),
-    fkFuncionario INT NOT NULL,
-      CONSTRAINT constFkFuncionario2 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
-
+  id INT PRIMARY KEY,
+  aviso VARCHAR(45),
+  descricao VARCHAR(255),
+  pagina VARCHAR(45),
+  data DATETIME,
+  fkFuncionario INT NOT NULL,
+  CONSTRAINT fk_log_site_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
 );
 
 CREATE TABLE albumBD (
@@ -126,22 +139,72 @@ CREATE TABLE sugestaoFeat (
 CREATE TABLE metricaDash (
   id INT PRIMARY KEY,
   nome VARCHAR(45) NOT NULL,
-  filtroUm VARCHAR(45) NOT NULL,
-  filtroDois VARCHAR(45) NOT NULL,
-  filtroTres VARCHAR(45) NOT NULL,
-  filtroQuatro VARCHAR(45) NOT NULL,
-  filtroCinco VARCHAR(45) NOT NULL,
+  data_inicial DATE,
+  data_final DATE,
+  genero VARCHAR(45),
+  dancabilidade DOUBLE,
+  intensidadeSonora DOUBLE,
+  vivacidade DOUBLE,
+  energia DOUBLE,
+  acustica DOUBLE,
+  valencia DOUBLE,
+  tonalidade DOUBLE,
+  intrumentalidade DOUBLE,
+  bpm DOUBLE,
   fkFuncionario INT NOT NULL,
   CONSTRAINT fk_metricaDash_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
 );
 
 CREATE TABLE notificacao (
   id INT PRIMARY KEY,
-  nome VARCHAR(45) NOT NULL,
-  notificacaoUm VARCHAR(45) NOT NULL,
-  notificacaoDois VARCHAR(45) NOT NULL,
-  notificacaoTres VARCHAR(45) NOT NULL,
-  notificacaoQuatro VARCHAR(45) NOT NULL,
   fkFuncionario INT NOT NULL,
   CONSTRAINT fk_notificacao_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
 );
+
+CREATE TABLE notificacao_acesso (
+  id INT PRIMARY KEY,
+  usuario TINYINT,
+  data TINYINT,
+  horario TINYINT,
+  paginas TINYINT,
+  fkNotificacao INT NOT NULL,
+  CONSTRAINT fk_notificacao_acesso_notificacao1 FOREIGN KEY (fkNotificacao) REFERENCES notificacao (id)
+);
+
+CREATE TABLE notificacao_atualizacoes (
+  id INT PRIMARY KEY,
+  novas_funcionalidades TINYINT,
+  correcoes TINYINT,
+  manutencoes TINYINT,
+  versoes TINYINT,
+  fkNotificacao INT NOT NULL,
+  CONSTRAINT fk_notificacao_atualizacoes_notificacao1 FOREIGN KEY (fkNotificacao) REFERENCES notificacao (id)
+);
+
+CREATE TABLE notificacao_informativas (
+  id INT PRIMARY KEY,
+  novidades TINYINT,
+  dicas TINYINT,
+  comunicados TINYINT,
+  eventos TINYINT,
+  fkNotificacao INT NOT NULL,
+  CONSTRAINT fk_notificacao_informativas_notificacao1 FOREIGN KEY (fkNotificacao) REFERENCES notificacao (id)
+);
+
+CREATE TABLE notificacao_frequencia (
+  id INT PRIMARY KEY,
+  diaria TINYINT,
+  semanal TINYINT,
+  mensal TINYINT,
+  fkNotificacao INT NOT NULL,
+  CONSTRAINT fk_notificacao_frequencia_notificacao1 FOREIGN KEY (fkNotificacao) REFERENCES notificacao (id)
+);
+
+INSERT INTO cargo (nome) VALUES
+('Admin'),
+('Empresa'),
+('Produtor'),
+('Marketing');
+
+SELECT * FROM log_apache;
+SELECT * FROM musicaBD limit 10000;
