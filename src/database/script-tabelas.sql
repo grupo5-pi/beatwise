@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS beatwise;
 CREATE DATABASE beatwise;
 USE beatwise;
 
@@ -14,18 +15,7 @@ CREATE TABLE empresa (
   telefone CHAR(15)
 );
 
-CREATE TABLE tokenAcesso (
-  id INT PRIMARY KEY,
-  tipo VARCHAR(20),
-  codigo CHAR(8),
-  expiracao DATETIME,
-  statusEnviado TINYINT,
-  usado TINYINT,
-  tentativas INT,
-  falhasEnvio INT,
-  criadoEm DATETIME
-);
-
+-- 1. Criamos a tabela funcionario ANTES (sem a FK de token por enquanto)
 CREATE TABLE funcionario (
   id INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45),
@@ -33,13 +23,33 @@ CREATE TABLE funcionario (
   senha VARCHAR(100),
   fkEmpresa INT NOT NULL,
   fkCargo INT NOT NULL,
-  fkSubalterno INT,
+  fkSubalterno INT NULL,
   tokenAcesso_id INT,
+  foto VARCHAR(255),
   CONSTRAINT constFkEmpresa FOREIGN KEY (fkEmpresa) REFERENCES empresa (id),
   CONSTRAINT constFkCargo FOREIGN KEY (fkCargo) REFERENCES cargo (id),
-  CONSTRAINT fk_funcionario_funcionario1 FOREIGN KEY (fkSubalterno) REFERENCES funcionario (id),
-  CONSTRAINT fk_funcionario_tokenAcesso1 FOREIGN KEY (tokenAcesso_id) REFERENCES tokenAcesso (id)
+  CONSTRAINT fk_funcionario_funcionario1 FOREIGN KEY (fkSubalterno) REFERENCES funcionario (id)
 );
+
+-- 2. Agora criamos a tabela tokenAcesso (pois funcionario já existe)
+CREATE TABLE tokenAcesso (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fkFuncionario INT NOT NULL,
+    tipo VARCHAR(20),
+    codigo CHAR(8),
+    expiracao DATETIME,
+    statusEnviado TINYINT,
+    usado TINYINT,
+    tentativas INT,
+    falhasEnvio INT,
+    criadoEm DATETIME,
+    CONSTRAINT fk_token_funcionario FOREIGN KEY (fkFuncionario) REFERENCES funcionario(id)
+);
+
+-- 3. Adicionamos a FK de tokenAcesso na tabela funcionario via ALTER TABLE
+ALTER TABLE funcionario 
+ADD CONSTRAINT fk_funcionario_tokenAcesso1 
+FOREIGN KEY (tokenAcesso_id) REFERENCES tokenAcesso (id);
 
 CREATE TABLE log_apache (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -201,10 +211,7 @@ CREATE TABLE notificacao_frequencia (
 );
 
 INSERT INTO cargo (nome) VALUES
-('Admin'),
 ('Empresa'),
+('Admin'),
 ('Produtor'),
 ('Marketing');
-
-SELECT * FROM log_apache;
-SELECT * FROM musicaBD limit 10000;
