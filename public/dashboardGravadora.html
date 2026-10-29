@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Gravadora | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/dashboardGeral.css">
+    <link rel="stylesheet" href="./css/padrao.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="./js/sidebar.js" defer></script>
+    <script src="./js/controleDeAcesso.js"></script>
+</head>
+
+<body class="dash-gravadora bw" onload="iniciar(), validarAcesso()">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
+        <hr>
+
+        <ul>
+            <li class="selected" id="dashboard-gravadora">
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Gravadora</div>
+                </a>
+            </li>
+            <li id="dashboard-marketing">
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li id="dashboard-produtor">
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li id="lista-musicas">
+                <a href="./listaMusica.html" title="Músicas">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li id="recomendacao">
+                <a href="./recomendacao.html" title="Recomendação">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li id="metricas">
+                <a href="./metricas.html" title="Métricas">
+                    <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Métricas</div>
+                </a>
+            </li>
+            <li id="funcionarios">
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
+            <li id="notificacoes">
+                <a href="./tela-notificacao.html" title="Notificações">
+                    <div class="icone-box"><img src="./assets/imgs/svg-notificacao.png" alt="" class="icone"></div>
+                    <div class="texto">Notificações</div>
+                </a>
+            </li>
+        </ul>
+
+        <div class="perfil">
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
+        </div>
+    </aside>
+
+    <main class="conteudo">
+        <div class="conteudo-topo">
+            <div class="titulos">
+                <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
+                <h1>Monitoramento de Indicadores estratégicos</h1>
+            </div>
+        </div>
+
+        <div class="dash-alertas" id="lista_alertas"></div>
+
+        <div class="kpis-desempenho" id="lista_kpis"></div>
+
+        <div class="graficos">
+            <div class="grafico">
+                <h3>Comparação de Reprodução entre Spotify(streaming) e YouTube (views)</h3>
+                <div class="grafico-canvas"><canvas id="graficoLancamento"></canvas></div>
+            </div>
+
+            <div class="grafico">
+                <h3>Gêneros com mais engajamento</h3>
+                <div class="grafico-canvas"><canvas id="graficoGeneros"></canvas></div>
+            </div>
+
+            <div class="grafico">
+                <h3>Tipo de álbum</h3>
+                <div class="grafico-canvas"><canvas id="graficoTipoAlbum"></canvas></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        /* ---------- ALERTAS ---------- */
+        let dadosAlertas = [
+            { tipo: "positivo", texto: "Importação de músicas realizada com sucesso." },
+            { tipo: "negativo", texto: "Existem músicas sem informações completas." },
+        ];
+
+        function carregarAlertas() {
+            lista_alertas.innerHTML = '';
+
+            for (let i = 0; i < dadosAlertas.length; i++) {
+                let tipo = dadosAlertas[i].tipo;
+                let icone = tipo == 'positivo' ? '✓' : '✗';
+
+                lista_alertas.innerHTML += `
+                    <div class="dash-alerta dash-alerta-${tipo}">
+                        <span class="dash-alerta-icone">${icone}</span>
+                        <span>${dadosAlertas[i].texto}</span>
+                    </div>`;
+            }
+        }
+
+        /* ---------- KPIs (dados mockados) ---------- */
+        let dadosKpis = [
+            { titulo: "Comparativo músicas com clipe X sem clipe", valor: "Com Clipe", desc: "Músicas com clipe têm maior taxa de engajamento:  <span class='destaque'>6,0%</span>", seta: "↑↑" },
+            { titulo: "Gênero com melhor desempenho", valor: "Pop", desc: "Pop está performando  <span class='destaque'>44%</span> acima da média geral", seta: "↑↑" },
+            { titulo: "Qual a melhor plataforma", valor: "YouTube", desc: "O YouTube apresenta maior taxa de aproveitamento: <span class='destaque'>+11%</span>", seta: "↑↑" },
+            { titulo: "Comparativo Feat/Solo", valor: "Feat", desc: "Músicas feat têm maior taxa de engajamento: <span class='destaque'>+8%</span>", seta: "↑↑" },
+        ];
+
+        function carregarKpis() {
+            lista_kpis.innerHTML = '';
+
+            for (let i = 0; i < dadosKpis.length; i++) {
+                let k = dadosKpis[i];
+
+                lista_kpis.innerHTML += `
+                    <div class="kpi">
+                        <span class="kpi-titulo">${k.titulo}</span>
+                        <div class="dado">${k.valor} <span class="kpi-seta">${k.seta}</span></div>
+                        <span class="kpi-desc">${k.desc}</span>
+                    </div>`;
+            }
+        }
+
+
+        const roxo = '#7C3AED';
+        const roxoClaro = '#A78BFA';
+        const indigo = '#4F46E5';
+        const lilas = '#C4B5FD';
+        const texto= '#fff';
+        const linhaGrade = 'rgba(139, 92, 246, 0.15)';
+
+        Chart.defaults.color = texto
+        Chart.defaults.font.family = 'Inter, sans-serif';
+        Chart.defaults.borderColor = linhaGrade;
+        Chart.defaults.maintainAspectRatio = false;
+
+        function carregarGraficos() {
+            // 1) Tipo de lançamento x desempenho: Spotify x YouTube (em milhões)
+            new Chart(graficoLancamento, {
+                type: 'bar',
+                data: {
+                    labels: ['Álbum', 'Solo'],
+                    datasets: [
+                        { label: 'Spotify', data: [5.2, 8.0], backgroundColor: roxo, borderRadius: 6 },
+                        { label: 'YouTube', data: [5.5, 8.6], backgroundColor: roxoClaro, borderRadius: 6 }
+                    ]
+                },
+                options: {
+                    plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y.toString().replace('.', ',')} mi` } } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { callback: v => v + ' mi' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 2) Gêneros com mais engajamento (% de curtidas + comentários / views)
+            new Chart(graficoGeneros, {
+                type: 'bar',
+                data: {
+                    labels: ['Pop', 'Funk', 'Trap', 'MPB', 'Rock', 'Eletrônica', 'Sertanejo', 'Samba'],
+                    datasets: [{
+                        label: 'Engajamento',
+                        data: [7.0, 5.2, 4.9, 4.3, 3.9, 3.9, 3.5, 3.5],
+                        backgroundColor: roxo,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { beginAtZero: true, ticks: { callback: v => v + '%' } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 3) Tipo de álbum (% do desempenho)
+            new Chart(graficoTipoAlbum, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Feat - Single', 'Feat - Álbum', 'Solo - Single', 'Solo - Álbum'],
+                    datasets: [{
+                        data: [41, 16, 19, 24],
+                        backgroundColor: [roxo, indigo, roxoClaro, lilas],
+                        borderColor: '#15131D',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    cutout: '65%',
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
+                }
+            });
+        }
+
+        function iniciar() {
+            carregarAlertas();
+            carregarKpis();
+            carregarGraficos();
+        }
+    </script>
+</body>
+
+</html>

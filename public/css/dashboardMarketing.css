@@ -1,0 +1,273 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+    --color-bw-bg: #0A0A0A;
+    --color-bw-surface: rgba(76, 29, 149, 0.12);
+    --color-bw-surface-hover: rgba(76, 29, 149, 0.22);
+    --color-bw-border: rgba(139, 92, 246, 0.28);
+    --color-bw-border-strong: rgba(139, 92, 246, 0.55);
+    --color-bw-purple: #7C3AED;
+    --color-bw-violet: #6D28D9;
+    --color-bw-indigo: #4F46E5;
+    --color-bw-accent: #A855F7;
+
+    --color-bg-primary: #0A0A0F;
+    --color-bg-sidebar: #0D0718;
+    --color-bg-card: #15131D;
+    --color-bg-secondary: #252131;
+    --color-bg-hover: #302442;
+    --color-primary: #7C3AED;
+    --color-primary-hover: #6D28D9;
+    --color-accent: #A78BFA;
+    --color-border: #30283E;
+    --color-border-strong: #594078;
+    --color-text-primary: #F5F3FF;
+    --color-text-secondary: #AAA3BC;
+
+    --font-primary: 'Inter', sans-serif;
+}
+
+html, body {
+    width: 100%;
+    min-width: 0;
+    min-height: 100%;
+    margin: 0;
+}
+
+body.dash-marketing {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body.dash-marketing>.sidebar {
+    flex: 0 0 auto;
+    min-width: 0;
+}
+
+body.dash-marketing>main.conteudo {
+    position: relative;
+    right: auto;
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 30px;
+    overflow-x: hidden;
+    background: linear-gradient(280deg,#000000 22%, #0e0221 46%, #0e0221 89%);
+    color: #ffffff;
+}
+
+/* ALERTAS */
+.dash-marketing .dash-alertas {
+    display: flex;
+    flex-direction: column;
+    width: 92%;
+    gap: 10px;
+    margin: 0 0 22px 0;
+}
+
+.dash-marketing .dash-alerta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    min-width: 0;
+    padding: 10px 16px;
+
+    background-color: rgba(76, 29, 149, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.28);
+    border-radius: 10px;
+
+    color: #FFFFFF;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.dash-marketing .dash-alerta-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.dash-marketing .dash-alerta-positivo {
+    border-color: #22C55E;
+}
+
+.dash-marketing .dash-alerta-positivo .dash-alerta-icone {
+    color: #4ADE80;
+}
+
+.dash-marketing .dash-alerta-negativo {
+    border-color: #EF4444;
+}
+
+.dash-marketing .dash-alerta-negativo .dash-alerta-icone {
+    color: #F87171;
+}
+
+.dash-marketing .dash-alerta span:last-child {
+    flex: 1;
+    min-width: 0;
+}
+
+.dash-marketing .conteudo-topo {
+    width: 92%;
+    max-width: 100%;
+    height: auto;
+    min-height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 27px 0 18px;
+    gap: 16px;
+}
+
+.dash-marketing .conteudo-topo .titulos {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+}
+
+.dash-marketing .conteudo-topo h1 {
+    margin-bottom: 16px;
+    overflow-wrap: anywhere;
+}
+
+.dash-marketing .dash-alertas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 92%;
+    min-width: 0;
+    margin-bottom: 22px;
+}
+
+.dash-marketing .dash-alerta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 16px;
+    border-radius: 10px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.dash-marketing .dash-alerta-icone {
+    flex-shrink: 0;
+}
+
+.dash-marketing .dash-kpi {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    width: 92%;
+    min-width: 0;
+    margin-bottom: 10px;
+}
+
+.dash-marketing .kpi {
+    min-width: 0;
+    width: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    overflow-wrap: anywhere;
+}
+
+.dash-marketing .kpi .kpi-titulo {
+    min-height: 2.6em;
+    line-height: 1.4;
+}
+
+.dash-marketing .kpi .kpi-valor {
+    max-width: 100%;
+    font-size: clamp(20px, 1.7vw, 32px);
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.dash-marketing .kpi .kpi-descricao {
+    min-height: 3.9em;
+    line-height: 1.45;
+}
+
+.dash-marketing .graficos {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.65fr);
+    gap: 14px;
+    align-items: stretch;
+    width: 93%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 10px 0 20px;
+}
+
+.dash-marketing .grafico {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    min-height: 360px;
+    margin: 0;
+    padding: 18px 20px;
+    overflow: hidden;
+}
+
+.dash-marketing .grafico .grafico-titulo {
+    flex: 0 0 auto;
+    min-width: 0;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.dash-marketing .grafico .grafico-area {
+    position: relative;
+
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 250px;
+}
+
+.dash-marketing .graficos .grafico:nth-child(3) .grafico-area {
+    flex: 1 1 auto;
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    min-height: 250px;
+    margin: 0;
+}
+
+.dash-marketing .grafico-area canvas {
+    display: block;
+    max-width: 100%;
+}

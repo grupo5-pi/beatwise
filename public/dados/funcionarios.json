@@ -1,0 +1,104 @@
+{
+  "funcionarios": [
+    {
+      "nome": "Lucas Ferreira",
+      "email": "lucas.ferreira@empresa.com",
+      "cargo": "Produtor Musical"
+    },
+    {
+      "nome": "Gabriel Oliveira",
+      "email": "gabriel.oliveira@empresa.com",
+      "cargo": "Produtor Musical"
+    },
+    {
+      "nome": "Rafael Costa",
+      "email": "rafael.costa@empresa.com",
+      "cargo": "Produtor Musical"
+    },
+    {
+      "nome": "Matheus Almeida",
+      "email": "matheus.almeida@empresa.com",
+      "cargo": "Produtor Musical"
+    },
+    {
+      "nome": "Pedro Santos",
+      "email": "pedro.santos@empresa.com",
+      "cargo": "Produtor Musical"
+    },
+    {
+      "nome": "Bruno Carvalho",
+      "email": "bruno.carvalho@empresa.com",
+      "cargo": "Produtor Musical"
+    },
+    {
+      "nome": "Thiago Mendes",
+      "email": "thiago.mendes@empresa.com",
+      "cargo": "Produtor Musical"
+    },
+    {
+      "nome": "André Barbosa",
+      "email": "andre.barbosa@empresa.com",
+      "cargo": "Produtor Musical"
+    },
+    {
+      "nome": "Leonardo Gomes",
+      "email": "leonardo.gomes@empresa.com",
+      "cargo": "Produtor Musical"
+    },
+    {
+      "nome": "Vinicius Rocha",
+      "email": "vinicius.rocha@empresa.com",
+      "cargo": "Produtor Musical"
+    },
+    {
+      "nome": "Ana Rodrigues",
+      "email": "ana.rodrigues@empresa.com",
+      "cargo": "Equipe de Marketing"
+    },
+    {
+      "nome": "Mariana Silva",
+      "email": "mariana.silva@empresa.com",
+      "cargo": "Equipe de Marketing"
+    },
+    {
+      "nome": "Beatriz Martins",
+      "email": "beatriz.martins@empresa.com",
+      "cargo": "Equipe de Marketing"
+    },
+    {
+      "nome": "Juliana Pereira",
+      "email": "juliana.pereira@empresa.com",
+      "cargo": "Equipe de Marketing"
+    },
+    {
+      "nome": "Felipe Ribeiro",
+      "email": "felipe.ribeiro@empresa.com",
+      "cargo": "Equipe de Marketing"
+    },
+    {
+      "nome": "Camila Azevedo",
+      "email": "camila.azevedo@empresa.com",
+      "cargo": "Equipe de Marketing"
+    },
+    {
+      "nome": "Larissa Nunes",
+      "email": "larissa.nunes@empresa.com",
+      "cargo": "Equipe de Marketing"
+    },
+    {
+      "nome": "Eduardo Lima",
+      "email": "eduardo.lima@empresa.com",
+      "cargo": "Equipe de Marketing"
+    },
+    {
+      "nome": "Isabela Cardoso",
+      "email": "isabela.cardoso@empresa.com",
+      "cargo": "Equipe de Marketing"
+    },
+    {
+      "nome": "Gustavo Teixeira",
+      "email": "gustavo.teixeira@empresa.com",
+      "cargo": "Equipe de Marketing"
+    }
+  ]
+}

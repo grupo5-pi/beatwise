@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feats cadastrados | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/recomendacao.css">
+    <link rel="stylesheet" href="./css/padrao.css">
+    <script src="./js/featsCadastrados.js" defer></script>
+    <script src="./js/sidebar.js" defer></script>
+    <script src="./js/controleDeAcesso.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="rec-page bw" onload="validarAcesso()">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
+        <hr>
+
+        <ul>
+            <li id="dashboard-gravadora">
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Gravadora</div>
+                </a>
+            </li>
+            <li id="dashboard-marketing">
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li id="dashboard-produtor">
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li id="lista-musicas">
+                <a href="./listaMusica.html" title="Músicas">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li class="selected" id="recomendacao">
+                <a href="./recomendacao.html" title="Recomendação">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li id="metricas">
+                <a href="./metricas.html" title="Métricas">
+                    <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Métricas</div>
+                </a>
+            </li>
+            <li id="funcionarios">
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone">
+                    </div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
+            <li id="notificacoes">
+                <a href="./tela-notificacao.html" title="Notificações">
+                    <div class="icone-box"><img src="./assets/imgs/svg-notificacao.png" alt="" class="icone"></div>
+                    <div class="texto">Notificações</div>
+                </a>
+            </li>
+        </ul>
+
+        <div class="perfil">
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
+        </div>
+    </aside>
+
+    <main class="rec-content">
+        <div class="conteudo-topo">
+            <div class="titulos">
+                <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
+                <h1>Feats cadastrados</h1>
+            </div>
+
+            <nav class="rec-abas">
+                <a href="./recomendacao.html" class="rec-aba">Recomendação Feat</a>
+                <a href="./featsCadastrados.html" class="rec-aba rec-aba-ativa">Feats cadastrados</a>
+            </nav>
+        </div>
+
+        <h2 class="rec-subtitulo">Acesse recomendações anteriores</h2>
+
+        <div class="rec-painel">
+            <div id="rec-lista" class="rec-cards rec-cards-lista">
+                <div class="rec-card" data-genero="Pop" data-energia="72" data-danca="65" data-bpm-min="90" data-bpm-max="130" data-tom="C" data-anos="2">
+                    <span class="rec-card-nome">Recomendação 1</span>
+                    <span class="rec-card-info">Dua Lipa, Luísa Sonza, Veigh</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
+                    </div>
+                </div>
+                <div class="rec-card" data-genero="Rap" data-energia="80" data-danca="60" data-bpm-min="120" data-bpm-max="160" data-tom="D" data-anos="1">
+                    <span class="rec-card-nome">Recomendação 2</span>
+                    <span class="rec-card-info">The Weeknd, Anitta, Matuê</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
+                    </div>
+                </div>
+                <div class="rec-card" data-genero="Pop" data-energia="55" data-danca="70" data-bpm-min="80" data-bpm-max="120" data-tom="G" data-anos="3">
+                    <span class="rec-card-nome">Recomendação 3</span>
+                    <span class="rec-card-info">Taylor Swift, Jão, Billie Eilish</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
+                    </div>
+                </div>
+                <div class="rec-card" data-genero="Sertanejo" data-energia="50" data-danca="55" data-bpm-min="85" data-bpm-max="125" data-tom="A" data-anos="2">
+                    <span class="rec-card-nome">Recomendação 4</span>
+                    <span class="rec-card-info">Bruno Mars, Ed Sheeran, Post Malone</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
+                    </div>
+                </div>
+                <div class="rec-card" data-genero="Funk" data-energia="85" data-danca="80" data-bpm-min="110" data-bpm-max="140" data-tom="C#" data-anos="1">
+                    <span class="rec-card-nome">Recomendação 5</span>
+                    <span class="rec-card-info">Marília Mendonça, Michel Teló, Anitta</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
+                    </div>
+                </div>
+                <div class="rec-card" data-genero="Rap" data-energia="75" data-danca="50" data-bpm-min="130" data-bpm-max="170" data-tom="F#" data-anos="4">
+                    <span class="rec-card-nome">Recomendação 6</span>
+                    <span class="rec-card-info">Drake, Travis Scott, Veigh</span>
+                    <div class="rec-card-acoes">
+                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
+                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal_editar" class="rec-modal" style="display: none;">
+        <div class="rec-modal-caixa rec-edit-caixa">
+            <h3>Editar recomendação</h3>
+            <label for="input_nome_edicao">Nome da recomendação</label>
+            <input type="text" id="input_nome_edicao" maxlength="40">
+
+            <div class="rec-edit-campo">
+                <label for="edit_genero">Gênero</label>
+                <select id="edit_genero">
+                    <option value="">Qualquer gênero</option>
+                    <option value="Pop">Pop</option>
+                    <option value="Rap">Rap</option>
+                    <option value="Funk">Funk</option>
+                    <option value="Sertanejo">Sertanejo</option>
+                    <option value="Eletrônica">Eletrônica</option>
+                </select>
+            </div>
+
+            <div class="rec-edit-linha">
+                <div class="rec-edit-campo">
+                    <label for="edit_energia">Nível de energia <span id="edit_energia_valor" class="rec-valor"></span></label>
+                    <input type="range" id="edit_energia" min="0" max="100" oninput="mostrarValoresEdicao()">
+                </div>
+                <div class="rec-edit-campo">
+                    <label for="edit_danca">Dançabilidade <span id="edit_danca_valor" class="rec-valor"></span></label>
+                    <input type="range" id="edit_danca" min="0" max="100" oninput="mostrarValoresEdicao()">
+                </div>
+            </div>
+
+            <div class="rec-edit-linha">
+                <div class="rec-edit-campo">
+                    <label>BPM</label>
+                    <div class="rec-edit-bpm">
+                        <input type="number" id="edit_bpm_min" placeholder="Mín" min="40" max="220">
+                        <span>—</span>
+                        <input type="number" id="edit_bpm_max" placeholder="Máx" min="40" max="220">
+                    </div>
+                </div>
+                <div class="rec-edit-campo">
+                    <label for="edit_tom">Tonalidade</label>
+                    <select id="edit_tom">
+                        <option value="">Qualquer tonalidade</option>
+                        <option>C</option>
+                        <option>C#</option>
+                        <option>D</option>
+                        <option>D#</option>
+                        <option>E</option>
+                        <option>F</option>
+                        <option>F#</option>
+                        <option>G</option>
+                        <option>G#</option>
+                        <option>A</option>
+                        <option>A#</option>
+                        <option>B</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="rec-edit-campo">
+                <label for="edit_anos">Intervalo desde o último lançamento (anos)</label>
+                <input type="number" id="edit_anos" placeholder="xx anos" min="0" max="30">
+            </div>
+
+            <p id="mensagem_edicao" class="rec-erro" style="display: none;"></p>
+
+            <div class="rec-acoes">
+                <button type="button" class="rec-botao" onclick="salvarEdicao()">Salvar</button>
+                <button type="button" class="rec-botao rec-botao-secundario" onclick="cancelarEdicao()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

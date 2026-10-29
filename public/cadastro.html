@@ -7,6 +7,7 @@
     <title>Cadastro | BeatWise</title>
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
 
+    <link rel="stylesheet" href="/css/loginCadastro.css">
     <link rel="stylesheet" href="/css/style.css">
     <script src="./js/cadastro.js" defer></script>
 </head>
@@ -23,7 +24,7 @@
         </label>
 
         <ul id="nav-menu">
-            <li><a href="index.html#home">HOME</a></li>
+            <li><a href="index.html">HOME</a></li>
             <li><a href="index.html#quem-somos">QUEM SOMOS</a></li>
             <li><a href="index.html#valores">VALORES</a></li>
             <li><a href="index.html#contato">CONTATO</a></li>
@@ -53,17 +54,21 @@
         <div class="divisao">
             <div class="formulario" id="formulario1" style="display: flex;">
                 <input type="text" id="input_razao_social" placeholder="Razão Social:" oninput="validarRazaoSocial()">
-                <input type="text" id="input_email_empresa" placeholder="Email (empresa):" oninput="validarEmailEmpresa()">
-                <input type="text" id="input_cnpj" placeholder="CNPJ:" maxlength="18" oninput="mascaraCNPJ(this), validarCNPJ()">
-                <input type="text" id="input_telefone" placeholder="Telefone (empresa):" maxlength="15" oninput="mascaraTelefone(this), validarTelefone()">
+                <input type="text" id="input_email_empresa" placeholder="Email (empresa):"
+                    oninput="validarEmailEmpresa()">
+                <input type="text" id="input_cnpj" placeholder="CNPJ:" maxlength="18"
+                    oninput="mascaraCNPJ(this), validarCNPJ()">
+                <input type="text" id="input_telefone" placeholder="Telefone (empresa):" maxlength="15"
+                    oninput="mascaraTelefone(this), validarTelefone()">
                 <div id="mensagem1"></div>
                 <button onclick="continuar()">CONTINUAR</button>
             </div>
             <div class="formulario" id="formulario2" style="display: none;">
-                <input type="text"  id="input_nome" placeholder="Nome:" oninput="validarNome()">
+                <input type="text" id="input_nome" placeholder="Nome:" oninput="validarNome()">
                 <input type="text" id="input_email" placeholder="Email:" oninput="validarEmail()">
                 <input type="password" id="input_senha" placeholder="Senha:" oninput="validarSenha()">
-                <input type="password" id="input_confirmar_senha" placeholder="Confirmar senha:" oninput="validarConfirmSenha()">
+                <input type="password" id="input_confirmar_senha" placeholder="Confirmar senha:"
+                    oninput="validarConfirmSenha()">
                 <div id="mensagem2"></div>
                 <div class="div_button">
                     <button onclick="voltar()">VOLTAR</button>
@@ -74,4 +79,5 @@
     </main>
 
 </body>
+
 </html>

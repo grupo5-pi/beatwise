@@ -1,0 +1,243 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+}
+
+:root {
+    --color-bw-bg: #0A0A0A;
+    --color-bw-surface: rgba(76, 29, 149, 0.12);
+    --color-bw-surface-hover: rgba(76, 29, 149, 0.22);
+    --color-bw-border: rgba(139, 92, 246, 0.28);
+    --color-bw-border-strong: rgba(139, 92, 246, 0.55);
+    --color-bw-purple: #7C3AED;
+    --color-bw-violet: #6D28D9;
+    --color-bw-indigo: #4F46E5;
+    --color-bw-accent: #A855F7;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    background-color: var(--color-bw-bg);
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 28px;
+    color: white;
+    overflow: hidden;
+}
+
+.cabecalho {
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.cabecalho span {
+    display: block;
+    font-size: 18px;
+}
+
+.cabecalho h1 {
+    font-size: 44px;
+    line-height: 1.1;
+}
+
+/* =================================SIDEBAR CORRIGIDA================================= */
+
+
+
+
+.container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background: var(--color-bw-surface);
+    border: 1px solid var(--color-bw-border);
+    border-radius: 12px;
+}
+
+.cabecalho-container {
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 20px;
+}
+
+.container-filho {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.coluna {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 0;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-bw-border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.coluna-vazia {
+    justify-content: center;
+}
+
+.btn-adicionar {
+    width: 56px;
+    height: 56px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.75);
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-adicionar svg {
+    width: 100%;
+    height: 100%;
+    stroke-width: 1.6;
+}
+
+.btn-adicionar:hover {
+    color: var(--color-bw-accent);
+    transform: scale(1.08);
+}
+
+.icones-colunas {
+    display: flex;
+    justify-content: flex-end;  
+    gap: 6px;
+    width: 100%;
+}
+
+.btn-icone {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 1px solid var(--color-bw-border-strong);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-icone svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-icone:hover {
+    background: var(--color-bw-surface-hover);
+}
+
+.descricao-colunas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    text-align: center;
+}
+
+.descricao-colunas .titulo {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.descricao-colunas .descricao {
+    font-size: 17px;
+    opacity: 0.8;
+}
+
+.checks-colunas {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    margin-top: 32px;
+    padding-left: 12px;
+}
+
+.checks-colunas label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.checks-colunas input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    accent-color: var(--color-bw-accent);
+    cursor: pointer;
+}
+
+.btn-salvar {
+    margin-top: auto;
+    padding: 12px 40px;
+    background: transparent;
+    border: 1px solid var(--color-bw-accent);
+    border-radius: 999px;
+    color: white;
+    font-family: inherit;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-salvar:hover {
+    background: var(--color-bw-surface-hover);
+}
+
+@media (max-width: 1000px) {
+    .container-filho {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        overflow-y: auto;
+    }
+
+    .coluna {
+        min-height: 320px;
+    }
+}
+
+.checks-colunas.bloqueado label {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.checks-colunas.bloqueado input[type="checkbox"] {
+    cursor: default;
+}
+
+.btn-salvar:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.btn-salvar:disabled:hover {
+    background: transparent;
+}
+
+.coluna-vazia .descricao-colunas {
+    margin-top: 0;
+    margin-bottom: 36px;
+}

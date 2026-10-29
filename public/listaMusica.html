@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Música | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="./css/listas.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/padrao.css">
+    <script src="./js/musicas.js"></script>
+    <script src="./js/controleDeAcesso.js"></script>
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="./js/sidebar.js" defer></script>
+</head>
+
+<body class="listas bw" onload="iniciarPagina(), validarAcesso()">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
+        <hr>
+
+        <ul>
+            <li id="dashboard-gravadora">
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Gravadora</div>
+                </a>
+            </li>
+            <li id="dashboard-marketing">
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li id="dashboard-produtor">
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li class="selected" id="lista-musicas">
+                <a href="./listaMusica.html" title="Músicas">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li id="recomendacao">
+                <a href="./recomendacao.html" title="Recomendação">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li id="metricas">
+                <a href="./metricas.html" title="Métricas">
+                    <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Métricas</div>
+                </a>
+            </li>
+            <li id="funcionarios">
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
+            <li id="notificacoes">
+                <a href="./tela-notificacao.html" title="Notificações">
+                    <div class="icone-box"><img src="./assets/imgs/svg-notificacao.png" alt="" class="icone"></div>
+                    <div class="texto">Notificações</div>
+                </a>
+            </li>
+        </ul>
+
+        <div class="perfil">
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
+        </div>
+    </aside>
+
+        <!-- Lista -->
+        <div class="conteudo">
+            <div class="conteudo-topo">
+                <div class="titulos">
+                    <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
+                    <h1>Lista de Músicas</h1>
+                </div>
+            </div>
+
+    <div class="tabela">
+        <div class="pesquisa">
+            <span class="icone-busca">
+                <svg xmlns="http://w3.org" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </span>
+
+            <input id="pesquisa" type="text" placeholder="Buscar por música, artista ou álbum..." oninput="pesquisar()">
+        </div>
+
+        <div class="lista">
+            <div class="coluna primary">
+                <div class="top left">Música</div>
+
+            </div>
+            <div class="coluna">
+                <div class="top">Artista(s)</div>
+
+            </div>
+            <div class="coluna">
+                <div class="top">Álbum</div>
+
+            </div>
+            <div class="coluna">
+                <div class="top">Youtube</div>
+
+            </div>
+            <div class="coluna">
+                <div class="top right">Spotify</div>
+
+            </div>
+        </div>
+
+        <footer>
+            <div id="exibicao"></div>
+
+            <!-- Paginação -->
+            <div class="paginacao">
+                <button id="anterior" onclick="voltarPagina()">❮</button>
+                <span id="pagina">Página 1</span>
+                <button id="proxima" onclick="avancarPagina()">❯</button>
+            </div>
+        </footer>
+    </div>
+    </div>
+
+    <div class="info-musicas" id="modal" style="display: none;">
+        <div class="header">
+            <a>DETALHES DA MÚSICA</a>
+            <div id="track" class="primary-color"></div>
+            <div id="artist"></div>
+
+            <div class="sair" onclick="sairModal()">
+                <a> X </a>
+            </div>
+        </div>
+
+        <hr>
+
+        <p>DESEMPENHO NAS PLATAFORMAS</p>
+
+        <div class="kpis-desempenho">
+            <div class="kpi">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round" width="24" height="24">
+                    <path d="M3 14v-2a9 9 0 0 1 18 0v2" />
+                    <rect x="3" y="13" width="4" height="7" rx="2" />
+                    <rect x="17" y="13" width="4" height="7" rx="2" />
+                </svg>
+                <div id="streams" class="dado primary-color"></div>
+                <a>Streams</a>
+                <a>Spotify</a>
+            </div>
+
+            <div class="kpi">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round" width="24" height="24">
+                    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+                <div id="views" class="dado primary-color"></div>
+                <a>Visualizações</a>
+                <a>Youtube</a>
+            </div>
+
+            <div class="kpi">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round" width="24" height="24">
+                    <path d="M7 10v11H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3Z" />
+                    <path d="M7 10 12 3a3 3 0 0 1 2 3v4h5a2 2 0 0 1 2 2l-2 7a2 2 0 0 1-2 2H7" />
+                </svg>
+                <div id="likes" class="dado primary-color"></div>
+                <a>Curtidas</a>
+                <a>Youtube</a>
+            </div>
+
+            <div class="kpi">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round" width="24" height="24">
+                    <path
+                        d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z" />
+                </svg>
+                <div id="comments" class="dado primary-color"></div>
+                <a>Comentários</a>
+                <a>Youtube</a>
+            </div>
+        </div>
+
+        <hr>
+
+        <p>PERFIL SONORO</p>
+
+        <div class="kpis-perfil">
+            <div class="kpi">
+                <a>TEMPO</a>
+                <div id="bpm" class="dado primary-color"></div>
+            </div>
+
+            <div class="kpi">
+                <a>DURAÇÃO</a>
+                <div id="duration" class="dado primary-color"></div>
+            </div>
+
+            <div class="kpi">
+                <a>LICENCIADA</a>
+                <div id="licensed" class="dado primary-color"></div>
+            </div>
+        </div>
+
+        <div class="links">
+            <div class="link">
+                <a id="urlSpotify">Abrir no Spotify</a>
+            </div>
+
+            <div class="link">
+                <a id="urlYoutube">Ver no youtube</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        let musicas = [];
+        let paginaAtual = 1;
+        let totalPaginas = 0;
+
+        async function iniciarPagina() {
+            musicas = await retornarMusicas();
+            totalPaginas = Math.ceil(musicas.length / 10);
+            console.log(musicas);
+            console.log(musicas.length)
+
+            paginacao();
+        }
+
+        function avancarPagina() {
+            paginaAtual++;
+            paginacao();
+        }
+
+        function voltarPagina() {
+            paginaAtual--;
+            paginacao();
+        }
+
+        function paginacao() {
+            document.getElementById("pagina").textContent = `Página ${paginaAtual} de ${totalPaginas}`;
+
+            document.getElementById("anterior").classList.remove('disabled');
+            document.getElementById("anterior").disabled = false;
+            document.getElementById("proxima").classList.remove('disabled');
+            document.getElementById("proxima").disabled = false;
+
+            if (totalPaginas == 1) {
+                document.getElementById("anterior").classList.add('disabled');
+                document.getElementById("anterior").disabled = true;
+                document.getElementById("proxima").classList.add('disabled');
+                document.getElementById("proxima").disabled = true;
+            } else if (paginaAtual == 1) {
+                document.getElementById("anterior").disabled = true;
+                document.getElementById("anterior").classList.add('disabled');
+            } else if (paginaAtual == totalPaginas) {
+                document.getElementById("proxima").disabled = true;
+                document.getElementById("proxima").classList.add('disabled');
+            }
+
+            renderizarMusica();
+        }
+
+        // Cria a div
+        function criarCelula(texto, id) {
+            const celula = document.createElement("div");
+            celula.classList.add("grids");
+            celula.setAttribute('id', id);
+            celula.addEventListener('click', function (e) { ativarModal(e) });
+            celula.textContent = texto;
+            return celula;
+        }
+
+        const colunas = document.querySelectorAll(".lista .coluna");
+
+        function renderizarMusica() {
+            // limpar os grids existentes para não atrapalhar a renderização
+            colunas.forEach((coluna) => {
+                coluna.querySelectorAll(".grids")
+                    .forEach((linha) => linha.remove());
+            });
+
+            const itens = 10;
+            const inicio = (paginaAtual - 1) * itens;
+            const fim = Math.min(inicio + itens, musicas.length);
+            document.getElementById("exibicao").textContent = `Exibindo ${inicio + 1}-${fim} de ${musicas.length}`;
+
+            for (let i = inicio; i < fim; i++) {
+                const musica = tratarMusica(i, i);
+
+                colunas[0].appendChild(criarCelula(musica.track, i));
+                colunas[1].appendChild(criarCelula(musica.artist, i));
+                colunas[2].appendChild(criarCelula(musica.album, i));
+                colunas[3].appendChild(criarCelula(formatar(musica.views), i));
+                colunas[4].appendChild(criarCelula(formatar(musica.stream), i));
+            };
+        }
+
+        function formatar(dado) {
+            const numero = Number(dado);
+
+            return new Intl.NumberFormat("pt-BR", { notation: "compact", maximumFractionDigits: 3 }).format(numero);
+        }
+
+        function tratarMusica(posicao) {
+            const musica = musicas[posicao];
+
+            return {
+                id: musica.id != null ? musica.id : 0,
+                artist: Array.isArray(musica.artist) ? musica.artist.join(", ") : musica.artist ?? "Artista não encontrado",
+                urlSpotify: musica.urlSpotify != null ? musica.urlSpotify : "",
+                track: musica.track != null ? musica.track : "Título não encontrado",
+                album: musica.album != null ? musica.album : "Álbum não encontrado",
+                albumType: musica.albumType != null ? musica.albumType : "Tipo de álbum não encontrado",
+                uri: musica.uri != null ? musica.uri : "",
+                danceability: musica.danceability != null ? musica.danceability : 0,
+                energy: musica.energy != null ? musica.energy : 0,
+                key: musica.key != null ? musica.key : 0,
+                loudness: musica.loudness != null ? musica.loudness : 0,
+                speechiness: musica.speechiness != null ? musica.speechiness : 0,
+                acousticness: musica.acousticness != null ? musica.acousticness : 0,
+                instrumentalness: musica.instrumentalness != null ? musica.instrumentalness : 0,
+                liveness: musica.liveness != null ? musica.liveness : 0,
+                valence: musica.valence != null ? musica.valence : 0,
+                tempo: musica.tempo != null ? musica.tempo : 0,
+                durationMs: musica.durationMs != null ? musica.durationMs : 0,
+                urlYoutube: musica.urlYoutube != null ? musica.urlYoutube : "",
+                title: musica.title != null ? musica.title : "Título do vídeo não encontrado",
+                channel: musica.channel != null ? musica.channel : "Canal não encontrado",
+                views: musica.views != null ? musica.views : 0,
+                likes: musica.likes != null ? musica.likes : 0,
+                comments: musica.comments != null ? musica.comments : 0,
+                description: musica.description != null ? musica.description : "Descrição não encontrada",
+                licensed: musica.licensed != null ? musica.licensed : false,
+                officialVideo: musica.officialVideo != null ? musica.officialVideo : false,
+                stream: musica.stream != null ? musica.stream : 0
+            };
+        }
+
+        // Campo de pesquisa
+        async function pesquisar() {
+            musicas = await retornarMusicas()
+            let palavraPesquisa = pesquisa.value.toLowerCase();
+
+            if (palavraPesquisa == null || palavraPesquisa.trim() == '') {
+                musicas = await retornarMusicas();
+            }
+
+            let musicasFiltradas = [];
+            for (let i = 0; i < musicas.length; i++) {
+                if (Array.isArray(musicas[i].artist)) {
+                    for (let j = 0; j < musicas[i].artist.length; j++) {
+                        if (musicas[i].track.toLowerCase().includes(palavraPesquisa) || musicas[i].artist[j].toLowerCase().includes(palavraPesquisa) || musicas[i].album.toLowerCase().includes(palavraPesquisa)) {
+                            musicasFiltradas.push(musicas[i])
+                            break
+                        }
+                    }
+                } else {
+                    if (musicas[i].track.toLowerCase().includes(palavraPesquisa) || musicas[i].artist.toLowerCase().includes(palavraPesquisa) || musicas[i].album.toLowerCase().includes(palavraPesquisa)) {
+                        musicasFiltradas.push(musicas[i])
+                    }
+                }
+            }
+
+            musicas = musicasFiltradas;
+            totalPaginas = Math.ceil(musicas.length / 10);
+            paginacao();
+        }
+
+        // Modal
+        function sairModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        function ativarModal(evento) {
+            let id = evento.currentTarget.id;
+            let musica = tratarMusica(id);
+
+            // Titulo
+            track.innerHTML = musica.track;
+            artist.innerHTML = musica.artist;
+
+            // Desempenho
+            streams.innerHTML = formatar(musica.stream);
+            views.innerHTML = formatar(musica.views);
+            comments.innerHTML = formatar(musica.comments);
+            likes.innerHTML = formatar(musica.likes);
+
+            // Perfil sonoro
+            bpm.innerHTML = (musica.tempo / 1000).toFixed(1).replace('.', ',') + ' BPM';
+            licensed.innerHTML = musica.licensed == true ? 'Sim' : 'Não';
+            let duracao = formatarDuracao(musica.durationMs);
+            duration.innerHTML = duracao.replace(':', 'min ') + "s";
+
+            // Links
+            document.getElementById("urlSpotify").href = musica.urlSpotify
+            document.getElementById("urlYoutube").href = musica.urlYoutube
+
+            document.getElementById("modal").style.display = 'flex';
+        }
+
+        function formatarDuracao(durationMs) {
+            const totalSegundos = Math.floor(durationMs / 1000);
+            const minutos = Math.floor(totalSegundos / 60);
+            const segundos = totalSegundos % 60;
+
+            return `${minutos}:${String(segundos).padStart(2, '0')}`;
+        }
+
+
+    </script>
+</body>
+
+</html>

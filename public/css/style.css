@@ -1,35 +1,244 @@
-@font-face {
-    font-family: 'Myriad Pro Semi Extended';
-    src: url('fontes/myriad-pro-semi-extended.woff2') format('woff2'),
-        url('fontes/myriad-pro-semi-extended.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-@import url('https://googleapis.com');
-
-:root {
-    --roxo-claro: rgba(197, 157, 255, 1);
-    --roxo-escuro: rgba(84, 36, 187, 1);
-}
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     list-style: none;
     text-decoration: none;
-    scroll-behavior: smooth;
 }
 
-/* Estilo Header */
+:root {
+    --color-bw-bg: #0A0A0A;
+    --color-bw-surface: rgba(76, 29, 149, 0.12);
+    --color-bw-surface-hover: rgba(76, 29, 149, 0.22);
+    --color-bw-border: rgba(139, 92, 246, 0.28);
+    --color-bw-border-strong: rgba(139, 92, 246, 0.55);
+    --color-bw-purple: #7C3AED;
+    --color-bw-violet: #6D28D9;
+    --color-bw-indigo: #4F46E5;
+    --color-bw-accent: #A855F7;
+    --roxo-claro: rgba(197, 157, 255, 1);
+    --roxo-escuro: rgba(84, 36, 187, 1);
+}
 
 body {
     height: 100vh;
-    background-size: cover;
-    background-color: black;
+    width: 100%;
 }
 
+/*sidebar*/
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 80px;
+    flex-shrink: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.3s ease;
+    cursor: pointer;
+    background: linear-gradient(280deg, rgba(0, 0, 0, 1) 22%, rgba(14, 2, 33, 1) 46%, rgba(14, 2, 33, 1) 89%);
+    border-right: solid 5px var(--color-bw-accent);
+    position: sticky; /* acompanha a rolagem da página */
+    top: 0;
+    align-self: flex-start;
+    z-index: 999;
+}
+
+.sidebar.expandida {
+    width: 270px;
+}
+
+.sidebar hr {
+    background-color: var(--color-bw-accent);
+    height: 2px;
+    border: none;
+}
+
+/* Área da Lista do Menu */
+.sidebar ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: white;
+    width: 85%;
+    margin-top: 20px;
+    padding: 0 0 0 5%;
+    gap: 8px;
+}
+
+/* Cada item do menu (Ícone + Texto lado a lado) */
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    border-radius: 14px;
+    width: 100%;
+    min-height: 40px;
+    margin: 0;
+    font-size: 23px;
+    cursor: pointer;
+    border: solid 1.5px transparent;
+    box-sizing: border-box;
+}
+
+/* Caixa do ícone perfeitamente centralizada */
+.sidebar ul li .icone-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px; /* 80 (sidebar) - 5 (borda) - 24 (folga) - 3 (borda do item) */
+    height: 32px;
+    flex-shrink: 0;
+}
+
+/* Imagem do ícone ajustada dentro da caixa */
+.sidebar ul li img.icone,
+.sidebar ul li .icone-box img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+/* Comportamento do texto ao expandir/recolher */
+.sidebar .texto,
+.sidebar #nome-usuario {
+    max-width: 0;
+    margin-left: 0;
+    overflow: hidden;
+    opacity: 0;
+    white-space: nowrap;
+    transition: max-width 0.3s ease, margin-left 0.3s ease, opacity 0.2s ease;
+}
+
+.sidebar.expandida .texto {
+    max-width: 200px;
+    margin-left: 4px;
+    opacity: 1;
+    transition-delay: 0.1s;
+}
+
+.sidebar.expandida #nome-usuario {
+    max-width: 200px;
+    margin-left: 15px;
+    opacity: 1;
+    transition-delay: 0.1s;
+}
+
+.sidebar.expandida ul li {
+    width: 100%;
+    justify-content: flex-start;
+}
+
+/* Efeito Hover e Item Selecionado */
+.sidebar ul li:hover,
+.selected {
+    border: solid 1.5px var(--color-bw-accent);
+    background: linear-gradient(309deg, rgba(109, 40, 217, 1) 0%, rgba(0, 0, 0, 1) 55%, rgba(45, 36, 201, 1) 100%);
+    background-size: 200% 200%;
+    animation: fundo 4s ease-in-out alternate infinite;
+}
+
+@keyframes fundo {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 0%;
+    }
+}
+
+/* Perfil do Usuário na Base da Sidebar */
+.sidebar .perfil {
+    display: flex;
+    align-items: center;
+    height: 70px;
+    background-color: black;
+    border-top: solid 2px var(--color-bw-accent);
+    margin-top: auto;
+    padding: 0 15px;
+}
+
+.sidebar .perfil img {
+    height: 44px;
+    width: 44px;
+    background-color: #2a1441;
+    border-radius: 50%;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+/* Logo da Sidebar */
+.sidebar .logo-area {
+    position: relative;
+    height: 70px;
+    margin: 20px 0;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar .logo-area img {
+    position: absolute;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar .logo-icone {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    opacity: 1;
+}
+
+.sidebar.expandida .logo-icone {
+    opacity: 0;
+}
+
+.sidebar .logo-banner {
+    width: 90%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+}
+
+.sidebar.expandida .logo-banner {
+    opacity: 1;
+}
+
+.sidebar ul li a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    align-self: stretch; /* a área toda do item é clicável */
+    text-decoration: none;
+    color: inherit;
+    gap: 0;
+}
+
+.sidebar .perfil #nome-usuario {
+    color: white;
+    font-size: 24px;
+}
+
+/* Layout das telas com sidebar: ela fica ao lado do conteúdo (não é mais fixed),
+   então o body vira flex e a área principal ocupa o espaço que sobra. */
+body:has(> .sidebar) {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: auto;
+    min-height: 100vh;
+}
+
+body:has(> .sidebar) > :is(main, .conteudo, .content, .rec-content, .dash-content) {
+    flex: 1;
+    min-width: 0;
+}
+
+
+/*Header*/
 header {
     display: flex;
     justify-content: space-between;
@@ -152,322 +361,4 @@ header a {
 
 .banner img {
     width: 60%;
-}
-
-/* Estilo Login e Cadastro*/
-
-.login-cadastro {
-    margin-top: 170px;
-    height: 80vh;
-    background-image: url(../assets/imgs/fundoLogin.jpeg);
-    background-size: cover;
-    overflow: hidden;
-}
-
-.login-cadastro main {
-    display: flex;
-    height: 80%;
-}
-
-.login-cadastro .divisao {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 50%;
-}
-
-.login-cadastro .divisao .formulario {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: fit-content;
-    min-height: 60%;
-    width: 80%;
-    background-color: rgba(255, 255, 255, 0.4);
-    border-radius: 20px;
-    padding: 20px 0;
-}
-
-.login-cadastro .divisao .formulario input {
-    background-color: transparent;
-    border: solid transparent;
-    border-bottom: solid 3px rgba(0, 0, 0, 0.452);
-    color: rgb(0, 0, 0);
-    height: 15%;
-    min-height: 55px;
-    width: 80%;
-    font-size: 23px;
-    padding: 0 0 0 25px;
-    margin: 5px 0 10px 0;
-    transition: 0.6s ease;
-}
-
-.login-cadastro .divisao .formulario input:hover {
-    border-bottom: solid 3px var(--roxo-claro);
-    transition: 0.6s ease;
-}
-
-.login-cadastro .divisao .formulario input::placeholder {
-    color: rgba(0, 0, 0, 0.478);
-    transition: 0.6s ease;
-}
-
-.login-cadastro .divisao .formulario input:hover::placeholder {
-    color: var(--roxo-claro);
-    transition: 0.6s ease;
-}
-
-.login-cadastro .divisao button {
-    background: linear-gradient(90deg, var(--roxo-claro) 0%, var(--roxo-escuro) 50%, rgba(0, 0, 0, 1) 100%);
-    background-position: left;
-    background-size: 200% 100%;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    height: 50px;
-    width: 200px;
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 25px;
-    cursor: pointer;
-    transition: 0.9s ease;
-    margin: 10px;
-}
-
-.login-cadastro .divisao a button {
-    height: 100%;
-    padding: 0 10px;
-}
-
-.login-cadastro .divisao button:hover {
-    background-position: right;
-    border: solid 1px white;
-    transition: 0.7s ease-in-out;
-}
-
-.login-cadastro .divisao .centro {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 60%;
-    width: 100%;
-    color: white;
-    font-size: 40px;
-}
-
-.login-cadastro .divisao .centro h6 {
-    margin: 110px 0 15px 0;
-    font-family: 'Poppins', sans-serif;
-}
-
-.login-cadastro .divisao .centro h5 {
-    margin: 15px 0 0 0;
-    font-family: 'Poppins', sans-serif;
-}
-
-/* Estilização das mensagens de alerta ao usuário */
-#mensagem1,
-#mensagem2 {
-    margin: 6px;
-    max-width: 540px;
-    text-align: center;
-    line-height: 30px;
-}
-
-.erro {
-    padding: 7px 10px;
-    background-color: rgb(137, 131, 131);
-    color: white;
-    border-radius: 5px;
-    font-size: 20px;
-}
-
-.realizado {
-    padding: 7px 10px;
-    background-color: rgb(77, 108, 77);
-    color: white;
-    border-radius: 5px;
-    font-size: 20px;
-}
-
-
-/* Resposividade */
-@media (max-width: 600px) {
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 110px;
-    }
-
-    .banner img {
-        display: flex;
-        margin-top: 100px;
-        margin-bottom: 80px;
-        width: 350px;
-    }
-
-    .logo-header {
-        width: 90px;
-        height: 90px;
-    }
-
-    .hamburger {
-        display: flex;
-        margin: 30px;
-    }
-
-    .button-login-desktop {
-        display: none;
-    }
-
-    .login-item {
-        display: flex;
-        justify-content: center;
-    }
-
-    header ul {
-        position: fixed;
-        top: 14%;
-        left: 0;
-        width: 100%;
-        height: 0;
-        overflow: hidden;
-        flex-direction: column;
-        background-color: black;
-        transition: height 0.4s ease-in-out;
-    }
-
-    .menu-toggle:checked~ul {
-        height: 40vh;
-    }
-
-    header ul li {
-        width: 100%;
-        padding: 20px 0;
-    }
-
-    .login-cadastro {
-        margin-top: 50px;
-        height: 100vh;
-        width: 100%;
-        background-image: url(../assets/imgs/fundoLoginMobile.png);
-        overflow-y: hidden;
-    }
-
-    .login-cadastro main {
-        display: block;
-    }
-
-    .login-cadastro .divisao {
-        display: flex;
-        justify-content: center;
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        pointer-events: none;
-    }
-
-    .login-cadastro .divisao .formulario {
-        min-height: 240px;
-        min-width: 300px;
-        background-color: rgba(255, 255, 255, 0.4);
-        border-radius: 20px;
-        padding: 20px;
-    }
-
-    .login-cadastro .divisao .formulario input {
-        min-height: 40px;
-        width: 92%;
-        font-size: 18px;
-        margin: 5px 0 10px 0;
-        padding: 0 0 0 5%;
-        pointer-events: auto;
-        /* Div da frente não bloqueia o click*/
-    }
-
-    .login-cadastro .divisao .centro {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        width: 100%;
-        color: white;
-    }
-
-    .login-cadastro .divisao button {
-        pointer-events: auto;
-        /* Div da frente não bloqueia o click*/
-        max-height: 36px;
-        max-width: 160px;
-        font-size: 18px;
-    }
-
-    .login-cadastro .divisao .centro h1 {
-        font-size: 42px;
-    }
-
-    .login-cadastro .divisao .centro h5 {
-        font-size: 23px;
-    }
-
-    /*Estilo pagina-login*/
-
-    .pagina-login .divisao .centro h6 {
-        margin: 340px 0 10px 0;
-        font-size: 23px;
-        bottom: 0;
-    }
-
-    .pagina-login .divisao .centro h1 {
-        font-size: 40   px;
-    }
-
-    /*Estilo pagina-cadastro*/
-
-    .pagina-cadastro .divisao .centro h6 {
-        margin: 470px 0 10px 0;
-        font-size: 24px;
-        bottom: 0;
-    }
-
-    .div_button {
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Estilização das mensagens de alerta ao usuário */
-    #mensagem1,
-    #mensagem2 {
-        line-height: 20px;
-        min-width: 300px;
-    }
-
-    .erro {
-        background-color: transparent;
-        font-size: 16px;
-    }
-
-    .realizado {
-        background-color: transparent;
-        font-size: 16px;
-    }
-}
-
-/* Centralizando a dash */
-.dashboard {
-  display: flex;
-  justify-content: center;
-  align-items: center; 
-  height: 100vh; 
-  width: 100%;
-  text-align: center;
-}
-.dashboard h1 {
-  margin-left: 0; 
-  margin-top: 0;
 }

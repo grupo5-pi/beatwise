@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primeiro acesso | BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="./css/loginCadastro.css">
+    <link rel="stylesheet" href="./css/primeiroAcesso.css">
+    <script src="./js/primeiroAcesso.js" defer></script>
+</head>
+
+<body class="primeiro-acesso">
+    <main class="pa-modal">
+        <img class="pa-logo" src="./assets/imgs/Logo_nav.png" alt="BeatWise">
+
+        <h1>Crie sua senha</h1>
+        <p class="pa-subtitulo">Use o código que enviamos para o seu e-mail.</p>
+
+        <div class="pa-formulario">
+            <input type="text" id="input_email" placeholder="Email:" autocomplete="off">
+            <input type="text" id="input_codigo" placeholder="Código do e-mail:" maxlength="8" autocomplete="off">
+            <input type="password" id="input_senha" placeholder="Nova senha:" autocomplete="new-password">
+            <input type="password" id="input_confirmar_senha" placeholder="Confirmar senha:" autocomplete="new-password">
+
+            <p class="pa-dica">Mínimo de 8 caracteres, com letra maiúscula, minúscula, número e caractere especial (@ # $ % &amp; * ! ? _ -)</p>
+
+            <div id="mensagem1"></div>
+
+            <button id="btn_criar" onclick="criarSenha()">CRIAR SENHA</button>
+            <a href="./login.html" class="pa-link">Voltar para o login</a>
+        </div>
+    </main>
+</body>
+
+</html>
