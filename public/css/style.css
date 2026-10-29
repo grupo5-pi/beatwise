@@ -46,7 +46,7 @@ body {
 }
 
 .sidebar.expandida {
-    width: 280px;
+    width: 270px;
 }
 
 .sidebar hr {
@@ -62,22 +62,22 @@ body {
     justify-content: flex-start;
     align-items: center;
     color: white;
-    width: 100%;
+    width: 85%;
     margin-top: 20px;
-    padding: 0 12px; /* a caixa de seleção não encosta nas laterais */
-    gap: 8px; /* Espaçamento limpo entre os itens */
+    padding: 0 0 0 5%;
+    gap: 8px;
 }
 
 /* Cada item do menu (Ícone + Texto lado a lado) */
 .sidebar ul li {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centraliza o ícone quando fechado */
+    justify-content: center; 
     border-radius: 14px;
     width: 100%;
-    min-height: 48px;
+    min-height: 40px;
     margin: 0;
-    font-size: 26px;
+    font-size: 23px;
     cursor: pointer;
     border: solid 1.5px transparent;
     box-sizing: border-box;
@@ -96,8 +96,8 @@ body {
 /* Imagem do ícone ajustada dentro da caixa */
 .sidebar ul li img.icone,
 .sidebar ul li .icone-box img {
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
     object-fit: contain;
 }
 
