@@ -29,7 +29,19 @@ function autenticar() {
 
                 mensagem1.innerHTML = `<span class="realizado">Login realizado com sucesso!`
                 setTimeout(function () {
-                    window.location = "dashboardGravadora.html";
+                    if (json.fkCargo == 2) {
+                        window.location = "../dashboardGravadora.html";
+
+                    } else if (json.fkCargo == 4) {
+                        window.location = "../dashboardMarketing.html";
+
+                    } else if (json.fkCargo == 3) {
+                        window.location = "../dashboardProdutor.html";
+
+                    } else {
+                        window.location = "../dashboardGravadora.html";
+
+                    }
                 }, 1000)
             });
 
