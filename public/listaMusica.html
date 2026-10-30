@@ -67,7 +67,8 @@
             </li>
             <li id="funcionarios">
                 <a href="./cadastroFuncionario.html" title="Funcionários">
-                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone">
+                    </div>
                     <div class="texto">Funcionários</div>
                 </a>
             </li>
@@ -85,62 +86,63 @@
         </div>
     </aside>
 
-        <!-- Lista -->
-        <div class="conteudo">
-            <div class="conteudo-topo">
-                <div class="titulos">
-                    <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
-                    <h1>Lista de Músicas</h1>
+    <!-- Lista -->
+    <div class="conteudo">
+        <div class="conteudo-topo">
+            <div class="titulos">
+                <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
+                <h1>Lista de Músicas</h1>
+            </div>
+        </div>
+
+        <div class="tabela">
+            <div class="pesquisa">
+                <span class="icone-busca">
+                    <svg xmlns="http://w3.org" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </span>
+
+                <input id="pesquisa" type="text" placeholder="Buscar por música, artista ou álbum..."
+                    oninput="pesquisar()">
+            </div>
+
+            <div class="lista">
+                <div class="coluna primary">
+                    <div class="top left">Música</div>
+
+                </div>
+                <div class="coluna">
+                    <div class="top">Artista(s)</div>
+
+                </div>
+                <div class="coluna">
+                    <div class="top">Álbum</div>
+
+                </div>
+                <div class="coluna">
+                    <div class="top">Youtube</div>
+
+                </div>
+                <div class="coluna">
+                    <div class="top right">Spotify</div>
+
                 </div>
             </div>
 
-    <div class="tabela">
-        <div class="pesquisa">
-            <span class="icone-busca">
-                <svg xmlns="http://w3.org" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-            </span>
+            <footer>
+                <div id="exibicao"></div>
 
-            <input id="pesquisa" type="text" placeholder="Buscar por música, artista ou álbum..." oninput="pesquisar()">
+                <!-- Paginação -->
+                <div class="paginacao">
+                    <button id="anterior" onclick="voltarPagina()">❮</button>
+                    <span id="pagina">Página 1</span>
+                    <button id="proxima" onclick="avancarPagina()">❯</button>
+                </div>
+            </footer>
         </div>
-
-        <div class="lista">
-            <div class="coluna primary">
-                <div class="top left">Música</div>
-
-            </div>
-            <div class="coluna">
-                <div class="top">Artista(s)</div>
-
-            </div>
-            <div class="coluna">
-                <div class="top">Álbum</div>
-
-            </div>
-            <div class="coluna">
-                <div class="top">Youtube</div>
-
-            </div>
-            <div class="coluna">
-                <div class="top right">Spotify</div>
-
-            </div>
-        </div>
-
-        <footer>
-            <div id="exibicao"></div>
-
-            <!-- Paginação -->
-            <div class="paginacao">
-                <button id="anterior" onclick="voltarPagina()">❮</button>
-                <span id="pagina">Página 1</span>
-                <button id="proxima" onclick="avancarPagina()">❯</button>
-            </div>
-        </footer>
-    </div>
     </div>
 
     <div class="info-musicas" id="modal" style="display: none;">
@@ -244,6 +246,60 @@
         let paginaAtual = 1;
         let totalPaginas = 0;
 
+        async function retornarMusicas() {
+            let album = await retornarAlbum();
+            let artista = await retornarArtista();
+            let musica = await retornarMusica();
+            let musicaArtista = await retornarMusicaArtista();
+            let spotify = await retornarSpotify();
+            let youtube = await retornarYoutube();
+
+            let musicas = [];
+            for (let i = 0; i < musica.length; i++) {
+                let musicaAtual = musica[i];
+                let albumAtual = album.find(a => a.id == musicaAtual.fkAlbumBD);
+                let artistasAtuais = musicaArtista.filter(ma => ma.fkMusicaBD == musicaAtual.id).map(ma => {
+                    let artistaEncontrado = artista.find(a => a.id == ma.fkArtistaBD);
+                    return artistaEncontrado ? artistaEncontrado.nome : null;
+                }).filter(a => a != null);
+
+                let spotifyAtual = spotify.find(s => s.fkMusicaBD == musicaAtual.id);
+                let youtubeAtual = youtube.find(y => y.fkMusicaBD == musicaAtual.id);
+
+                musicas.push({
+                    id: musicaAtual.id != null ? musicaAtual.id : 0,
+                    track: musicaAtual.nome != null ? musicaAtual.nome : "Título não encontrado",
+                    artist: artistasAtuais != null ? artistasAtuais : "Artista não encontrado",
+                    album: albumAtual.nome != null ? albumAtual.nome : "Álbum não encontrado",
+
+                    urlSpotify: spotifyAtual?.url != null ? spotifyAtual.url : "",
+                    danceability: spotifyAtual?.dancabilidade != null ? spotifyAtual.dancabilidade : 0,
+                    energy: spotifyAtual?.energia != null ? spotifyAtual.energia : 0,
+                    key: spotifyAtual?.tonalidade != null ? spotifyAtual.tonalidade : 0,
+                    loudness: spotifyAtual?.intensidadeSonora != null ? spotifyAtual.intensidadeSonora : 0,
+                    speechiness: spotifyAtual?.speechiness != null ? spotifyAtual.speechiness : 0,
+                    acousticness: spotifyAtual?.acustica != null ? spotifyAtual.acustica : 0,
+                    instrumentalness: spotifyAtual?.instrumentalidade != null ? spotifyAtual.instrumentalidade : 0,
+                    liveness: spotifyAtual?.vivicidade != null ? spotifyAtual.vivicidade : 0,
+                    valence: spotifyAtual?.valenciaPositividade != null ? spotifyAtual.valenciaPositividade : 0,
+                    tempo: spotifyAtual?.tempoBPM != null ? spotifyAtual.tempoBPM : 0,
+                    durationMs: spotifyAtual?.duracaoMs != null ? spotifyAtual.duracaoMs : 0,
+                    stream: spotifyAtual?.fluxo != null ? spotifyAtual.fluxo : 0,
+
+                    urlYoutube: youtubeAtual?.url != null ? youtubeAtual.url : "",
+                    title: youtubeAtual?.titulo != null ? youtubeAtual.titulo : "Título do vídeo não encontrado",
+                    channel: youtubeAtual?.canal != null ? youtubeAtual.canal : "Canal não encontrado",
+                    views: youtubeAtual?.visitas != null ? youtubeAtual.visitas : 0,
+                    likes: youtubeAtual?.curtidas != null ? youtubeAtual.curtidas : 0,
+                    comments: youtubeAtual?.comentarios != null ? youtubeAtual.comentarios : 0,
+                    description: youtubeAtual?.descricao != null ? youtubeAtual.descricao : "Descrição não encontrada",
+                    licensed: youtubeAtual?.licenciado != null ? youtubeAtual.licenciado : false,
+                    officialVideo: youtubeAtual?.videoOficial != null ? youtubeAtual.videoOficial : false,
+                })
+            }
+            return musicas;
+        }
+
         async function iniciarPagina() {
             musicas = await retornarMusicas();
             totalPaginas = Math.ceil(musicas.length / 10);
@@ -325,7 +381,7 @@
         function formatar(dado) {
             const numero = Number(dado);
 
-            return new Intl.NumberFormat("pt-BR", { notation: "compact", maximumFractionDigits: 3 }).format(numero);
+            return new Intl.NumberFormat("pt-BR", { notation: "compact", maximumFractionDigits: 1 }).format(numero);
         }
 
         function tratarMusica(posicao) {
@@ -333,12 +389,12 @@
 
             return {
                 id: musica.id != null ? musica.id : 0,
-                artist: Array.isArray(musica.artist) ? musica.artist.join(", ") : musica.artist ?? "Artista não encontrado",
+                artist: musica.artist != null ? musica.artist : "Artista não encontrado",
                 urlSpotify: musica.urlSpotify != null ? musica.urlSpotify : "",
                 track: musica.track != null ? musica.track : "Título não encontrado",
                 album: musica.album != null ? musica.album : "Álbum não encontrado",
-                albumType: musica.albumType != null ? musica.albumType : "Tipo de álbum não encontrado",
-                uri: musica.uri != null ? musica.uri : "",
+                albumType: musica.albumType != null ? musica.albumType : "",
+                uri: musica.urlSpotify != null ? musica.urlSpotify : "",
                 danceability: musica.danceability != null ? musica.danceability : 0,
                 energy: musica.energy != null ? musica.energy : 0,
                 key: musica.key != null ? musica.key : 0,

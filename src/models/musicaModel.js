@@ -1,46 +1,46 @@
 var database = require("../database/config");
 
-function selectAlbum() {
+function obterAlbum() {
   var instrucaoSql = `SELECT * FROM albumBD`;
 
   return database.executar(instrucaoSql);
 }
 
-function selectArtista() {
+function obterArtista() {
     var instrucaoSql = `SELECT * FROM artistaBD`;
     
     return database.executar(instrucaoSql);
 }
 
-function selectMusica() {
+function obterMusica() {
   var instrucaoSql = `SELECT * FROM musicaBD`;
 
   return database.executar(instrucaoSql);
 }
 
-function selectMusicaArtista() {
+function obterMusicaArtista() {
   var instrucaoSql = `SELECT * FROM musicaArtistaBD`;
 
   return database.executar(instrucaoSql);
 }
 
-function selectSpotify() {
+function obterSpotify() {
   var instrucaoSql = `SELECT * FROM spotifyBD`;
 
   return database.executar(instrucaoSql);
 }
 
-function selectYoutube() {
+function obterYoutube() {
   var instrucaoSql = `SELECT * FROM youtubeBD`;
 
   return database.executar(instrucaoSql);
 }
 
 module.exports = { 
-    selectAlbum,
-    selectArtista,
-    selectMusica,
-    selectMusicaArtista,
-    selectSpotify,
-    selectYoutube
+    obterAlbum,
+    obterArtista,
+    obterMusica,
+    obterMusicaArtista,
+    obterSpotify,
+    obterYoutube
 };

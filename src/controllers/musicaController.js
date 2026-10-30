@@ -2,37 +2,37 @@
 var musicaModel = require("../models/musicaModel");
 
 function obterAlbum(req, res) {
-  musicaModel.selectAlbum().then((resultado) => {
+  musicaModel.obterAlbum().then((resultado) => {
     res.status(200).json(resultado);
   });
 }
 
 function obterArtista(req, res) {
-  musicaModel.selectArtista().then((resultado) => {
+  musicaModel.obterArtista().then((resultado) => {
     res.status(200).json(resultado);
   });
 }
 
 function obterMusica(req, res) {
-  musicaModel.selectMusica().then((resultado) => {
+  musicaModel.obterMusica().then((resultado) => {
     res.status(200).json(resultado);
   });
 }
 
 function obterMusicaArtista(req, res) {
-  musicaModel.selectMusicaArtista().then((resultado) => {
+  musicaModel.obterMusicaArtista().then((resultado) => {
     res.status(200).json(resultado);
   });
 }
 
 function obterSpotify(req, res) {
-  musicaModel.selectSpotify().then((resultado) => {
+  musicaModel.obterSpotify().then((resultado) => {
     res.status(200).json(resultado);
   });
 }
 
 function obterYoutube(req, res) {
-  musicaModel.selectYoutube().then((resultado) => {
+  musicaModel.obterYoutube().then((resultado) => {
     res.status(200).json(resultado);
   });
 }
