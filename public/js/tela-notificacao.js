@@ -17,7 +17,7 @@ let opcoes = [
 let marcadas = [
     [false, false, false, false],
     [false, false, false, false],
-    [false, false, false, false],
+    [false, false, false],
     [false, false, false, false]
 ];
 
@@ -75,7 +75,7 @@ function htmlColunaAberta(i) {
     }
     html += '</div>';
 
-    html += '<button class="btn-sallet" onclick="salletColuna(' + i + ')"' + desabilitado + '>Sallet</button>';
+    html += '<button class="btn-salvar" onclick="salvarColuna(' + i + ')"' + desabilitado + '>Salvar</button>';
     html += '</div>';
 
     return html;
@@ -120,29 +120,77 @@ function excluirColuna(i) {
     desenharColunas();
 }
 
-function salletColuna(i) {
-    salvo[i] = true;
-    desenharColunas();
+// ===================== FETCH =====================
 
-    console.log(montarJSON());
-}
+// Monta o objeto de UMA coluna, que é o que vai para o banco
+function montarColuna(i) {
+    let itens = [];
 
-function montarJSON() {
-    let lista = [];
-
-    for (let i = 0; i < 4; i++) {
-        if (salvo[i]) {
-            let itens = [];
-
-            for (let j = 0; j < opcoes[i].length; j++) {
-                itens[j] = { nome: opcoes[i][j], ativo: marcadas[i][j] };
-            }
-
-            lista[lista.length] = { tema: titulos[i], opcoes: itens };
-        }
+    for (let j = 0; j < opcoes[i].length; j++) {
+        itens[j] = { nome: opcoes[i][j], ativo: marcadas[i][j] };
     }
 
-    return JSON.stringify(lista);
+    return {
+        idUsuario: sessionStorage.getItem('ID_USUARIO'),
+        tema: titulos[i],
+        opcoes: itens
+    };
+}
+
+// Envia a coluna para o servidor. Só trava a coluna se o servidor confirmar.
+function salvarColuna(i) {
+    fetch('/notificacoes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(montarColuna(i))
+    })
+    .then(function (resposta) {
+        if (resposta.ok) {
+            salvo[i] = true;
+            desenharColunas();
+        } else {
+            alert('Não foi possível salvar. Tente novamente.');
+        }
+    })
+    .catch(function (erro) {
+        console.log(erro);
+        alert('Erro de conexão com o servidor.');
+    });
+}
+
+// Ao abrir a página, busca no servidor o que o usuário já tinha salvo
+function carregarDoBanco() {
+    let idUsuario = sessionStorage.getItem('ID_USUARIO');
+
+    fetch('/notificacoes/' + idUsuario)
+    .then(function (resposta) {
+        return resposta.json();
+    })
+    .then(function (lista) {
+        // lista = [{ tema: "Acessos", opcoes: [{ nome: "Usuário", ativo: 1 }, ...] }, ...]
+        for (let k = 0; k < lista.length; k++) {
+            for (let i = 0; i < 4; i++) {
+                if (lista[k].tema == titulos[i]) {
+                    aberta[i] = true;
+                    salvo[i] = true;
+
+                    for (let j = 0; j < opcoes[i].length; j++) {
+                        for (let m = 0; m < lista[k].opcoes.length; m++) {
+                            if (lista[k].opcoes[m].nome == opcoes[i][j]) {
+                                marcadas[i][j] = (lista[k].opcoes[m].ativo == 1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        desenharColunas();
+    })
+    .catch(function (erro) {
+        console.log(erro);
+    });
 }
 
 desenharColunas();
+carregarDoBanco();
