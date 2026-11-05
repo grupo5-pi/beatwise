@@ -49,6 +49,42 @@ function obterTotalMusicas(req, res) {
   });
 }
 
+// Pesquisa
+function pesquisarMusica(req, res) {
+  const limite = Number(req.query.limite);
+  const palavra = req.query.palavra;
+
+  musicaModel.pesquisarMusica(palavra, limite).then((resultado) => {
+    res.status(200).json(resultado);
+  });
+}
+
+function pesquisarSpotify(req, res) {
+  const limite = Number(req.query.limite);
+  const palavra = req.query.palavra;
+
+  musicaModel.pesquisarSpotify(palavra, limite).then((resultado) => {
+    res.status(200).json(resultado);
+  });
+}
+
+function pesquisarYoutube(req, res) {
+  const limite = Number(req.query.limite);
+  const palavra = req.query.palavra;
+
+  musicaModel.pesquisarYoutube(palavra, limite).then((resultado) => {
+    res.status(200).json(resultado);
+  });
+}
+
+function contarPesquisaMusica(req, res) {
+  const palavra = req.query.palavra;
+
+  musicaModel.contarPesquisaMusica(palavra).then((resultado) => {
+    res.status(200).json(resultado[0].contagem);
+  });
+}
+
 module.exports = {
   obterAlbum,
   obterArtista,
@@ -56,5 +92,9 @@ module.exports = {
   obterMusicaArtista,
   obterSpotify,
   obterYoutube,
-  obterTotalMusicas
+  obterTotalMusicas,
+  pesquisarMusica,
+  pesquisarSpotify,
+  pesquisarYoutube,
+  contarPesquisaMusica
 };

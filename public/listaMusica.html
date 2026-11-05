@@ -257,10 +257,14 @@
             musicaArtista = await retornarMusicaArtista();
         }
 
+        let musica = null;
+        let spotify = null;
+        let youtube = null;
+
         async function retornarMusicas() {
-            let musica = await retornarMusica(paginaAtual);
-            let spotify = await retornarSpotify(paginaAtual);
-            let youtube = await retornarYoutube(paginaAtual);
+            musica = await retornarMusica(paginaAtual);
+            spotify = await retornarSpotify(paginaAtual);
+            youtube = await retornarYoutube(paginaAtual);
 
             let musicas = [];
             for (let i = 0; i < musica.length; i++) {
@@ -379,7 +383,7 @@
             const fim = Math.min(inicio + itens, quantidadeMusicas);
             document.getElementById("exibicao").textContent = `Exibindo ${inicio + 1}-${fim} de ${quantidadeMusicas}`;
 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < musicas.length; i++) {
                 const musica = tratarMusica(i, i);
 
                 colunas[0].appendChild(criarCelula(musica.track, i));
@@ -433,30 +437,64 @@
 
         // Campo de pesquisa
         async function pesquisar() {
-            musicas = await retornarMusicas()
             let palavraPesquisa = pesquisa.value.toLowerCase();
+            paginaAtual = 1;
 
-            if (palavraPesquisa == null || palavraPesquisa.trim() == '') {
+            if (palavraPesquisa.trim() == '') {
                 musicas = await retornarMusicas();
-            }
+                quantidadeMusicas = await retornarTotalMusicas();
 
-            let musicasFiltradas = [];
-            for (let i = 0; i < musicas.length; i++) {
-                if (Array.isArray(musicas[i].artist)) {
-                    for (let j = 0; j < musicas[i].artist.length; j++) {
-                        if (musicas[i].track.toLowerCase().includes(palavraPesquisa) || musicas[i].artist[j].toLowerCase().includes(palavraPesquisa) || musicas[i].album.toLowerCase().includes(palavraPesquisa)) {
-                            musicasFiltradas.push(musicas[i])
-                            break
-                        }
-                    }
-                } else {
-                    if (musicas[i].track.toLowerCase().includes(palavraPesquisa) || musicas[i].artist.toLowerCase().includes(palavraPesquisa) || musicas[i].album.toLowerCase().includes(palavraPesquisa)) {
-                        musicasFiltradas.push(musicas[i])
-                    }
+            } else {
+                musica = await retornarPesquisaMusica(palavraPesquisa, paginaAtual);
+                spotify = await retornarPesquisaSpotify(palavraPesquisa, paginaAtual);
+                youtube = await retornarPesquisaYoutube(palavraPesquisa, paginaAtual);
+                quantidadeMusicas = await retornarTotalPesquisaMusica(palavraPesquisa);
+
+                musicas = [];
+                for (let i = 0; i < musica.length; i++) {
+                    let musicaAtual = musica[i];
+                    let albumAtual = album.find(a => a.id == musicaAtual.fkAlbumBD);
+                    let artistasAtuais = musicaArtista.filter(ma => ma.fkMusicaBD == musicaAtual.id).map(ma => {
+                        let artistaEncontrado = artista.find(a => a.id == ma.fkArtistaBD);
+                        return artistaEncontrado ? artistaEncontrado.nome : null;
+                    }).filter(a => a != null);
+
+                    let spotifyAtual = spotify.find(s => s.fkMusicaBD == musicaAtual.id);
+                    let youtubeAtual = youtube.find(y => y.fkMusicaBD == musicaAtual.id);
+
+                    musicas.push({
+                        id: musicaAtual.id != null ? musicaAtual.id : 0,
+                        track: musicaAtual.nome != null ? musicaAtual.nome : "Título não encontrado",
+                        artist: artistasAtuais != null ? artistasAtuais : "Artista não encontrado",
+                        album: albumAtual.nome != null ? albumAtual.nome : "Álbum não encontrado",
+
+                        urlSpotify: spotifyAtual?.url != null ? spotifyAtual.url : "",
+                        danceability: spotifyAtual?.dancabilidade != null ? spotifyAtual.dancabilidade : 0,
+                        energy: spotifyAtual?.energia != null ? spotifyAtual.energia : 0,
+                        key: spotifyAtual?.tonalidade != null ? spotifyAtual.tonalidade : 0,
+                        loudness: spotifyAtual?.intensidadeSonora != null ? spotifyAtual.intensidadeSonora : 0,
+                        speechiness: spotifyAtual?.speechiness != null ? spotifyAtual.speechiness : 0,
+                        acousticness: spotifyAtual?.acustica != null ? spotifyAtual.acustica : 0,
+                        instrumentalness: spotifyAtual?.instrumentalidade != null ? spotifyAtual.instrumentalidade : 0,
+                        liveness: spotifyAtual?.vivicidade != null ? spotifyAtual.vivicidade : 0,
+                        valence: spotifyAtual?.valenciaPositividade != null ? spotifyAtual.valenciaPositividade : 0,
+                        tempo: spotifyAtual?.tempoBPM != null ? spotifyAtual.tempoBPM : 0,
+                        durationMs: spotifyAtual?.duracaoMs != null ? spotifyAtual.duracaoMs : 0,
+                        stream: spotifyAtual?.fluxo != null ? spotifyAtual.fluxo : 0,
+
+                        urlYoutube: youtubeAtual?.url != null ? youtubeAtual.url : "",
+                        title: youtubeAtual?.titulo != null ? youtubeAtual.titulo : "Título do vídeo não encontrado",
+                        channel: youtubeAtual?.canal != null ? youtubeAtual.canal : "Canal não encontrado",
+                        views: youtubeAtual?.visitas != null ? youtubeAtual.visitas : 0,
+                        likes: youtubeAtual?.curtidas != null ? youtubeAtual.curtidas : 0,
+                        comments: youtubeAtual?.comentarios != null ? youtubeAtual.comentarios : 0,
+                        description: youtubeAtual?.descricao != null ? youtubeAtual.descricao : "Descrição não encontrada",
+                        licensed: youtubeAtual?.licenciado != null ? youtubeAtual.licenciado : false,
+                        officialVideo: youtubeAtual?.videoOficial != null ? youtubeAtual.videoOficial : false,
+                    })
                 }
             }
 
-            musicas = musicasFiltradas;
             totalPaginas = Math.ceil(quantidadeMusicas / 10);
             paginacao();
         }

@@ -102,3 +102,64 @@ function retornarTotalMusicas() {
             return [];
         });
 }
+
+// Pesquisa
+function retornarPesquisaMusica(palavra, limite) {
+    return fetch(`/musicas/pesquisarMusica?palavra=${palavra}&limite=${limite}`)
+        .then(function (resposta) {
+            if (resposta.ok) {
+                return resposta.json();
+            } else {
+                console.log("Houve um erro ao pesquisar as músicas");
+                throw new Error("Houve um erro ao pesquisar as músicas");
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            return [];
+        });
+}
+
+function retornarPesquisaYoutube(palavra, limite) {
+    return fetch(`/musicas/pesquisarYoutube?palavra=${palavra}&limite=${limite}`)
+        .then(function (resposta) {
+            if (resposta.ok) {
+                return resposta.json();
+            } else {
+                console.log("Houve um erro ao pesquisar as músicas");
+                throw new Error("Houve um erro ao pesquisar as músicas");
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            return [];
+        });
+}
+
+function retornarPesquisaSpotify(palavra, limite) {
+    return fetch(`/musicas/pesquisarSpotify?palavra=${palavra}&limite=${limite}`)
+        .then(function (resposta) {
+            if (resposta.ok) {
+                return resposta.json();
+            } else {
+                console.log("Houve um erro ao pesquisar as músicas");
+                throw new Error("Houve um erro ao pesquisar as músicas");
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            return [];
+        });
+}
+
+function retornarTotalPesquisaMusica(palavra) {
+    return fetch(`/musicas/contarPesquisaMusica?palavra=${palavra}`)
+        .then(function (resposta) {
+            if (resposta.ok) {
+                return resposta.json();
+            } else {
+                console.log("Houve um erro ao contar as pesquisas as músicas");
+                throw new Error("Houve um erro ao contar as pesquisas as músicas");
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            return [];
+        });
+}

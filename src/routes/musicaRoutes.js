@@ -11,4 +11,9 @@ router.get("/obterSpotify", musicaController.obterSpotify);
 router.get("/obterYoutube", musicaController.obterYoutube);
 router.get("/obterTotalMusicas", musicaController.obterTotalMusicas);
 
+router.get("/pesquisarMusica", musicaController.pesquisarMusica);
+router.get("/pesquisarSpotify", musicaController.pesquisarSpotify);
+router.get("/pesquisarYoutube", musicaController.pesquisarYoutube);
+router.get("/contarPesquisaMusica", musicaController.contarPesquisaMusica);
+
 module.exports = router;
