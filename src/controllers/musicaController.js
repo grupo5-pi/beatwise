@@ -14,7 +14,9 @@ function obterArtista(req, res) {
 }
 
 function obterMusica(req, res) {
-  musicaModel.obterMusica().then((resultado) => {
+  const limite = Number(req.query.limite);
+
+  musicaModel.obterMusica(limite).then((resultado) => {
     res.status(200).json(resultado);
   });
 }
@@ -26,14 +28,24 @@ function obterMusicaArtista(req, res) {
 }
 
 function obterSpotify(req, res) {
-  musicaModel.obterSpotify().then((resultado) => {
+  const limite = Number(req.query.limite);
+
+  musicaModel.obterSpotify(limite).then((resultado) => {
     res.status(200).json(resultado);
   });
 }
 
 function obterYoutube(req, res) {
-  musicaModel.obterYoutube().then((resultado) => {
+  const limite = Number(req.query.limite);
+
+  musicaModel.obterYoutube(limite).then((resultado) => {
     res.status(200).json(resultado);
+  });
+}
+
+function obterTotalMusicas(req, res) {
+  musicaModel.obterTotalMusicas().then((resultado) => {
+    res.status(200).json(resultado[0].contagem);
   });
 }
 
@@ -43,5 +55,6 @@ module.exports = {
   obterMusica,
   obterMusicaArtista,
   obterSpotify,
-  obterYoutube
+  obterYoutube,
+  obterTotalMusicas
 };

@@ -245,14 +245,22 @@
         let musicas = [];
         let paginaAtual = 1;
         let totalPaginas = 0;
+        let quantidadeMusicas = 0;
+
+        let album = null;
+        let artista = null;
+        let musicaArtista = null;
+
+        async function retornarAlbumArtistas() {
+            album = await retornarAlbum();
+            artista = await retornarArtista();
+            musicaArtista = await retornarMusicaArtista();
+        }
 
         async function retornarMusicas() {
-            let album = await retornarAlbum();
-            let artista = await retornarArtista();
-            let musica = await retornarMusica();
-            let musicaArtista = await retornarMusicaArtista();
-            let spotify = await retornarSpotify();
-            let youtube = await retornarYoutube();
+            let musica = await retornarMusica(paginaAtual);
+            let spotify = await retornarSpotify(paginaAtual);
+            let youtube = await retornarYoutube(paginaAtual);
 
             let musicas = [];
             for (let i = 0; i < musica.length; i++) {
@@ -301,21 +309,25 @@
         }
 
         async function iniciarPagina() {
+            await retornarAlbumArtistas();
             musicas = await retornarMusicas();
-            totalPaginas = Math.ceil(musicas.length / 10);
+            quantidadeMusicas = await retornarTotalMusicas();
+            totalPaginas = Math.ceil(quantidadeMusicas / 10);
             console.log(musicas);
             console.log(musicas.length)
 
             paginacao();
         }
 
-        function avancarPagina() {
+        async function avancarPagina() {
             paginaAtual++;
+            musicas = await retornarMusicas();
             paginacao();
         }
 
-        function voltarPagina() {
+        async function voltarPagina() {
             paginaAtual--;
+            musicas = await retornarMusicas();
             paginacao();
         }
 
@@ -364,10 +376,10 @@
 
             const itens = 10;
             const inicio = (paginaAtual - 1) * itens;
-            const fim = Math.min(inicio + itens, musicas.length);
-            document.getElementById("exibicao").textContent = `Exibindo ${inicio + 1}-${fim} de ${musicas.length}`;
+            const fim = Math.min(inicio + itens, quantidadeMusicas);
+            document.getElementById("exibicao").textContent = `Exibindo ${inicio + 1}-${fim} de ${quantidadeMusicas}`;
 
-            for (let i = inicio; i < fim; i++) {
+            for (let i = 0; i < 10; i++) {
                 const musica = tratarMusica(i, i);
 
                 colunas[0].appendChild(criarCelula(musica.track, i));
@@ -445,7 +457,7 @@
             }
 
             musicas = musicasFiltradas;
-            totalPaginas = Math.ceil(musicas.length / 10);
+            totalPaginas = Math.ceil(quantidadeMusicas / 10);
             paginacao();
         }
 
@@ -469,7 +481,7 @@
             likes.innerHTML = formatar(musica.likes);
 
             // Perfil sonoro
-            bpm.innerHTML = (musica.tempo / 1000).toFixed(1).replace('.', ',') + ' BPM';
+            bpm.innerHTML = (musica.tempo).toFixed(1).replace('.', ',') + ' BPM';
             licensed.innerHTML = musica.licensed == true ? 'Sim' : 'Não';
             let duracao = formatarDuracao(musica.durationMs);
             duration.innerHTML = duracao.replace(':', 'min ') + "s";

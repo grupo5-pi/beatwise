@@ -12,8 +12,8 @@ function obterArtista() {
     return database.executar(instrucaoSql);
 }
 
-function obterMusica() {
-  var instrucaoSql = `SELECT * FROM musicaBD`;
+function obterMusica(limite) {
+  var instrucaoSql = `SELECT * FROM musicaBD WHERE id > ${limite * 10 - 10} LIMIT 10`;
 
   return database.executar(instrucaoSql);
 }
@@ -24,14 +24,20 @@ function obterMusicaArtista() {
   return database.executar(instrucaoSql);
 }
 
-function obterSpotify() {
-  var instrucaoSql = `SELECT * FROM spotifyBD`;
+function obterSpotify(limite) {
+  var instrucaoSql = `SELECT * FROM spotifyBD WHERE id > ${limite * 10 - 10} LIMIT 10`;
 
   return database.executar(instrucaoSql);
 }
 
-function obterYoutube() {
-  var instrucaoSql = `SELECT * FROM youtubeBD`;
+function obterYoutube(limite) {
+  var instrucaoSql = `SELECT * FROM youtubeBD WHERE id > ${limite * 10 - 10} LIMIT 10`;
+
+  return database.executar(instrucaoSql);
+}
+
+function obterTotalMusicas() {
+  var instrucaoSql = `SELECT COUNT(*) AS contagem FROM musicaBD`;
 
   return database.executar(instrucaoSql);
 }
@@ -42,5 +48,6 @@ module.exports = {
     obterMusica,
     obterMusicaArtista,
     obterSpotify,
-    obterYoutube
+    obterYoutube,
+    obterTotalMusicas
 };

@@ -28,8 +28,8 @@ function retornarArtista() {
         });
 }
 
-function retornarMusica() {
-    return fetch("/musicas/obterMusica")
+function retornarMusica(limite) {
+    return fetch(`/musicas/obterMusica?limite=${limite}`)
         .then(function (resposta) {
             if (resposta.ok) {
                 return resposta.json();
@@ -58,8 +58,8 @@ function retornarMusicaArtista() {
         });
 }
 
-function retornarSpotify() {
-    return fetch("/musicas/obterSpotify")
+function retornarSpotify(limite) {
+    return fetch(`/musicas/obterSpotify?limite=${limite}`)
         .then(function (resposta) {
             if (resposta.ok) {
                 return resposta.json();
@@ -73,14 +73,29 @@ function retornarSpotify() {
         });
 }
 
-function retornarYoutube() {
-    return fetch("/musicas/obterYoutube")
+function retornarYoutube(limite) {
+    return fetch(`/musicas/obterYoutube?limite=${limite}`)
         .then(function (resposta) {
             if (resposta.ok) {
                 return resposta.json();
             } else {
                 console.log("Houve um erro ao obter os dados do YouTube");
                 throw new Error("Erro ao buscar os dados do YouTube");
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            return [];
+        });
+}
+
+function retornarTotalMusicas() {
+    return fetch("/musicas/obterTotalMusicas")
+        .then(function (resposta) {
+            if (resposta.ok) {
+                return resposta.json();
+            } else {
+                console.log("Houve um erro ao obter a quantidade de músicas");
+                throw new Error("Houve um erro ao obter a quantidade de músicas");
             }
         }).catch(function (erro) {
             console.log(erro);
