@@ -440,7 +440,7 @@
             let palavraPesquisa = pesquisa.value.toLowerCase();
             paginaAtual = 1;
 
-            if (palavraPesquisa.trim() == '') {
+            if (palavraPesquisa.trim() == '' || palavraPesquisa == null) {
                 musicas = await retornarMusicas();
                 quantidadeMusicas = await retornarTotalMusicas();
 
