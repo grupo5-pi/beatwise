@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Equipe de Marketing - BeatWise</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/dashboardMarketing.css">
+    <link rel="stylesheet" href="./css/padrao.css">
+    <script src="./js/sidebar.js" defer></script>
+    <script src="./js/controleDeAcesso.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="dash-marketing bw" onload="carregarAlertas(); carregarKpis(), validarAcesso()">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
+            <img src="./assets/imgs/logo_B.png" alt="logo da BeatWise" class="logo-icone">
+        </div>
+        <hr>
+
+        <ul>
+            <li id="dashboard-gravadora">
+                <a href="./dashboardGravadora.html" title="Dashboard Gravadora">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Gravadora</div>
+                </a>
+            </li>
+            <li class="selected" id="dashboard-marketing">
+                <a href="./dashboardMarketing.html" title="Dashboard Marketing">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Marketing</div>
+                </a>
+            </li>
+            <li id="dashboard-produtor">
+                <a href="./dashboardProdutor.html" title="Dashboard Produtor">
+                    <div class="icone-box"><img src="./assets/imgs/dashboard-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Produtor</div>
+                </a>
+            </li>
+            <li id="lista-musicas">
+                <a href="./listaMusica.html" title="Músicas">
+                    <div class="icone-box"><img src="./assets/imgs/music-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Músicas</div>
+                </a>
+            </li>
+            <li id="recomendacao">
+                <a href="./recomendacao.html" title="Recomendação">
+                    <div class="icone-box"><img src="./assets/imgs/sliders-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Recomendação</div>
+                </a>
+            </li>
+            <li id="metricas">
+                <a href="./metricas.html" title="Métricas">
+                    <div class="icone-box"><img src="./assets/imgs/chart-white.svg" alt="" class="icone"></div>
+                    <div class="texto">Métricas</div>
+                </a>
+            </li>
+            <li id="funcionarios">
+                <a href="./cadastroFuncionario.html" title="Funcionários">
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="texto">Funcionários</div>
+                </a>
+            </li>
+            <li id="notificacoes">
+                <a href="./tela-notificacao.html" title="Notificações">
+                    <div class="icone-box"><img src="./assets/imgs/svg-notificacao.png" alt="" class="icone"></div>
+                    <div class="texto">Notificações</div>
+                </a>
+            </li>
+        </ul>
+
+        <div class="perfil">
+            <img id="sidebar-foto" src="./assets/imgs/logo_B.png" alt="foto de perfil">
+            <a id="nome-usuario" href="./perfil.html"></a>
+        </div>
+    </aside>
+
+    <main class="conteudo">
+        <div class="conteudo-topo">
+            <div class="titulos">
+                <h3>Bem vindo(a) <span data-usuario="primeiro-nome"></span></h3>
+                <h1>Dashboard Marketing</h1>
+            </div>
+        </div>
+
+        <div class="dash-alertas" id="lista_alertas">
+        </div>
+
+        <div class="dash-kpi" id="kpis">
+        </div>
+
+        <div class="graficos">
+            <div class="grafico">
+                <h3 class="grafico-titulo">Top 5 músicas: views e likes no Youtube</h3>
+                <div class="grafico-area"><canvas id="graficoYoutube"></canvas></div>
+            </div>
+            <div class="grafico">
+                <h3 class="grafico-titulo">Top 5 músicas: streamings no Spotify</h3>
+                <div class="grafico-area"><canvas id="graficoSpotify"></canvas></div>
+            </div>
+            <div class="grafico">
+                <h3 class="grafico-titulo">Média de views por tipo de lançamento</h3>
+                <div class="grafico-area"><canvas id="graficoLancamento"></canvas></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let dadosKpis = [
+            {
+                titulo: "Comparativo de engajamento entre músicas com clipe X sem clipe",
+                dado: "",
+                descricao: "",
+                positivo: true
+            },
+            {
+                titulo: "Engajamento por likes no Youtube",
+                dado: "",
+                descricao: "",
+                positivo: true
+            },
+            {
+                titulo: "Qual a melhor plataforma",
+                dado: "",
+                descricao: "",
+                positivo: true
+            },
+            {
+                titulo: "Comparativo Feat/Solo",
+                dado: "",
+                descricao: "",
+                positivo: true
+            }
+        ];
+
+        let dadosAlertas = [];
+
+        function carregarAlertas() {
+            dadosAlertas = [];
+
+            // Alerta positivo: engajamento acima da média (likes ÷ views)
+            let somaTaxas = 0;
+            let melhor = topMusicasYoutube[0];
+
+            for (let i = 0; i < topMusicasYoutube.length; i++) {
+                let m = topMusicasYoutube[i];
+                somaTaxas += m.likes / m.views;
+                if (m.likes / m.views > melhor.likes / melhor.views) {
+                    melhor = m;
+                }
+            }
+
+            let media = somaTaxas / topMusicasYoutube.length;
+            let acima = (melhor.likes / melhor.views - media) / media * 100;
+
+            dadosAlertas.push({
+                tipo: 'positivo',
+                texto: `A música ${tituloCurto(melhor.nome)} tem taxa de likes/views ${fmt(acima, 0)}% acima da média da base.`
+            });
+
+            // Alerta negativo: desbalanceamento entre plataformas
+            let maiorRazao = 0;
+            let alertaDesbalanco = null;
+
+            for (let i = 0; i < topMusicasYoutube.length; i++) {
+                let yt = topMusicasYoutube[i];
+
+                for (let j = 0; j < topMusicasSpotify.length; j++) {
+                    let sp = topMusicasSpotify[j];
+
+                    if (tituloCurto(sp.nome) == tituloCurto(yt.nome)) {
+                        let maior = Math.max(sp.streamings, yt.views);
+                        let menor = Math.min(sp.streamings, yt.views);
+
+                        if (maior / menor > maiorRazao) {
+                            maiorRazao = maior / menor;
+
+                            if (sp.streamings > yt.views) {
+                                alertaDesbalanco = `A música ${tituloCurto(yt.nome)} tem ${formatarViews(sp.streamings)} de streamings no Spotify, mas só ${formatarViews(yt.views)} de views no YouTube. Vale investir no YouTube.`;
+                            } else {
+                                alertaDesbalanco = `A música ${tituloCurto(yt.nome)} tem ${formatarViews(yt.views)} de views no YouTube, mas só ${formatarViews(sp.streamings)} de streamings no Spotify. Vale investir no Spotify.`;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (alertaDesbalanco != null) {
+                dadosAlertas.push({ tipo: 'negativo', texto: alertaDesbalanco });
+            }
+
+            // Renderização
+            lista_alertas.innerHTML = '';
+
+            for (let i = 0; i < dadosAlertas.length; i++) {
+                let tipo = dadosAlertas[i].tipo;
+                let icone = tipo == 'positivo' ? '✓' : '✗';
+
+                lista_alertas.innerHTML += `
+            <div class="dash-alerta dash-alerta-${tipo}">
+                <span class="dash-alerta-icone">${icone}</span>
+                <span>${dadosAlertas[i].texto}</span>
+            </div>`;
+            }
+        }
+
+        function fmt(n, casas = 1) {
+            return n.toFixed(casas).replace('.', ',');
+        }
+
+        // taxa de engajamento (likes + comentários / views) de uma lista de músicas
+        function taxa(lista) {
+            let views = 0, eng = 0;
+            for (let i = 0; i < lista.length; i++) {
+                views += lista[i].views;
+                eng += lista[i].likes + lista[i].comentarios;
+            }
+            return eng / views * 100;
+        }
+
+        function carregarKpis() {
+            let musicas = [
+                { plataforma: 'Spotify', tem_clipe: true, is_feat: true, views: 22000000, likes: 1100000, comentarios: 48000 },
+                { plataforma: 'Spotify', tem_clipe: true, is_feat: false, views: 18000000, likes: 850000, comentarios: 36000 },
+                { plataforma: 'Spotify', tem_clipe: false, is_feat: true, views: 40000000, likes: 1900000, comentarios: 70000 },
+                { plataforma: 'Spotify', tem_clipe: false, is_feat: false, views: 50000000, likes: 2300000, comentarios: 82000 },
+                { plataforma: 'YouTube', tem_clipe: true, is_feat: true, views: 21000000, likes: 900000, comentarios: 41000 },
+                { plataforma: 'YouTube', tem_clipe: true, is_feat: false, views: 19000000, likes: 760000, comentarios: 30000 },
+                { plataforma: 'YouTube', tem_clipe: false, is_feat: true, views: 38000000, likes: 1500000, comentarios: 55000 },
+                { plataforma: 'YouTube', tem_clipe: false, is_feat: false, views: 52000000, likes: 1900000, comentarios: 64000 },
+            ];
+
+            let comClipe = taxa(musicas.filter(m => m.tem_clipe));
+            let semClipe = taxa(musicas.filter(m => !m.tem_clipe));
+            let spotify = taxa(musicas.filter(m => m.plataforma == 'Spotify'));
+            let youtube = taxa(musicas.filter(m => m.plataforma == 'YouTube'));
+            let feat = taxa(musicas.filter(m => m.is_feat));
+            let solo = taxa(musicas.filter(m => !m.is_feat));
+
+            // KPI 1 - Clipe x Sem clipe
+            let clipeGanha = comClipe >= semClipe;
+            let maior = Math.max(comClipe, semClipe);
+            let menor = Math.min(comClipe, semClipe);
+            let diferencaClipe = maior - menor;
+
+            dadosKpis[0].dado = clipeGanha ? 'Com Clipe' : 'Sem Clipe';
+            dadosKpis[0].descricao = `Músicas ${clipeGanha ? 'com' : 'sem'} clipe têm maior taxa de engajamento: ${fmt(maior)}% contra ${fmt(menor)}% (${clipeGanha ? 'com' : 'sem'} clipe) <span class="${clipeGanha ? 'positivo' : 'negativo'}">+${fmt(diferencaClipe)}%</span>`;
+            dadosKpis[0].positivo = clipeGanha;
+
+            // KPI 2 - Música com maior taxa de likes (top 5 YouTube)
+            let melhor = topMusicasYoutube[0];
+            let somaTaxas = 0;
+
+            for (let i = 0; i < topMusicasYoutube.length; i++) {
+                let m = topMusicasYoutube[i];
+                somaTaxas += m.likes / m.views * 100;
+                if (m.likes / m.views > melhor.likes / melhor.views) {
+                    melhor = m;
+                }
+            }
+
+            let taxaMelhor = melhor.likes / melhor.views * 100;
+            let mediaTop5 = somaTaxas / topMusicasYoutube.length;
+            let acima = (taxaMelhor - mediaTop5) / mediaTop5 * 100;
+
+            dadosKpis[1].dado = tituloCurto(melhor.nome);
+            dadosKpis[1].descricao = `${melhor.nome} converte ${fmt(taxaMelhor, 2)}% das views em likes: <span class="positivo">+${fmt(acima, 0)}%</span> acima da média`;
+            dadosKpis[1].positivo = true;
+
+            // KPI 3 - Melhor plataforma
+            let spotifyGanha = spotify > youtube;
+            let difPlat = Math.abs(spotify - youtube) / Math.min(spotify, youtube) * 100;
+            let nomePlat = spotifyGanha ? 'Spotify' : 'YouTube';
+
+            dadosKpis[2].dado = nomePlat;
+            dadosKpis[2].descricao = `O ${nomePlat} apresenta maior taxa de aproveitamento: <span class="${spotifyGanha ? 'positivo' : 'negativo'}">+${fmt(difPlat, 0)}%</span>`;
+            dadosKpis[2].positivo = spotifyGanha;
+
+            // KPI 4 - Feat x Solo
+            let featGanha = feat >= solo;
+            let difFeat = Math.abs(feat - solo) / Math.min(feat, solo) * 100;
+
+            dadosKpis[3].dado = featGanha ? 'Feat' : 'Solo';
+            dadosKpis[3].descricao = `Músicas ${featGanha ? 'feat' : 'solo'} têm maior taxa de engajamento: <span class="${featGanha ? 'positivo' : 'negativo'}">+${fmt(difFeat, 0)}%</span>`;
+            dadosKpis[3].positivo = featGanha;
+
+            // Renderização
+            kpis.innerHTML = '';
+
+            for (let i = 0; i < dadosKpis.length; i++) {
+                let k = dadosKpis[i];
+                let classe = k.positivo ? 'positivo' : 'negativo';
+                let seta = k.positivo ? '↑↑' : '↓↓';
+
+                kpis.innerHTML += `
+            <div class="kpi">
+                <span class="kpi-titulo">${k.titulo}</span>
+                <span class="kpi-valor">${k.dado} <span class="kpi-seta ${classe}">${seta}</span></span>
+                <span class="kpi-descricao">${k.descricao}</span>
+            </div>
+        `;
+            }
+        }
+    </script>
+
+    <!-- Gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+    <script>
+        // Top músicas do YouTube
+        let topMusicasYoutube = [
+            { nome: 'Luís Fonsi ft. Daddy Yankee - Despacito', views: 80796493620, likes: 507886520 },
+            { nome: 'Ed Sheehan - Shape of You', views: 59083984790, likes: 310477800 },
+            { nome: 'Wiz Khalifa ft. Charlie Puth - See You Again', views: 57737984070, likes: 401476740 },
+            { nome: 'Mark Ronson feat. Bruno Mars - Uptown Funk', views: 48210162180, likes: 200678790 },
+            { nome: 'Psy - Gangnam Style', views: 46797674710, likes: 263991330 },
+        ];
+
+        // Top músicas do Spotify
+        let topMusicasSpotify = [
+            { nome: 'The Weeknd - Blinding Lights', streamings: 3386520288 },
+            { nome: 'Ed Sheeran - Shape of You', streamings: 3362005201 },
+            { nome: 'Lewis Capaldi - Someone You Loved', streamings: 2634013335 },
+            { nome: 'Post Malone ft. 21 Savage - Rockstar', streamings: 2594926619 },
+            { nome: 'Post Malone - Sunflower feat. Swae Lee', streamings: 2538329799 },
+            { nome: 'Drake - One Dance feat. Wizkid & Kyla', streamings: 2522431995 },
+        ];
+
+        // Tipos de lançamento
+        // quantidade = músicas com views | totalViews = soma de views do YouTube
+        let tiposLancamento = [
+            { nome: 'Feat - Single', quantidade: 858, totalViews: 926768125820 },
+            { nome: 'Solo - Single', quantidade: 3243, totalViews: 2194458530560 },
+            { nome: 'Feat - Álbum', quantidade: 2000, totalViews: 2981551764750 },
+            { nome: 'Solo - Álbum', quantidade: 12388, totalViews: 10510229367070 },
+        ];
+
+
+        function formatarViews(n) {
+            if (n >= 1000000000) {
+                return (n / 1000000000).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' bi';
+            }
+            return (n / 1000000).toLocaleString('pt-BR', { maximumFractionDigits: 0 }) + ' mi';
+        }
+
+        // Quebra o nome em várias linhas (para caber no gráfico)
+        function quebrarNome(nome, maxCaracteres) {
+            let palavras = nome.split(' ');
+            let linhas = [];
+            let atual = '';
+
+            for (let i = 0; i < palavras.length; i++) {
+                if ((atual + ' ' + palavras[i]).trim().length > maxCaracteres && atual != '') {
+                    linhas.push(atual);
+                    atual = palavras[i];
+                } else {
+                    atual = (atual + ' ' + palavras[i]).trim();
+                }
+            }
+            linhas.push(atual);
+            return linhas;
+        }
+
+        function tituloCurto(nome) {
+            let partes = nome.split(' - ');
+            return partes[partes.length - 1];
+        }
+
+        function carregarGraficos() {
+            Chart.defaults.color = '#C4B5FD';
+            Chart.defaults.borderColor = 'rgba(139, 92, 246, 0.15)';
+
+            let labelsYoutube = [], nomesYoutube = [], viewsYoutube = [], likesYoutube = [];
+            let labelsSpotify = [], nomesSpotify = [], streamsSpotify = [];
+
+            let youtube = topMusicasYoutube.slice();
+            let spotify = topMusicasSpotify.slice();
+
+            youtube.sort((a, b) => b.views - a.views);
+            spotify.sort((a, b) => b.streamings - a.streamings);
+
+            for (let i = 0; i < 5 && i < youtube.length; i++) {
+                labelsYoutube.push(quebrarNome(youtube[i].nome, 20));
+                nomesYoutube.push(youtube[i].nome);
+                viewsYoutube.push(youtube[i].views / 1000000000);
+                likesYoutube.push(youtube[i].likes / 1000000);
+            }
+
+            for (let i = 0; i < 5 && i < spotify.length; i++) {
+                labelsSpotify.push(quebrarNome(spotify[i].nome, 20));
+                nomesSpotify.push(spotify[i].nome);
+                streamsSpotify.push(spotify[i].streamings / 1000000000);
+            }
+
+            let maxViews = Math.max(...viewsYoutube);
+            let maxLikes = Math.max(...likesYoutube);
+            let limiteViews = Math.ceil(maxViews * 1.05);
+            let limiteLikes = Math.ceil(maxLikes / 100) * 100 * 2;
+
+
+            new Chart(graficoYoutube, {
+                type: 'bar',
+                data: {
+                    labels: labelsYoutube,
+                    datasets: [
+                        { label: 'Views (bilhões)', data: viewsYoutube, backgroundColor: '#7C3AED', borderRadius: 4 },
+                        { label: 'Likes (milhões)', data: likesYoutube, backgroundColor: '#C4B5FD', borderRadius: 4, yAxisID: 'y2' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: { callbacks: { title: function (itens) { return nomesYoutube[itens[0].dataIndex]; } } }
+                    },
+                    scales: {
+                        x: { ticks: { autoSkip: false, minRotation: 45, maxRotation: 45, font: { size: 8 } } },
+                        y: {
+                            beginAtZero: true,
+                            max: limiteViews,
+                            title: { display: true, text: 'Views (bilhões)', color: '#7C3AED' },
+                            ticks: { maxTicksLimit: 5, callback: function (v) { return v.toLocaleString('pt-BR'); } }
+                        },
+                        y2: {
+                            position: 'right',
+                            beginAtZero: true,
+                            max: limiteLikes,
+                            title: { display: true, text: 'Likes (milhões)', color: '#C4B5FD' },
+                            grid: { drawOnChartArea: false },
+                            ticks: { maxTicksLimit: 5, callback: function (v) { return v.toLocaleString('pt-BR'); } }
+                        }
+                    }
+                }
+            });
+
+            new Chart(graficoSpotify, {
+                type: 'bar',
+                data: {
+                    labels: labelsSpotify,
+                    datasets: [
+                        { label: 'Streamings (bilhões)', data: streamsSpotify, backgroundColor: '#A855F7', borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: { callbacks: { title: function (itens) { return nomesSpotify[itens[0].dataIndex]; } } }
+                    },
+                    scales: {
+                        x: { ticks: { autoSkip: false, minRotation: 45, maxRotation: 45, font: { size: 8 } } },
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Streamings (bilhões)', color: '#A855F7' },
+                            ticks: { maxTicksLimit: 5, callback: function (v) { return v.toLocaleString('pt-BR'); } }
+                        }
+                    }
+                }
+            });
+
+            // Donut: média de views por música em cada tipo de lançamento
+            let nomesTipos = [], medias = [], quantidades = [];
+            let somaViews = 0, somaMusicas = 0;
+
+            for (let i = 0; i < tiposLancamento.length; i++) {
+                let t = tiposLancamento[i];
+                nomesTipos.push(t.nome);
+                medias.push(t.totalViews / t.quantidade);
+                quantidades.push(t.quantidade);
+                somaViews += t.totalViews;
+                somaMusicas += t.quantidade;
+            }
+
+            let mediaGeral = somaViews / somaMusicas;
+
+            let textoCentro = {
+                id: 'textoCentro',
+                afterDraw(chart) {
+                    let ctx = chart.ctx;
+                    let x = (chart.chartArea.left + chart.chartArea.right) / 2;
+                    let y = (chart.chartArea.top + chart.chartArea.bottom) / 2;
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.font = 'bold 22px Arial';
+                    ctx.fillText(formatarViews(mediaGeral), x, y - 8);
+                    ctx.fillStyle = '#C4B5FD';
+                    ctx.font = '11px Arial';
+                    ctx.fillText('média/música', x, y + 14);
+                    ctx.restore();
+                }
+            };
+
+            new Chart(graficoLancamento, {
+                type: 'doughnut',
+                data: {
+                    labels: nomesTipos,
+                    datasets: [{
+                        data: medias,
+                        backgroundColor: ['#7C3AED', '#A855F7', '#4F46E5', '#C4B5FD'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '68%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } },
+                        tooltip: {
+                            displayColors: false,
+                            bodyFont: { size: 11 },
+                            titleFont: { size: 12 },
+                            callbacks: {
+                                label: function (item) {
+                                    return 'Média: ' + formatarViews(item.raw);
+                                },
+                                afterLabel: function (item) {
+                                    return 'Músicas: ' + quantidades[item.dataIndex].toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [textoCentro]
+            });
+        }
+
+        window.addEventListener('load', carregarGraficos);
+    </script>
+</body>
+
+</html>

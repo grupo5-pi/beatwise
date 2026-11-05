@@ -154,4 +154,31 @@ function salvarColuna(i) {
     });
 }
 
+function carregarUsuario() {
+    let nome = sessionStorage.getItem('NOME_USUARIO');
+
+    if (nome == null) {
+        nome = 'Usuário';
+    }
+
+    document.getElementById('saudacao').textContent = 'Olá, ' + nome + '!';
+    document.getElementById('nome-usuario').textContent = nome;
+}
+
+desenharColunas();
+
+const sidebar = document.getElementById('sidebar');
+
+sidebar.addEventListener('click', () => {
+    sidebar.classList.add('expandida');
+});
+
+document.addEventListener('click', (evento) => {
+    const clicouFora = !sidebar.contains(evento.target);
+
+    if (clicouFora) {
+        sidebar.classList.remove('expandida');
+    }
+});
+
 desenharColunas();

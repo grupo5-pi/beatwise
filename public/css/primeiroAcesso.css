@@ -1,0 +1,135 @@
+.primeiro-acesso {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    height: auto;
+    padding: 24px 16px;
+    background-image: url(../assets/imgs/fundoLogin.jpeg);
+    background-size: cover;
+    background-position: center;
+}
+
+.pa-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 480px;
+    padding: 32px 28px;
+    background-color: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(197, 157, 255, 0.35);
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.pa-logo {
+    width: 220px;
+    max-width: 70%;
+    margin-bottom: 18px;
+}
+
+.pa-modal h1 {
+    font-size: 28px;
+}
+
+.pa-subtitulo {
+    margin: 6px 0 18px;
+    font-size: 15px;
+    opacity: 0.85;
+    text-align: center;
+}
+
+.pa-formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.pa-formulario input {
+    width: 100%;
+    min-height: 50px;
+    margin: 4px 0 8px;
+    padding: 0 0 0 14px;
+    background-color: transparent;
+    border: solid transparent;
+    border-bottom: solid 3px rgba(255, 255, 255, 0.45);
+    color: white;
+    font-size: 18px;
+    transition: 0.6s ease;
+}
+
+.pa-formulario input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    transition: 0.6s ease;
+}
+
+.pa-formulario input:hover,
+.pa-formulario input:focus {
+    outline: none;
+    border-bottom: solid 3px var(--roxo-claro);
+}
+
+.pa-formulario input:hover::placeholder,
+.pa-formulario input:focus::placeholder {
+    color: var(--roxo-claro);
+}
+
+.pa-dica {
+    width: 100%;
+    margin: 2px 0 6px;
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+.pa-formulario #mensagem1 {
+    max-width: 100%;
+    margin: 6px 0 0;
+    line-height: 24px;
+}
+
+.pa-formulario #mensagem1 .erro,
+.pa-formulario #mensagem1 .realizado {
+    font-size: 16px;
+}
+
+.pa-formulario button {
+    width: 100%;
+    max-width: 260px;
+    height: 50px;
+    margin: 16px 0 6px;
+    background: linear-gradient(90deg, var(--roxo-claro) 0%, var(--roxo-escuro) 50%, rgba(0, 0, 0, 1) 100%);
+    background-position: left;
+    background-size: 200% 100%;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.9s ease;
+}
+
+.pa-formulario button:hover {
+    background-position: right;
+    border: solid 1px white;
+    transition: 0.7s ease-in-out;
+}
+
+.pa-formulario button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.pa-link {
+    margin-top: 8px;
+    color: var(--roxo-claro);
+    font-size: 15px;
+}
+
+.pa-link:hover {
+    text-decoration: underline;
+}

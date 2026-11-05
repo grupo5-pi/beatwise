@@ -1,6 +1,16 @@
 function continuar() {
-    document.getElementById("formulario1").style.display = "none";
-    document.getElementById("formulario2").style.display = "flex";
+    // Valida todos os campos do passo 1 antes de deixar avançar
+    validarRazaoSocial();
+    validarEmailEmpresa();
+    validarCNPJ();
+    validarTelefone();
+
+    if (validacaoRazaoSocial && validacaoEmailEmpresa && validacaoCNPJ && validacaoTelefone) {
+        document.getElementById("formulario1").style.display = "none";
+        document.getElementById("formulario2").style.display = "flex";
+    } else {
+        mensagem1.innerHTML = '<span class="erro">Preencha todos os campos corretamente antes de continuar!</span>';
+    }
 }
 
 function voltar() {
@@ -9,7 +19,6 @@ function voltar() {
 }
 
 function mascaraCNPJ(input) {
-
     let valor = input.value.replace(/\D/g, "");
 
     valor = valor.replace(/^(\d{2})(\d)/, "$1.$2");
@@ -44,7 +53,7 @@ function validarRazaoSocial() {
         mensagem1.innerHTML = '';
     } else {
         validacaoRazaoSocial = false;
-        mensagem1.innerHTML = '<span class="erro">Digite uma razão social válida (mínimo 3 caracteres';
+        mensagem1.innerHTML = '<span class="erro">Digite uma razão social válida (mínimo 3 caracteres)</span>';
     }
 }
 
@@ -56,7 +65,7 @@ function validarEmailEmpresa() {
         mensagem1.innerHTML = '';
     } else {
         validacaoEmailEmpresa = false;
-        mensagem1.innerHTML = '<span class="erro">Digite um email válido (Ex: beatwise@mail.com';
+        mensagem1.innerHTML = '<span class="erro">Digite um email válido (Ex: beatwise@mail.com)</span>';
     }
 }
 
@@ -65,7 +74,7 @@ function validarCNPJ() {
 
     if (cnpj.length < 18) {
         validacaoCNPJ = false;
-        mensagem1.innerHTML = '<span class="erro">Digite um CNPJ válido (Ex: 12.345.678/0001-90)';
+        mensagem1.innerHTML = '<span class="erro">Digite um CNPJ válido (Ex: 12.345.678/0001-90)</span>';
     } else {
         validacaoCNPJ = true;
         mensagem1.innerHTML = '';
@@ -73,10 +82,10 @@ function validarCNPJ() {
 }
 
 function validarTelefone() {
-    let telefone = input_telefone.value
+    let telefone = input_telefone.value;
     if (telefone.length < 14) {
         validacaoTelefone = false;
-        mensagem1.innerHTML = `<span class="erro">Digite um telefone válido (Ex: (11) 12345-6789)`;
+        mensagem1.innerHTML = `<span class="erro">Digite um telefone válido (Ex: (11) 12345-6789)</span>`;
     } else {
         validacaoTelefone = true;
         mensagem1.innerHTML = '';
@@ -91,7 +100,7 @@ function validarNome() {
         mensagem2.innerHTML = '';
     } else {
         validacaoNome = false;
-        mensagem2.innerHTML = '<span class="erro">Digite um nome válido (mínimo 3 caracteres';
+        mensagem2.innerHTML = '<span class="erro">Digite um nome válido (mínimo 3 caracteres)</span>';
     }
 }
 
@@ -103,7 +112,7 @@ function validarEmail() {
         mensagem2.innerHTML = '';
     } else {
         validacaoEmail = false;
-        mensagem2.innerHTML = '<span class="erro">Digite um email válido (Ex: fulano@mail.com';
+        mensagem2.innerHTML = '<span class="erro">Digite um email válido (Ex: fulano@mail.com)</span>';
     }
 }
 
@@ -131,7 +140,7 @@ function validarSenha() {
         mensagem2.innerHTML = '';
     } else {
         validacaoSenha = false;
-        mensagem2.innerHTML = `<span class="erro">A senha deve ter no mínimo 8 caracteres, caractere especial, um número, letra maiúscula e minúscula.`
+        mensagem2.innerHTML = `<span class="erro">A senha deve ter no mínimo 8 caracteres, caractere especial, um número, letra maiúscula e minúscula.</span>`;
     }
 }
 
@@ -139,16 +148,18 @@ function validarConfirmSenha() {
     let senha = input_senha.value;
     let confirSenha = input_confirmar_senha.value;
 
-    if (senha == confirSenha) {
+    if (senha == confirSenha && senha.length > 0) {
         validacaoConfirmSenha = true;
         mensagem2.innerHTML = '';
     } else {
-        mensagem2.innerHTML = `<span class="erro">As senhas não estão iguais!`;
+        mensagem2.innerHTML = `<span class="erro">As senhas não estão iguais!</span>`;
         validacaoConfirmSenha = false;
     }
 }
 
 function cadastrar() {
+    // Se quiser debugar, descomente a linha abaixo para ver quais validações estão false no console do navegador (F12)
+    // console.log({ r: validacaoRazaoSocial, ep: validacaoEmailEmpresa, c: validacaoCNPJ, t: validacaoTelefone, n: validacaoNome, e: validacaoEmail, s: validacaoSenha, cs: validacaoConfirmSenha });
 
     if (validacaoRazaoSocial && validacaoEmailEmpresa && validacaoCNPJ && validacaoTelefone && validacaoNome && validacaoEmail && validacaoSenha && validacaoConfirmSenha) {
         let nome = input_nome.value;
@@ -178,12 +189,19 @@ function cadastrar() {
             .then(function (resposta) {
                 console.log("resposta: ", resposta);
                 if (resposta.ok) {
-                    mensagem2.innerHTML = `<span class="realizado">Seu cadastro foi realizado com sucesso!`
-                    window.location.href = 'login.html';
-
+                    mensagem2.innerHTML = `<span class="realizado">Seu cadastro foi realizado com sucesso!</span>`;
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
                 } else {
                     throw "Houve um erro ao tentar realizar o cadastro!";
                 }
+            })
+            .catch(function (erro) {
+                console.error(erro);
+                mensagem2.innerHTML = `<span class="erro">${erro}</span>`;
             });
+    } else {
+        mensagem2.innerHTML = `<span class="erro">Preencha todos os campos corretamente antes de cadastrar!</span>`;
     }
 }
