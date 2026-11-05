@@ -1,19 +1,66 @@
-var database = require("../database/config")
+var database = require("../database/config");
 
-// Coloque os mesmos parâmetros aqui. Vá para a var instrucaoSql
-function salvarNotificacao(nome, email, senha, razaoSocial, emailEmpresa, cnpj, telefone) {
-    console.log("ACESSEI O notificacao MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function salvarNotificacao():");
-    
-    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
-    //  e na ordem de inserção dos dados.
-    var instrucaoSql = `
-        INSERT INTO empresa (razaoSocial, email, cnpj, telefone) VALUES ('${razaoSocial}', '${emailEmpresa}', '${cnpj}', '${telefone}');
-        INSERT INTO funcionario (nome, email, senha, fkCargo, fkEmpresa) SELECT '${nome}', '${email}', '${senha}', 2, id FROM empresa WHERE razaoSocial = '${razaoSocial}' LIMIT 1;
+var temas = [
+    { chave: "acesso", tabela: "notificacao_acesso", colunas: ["usuario", "data", "horario", "paginas"] },
+    { chave: "atualizacoes", tabela: "notificacao_atualizacoes", colunas: ["novas_funcionalidades", "correcoes", "manutencoes", "versoes"] },
+    { chave: "frequencia", tabela: "notificacao_frequencia", colunas: ["diaria", "semanal", "mensal"] },
+    { chave: "informativas", tabela: "notificacao_informativas", colunas: ["novidades", "dicas", "comunicados", "eventos"] }
+];
+
+function buscarTema(chave) {
+    for (var i = 0; i < temas.length; i++) {
+        if (temas[i].chave === chave) {
+            return temas[i];
+        }
+    }
+    return null;
+}
+
+function salvarNotificacao(fkFuncionario, chaveTema, opcoes) {
+    console.log("ACESSEI O notificacao MODEL \n function salvarNotificacao():");
+
+    var tema = buscarTema(chaveTema);
+    var colunas = "";
+    var valores = "";
+    var atualizacoes = "";
+
+    for (var i = 0; i < tema.colunas.length; i++) {
+        var valor = 0;
+        if (opcoes[i] === true || opcoes[i] === 1) {
+            valor = 1;
+        }
+
+        if (i > 0) {
+            colunas += ", ";
+            valores += ", ";
+            atualizacoes += ", ";
+        }
+
+        colunas += tema.colunas[i];
+        valores += valor;
+        atualizacoes += tema.colunas[i] + " = " + valor;
+    }
+
+    var instrucaoNotificacao = `
+        INSERT INTO notificacao (fkFuncionario)
+        SELECT ${fkFuncionario} FROM DUAL
+        WHERE NOT EXISTS (SELECT 1 FROM notificacao WHERE fkFuncionario = ${fkFuncionario});
     `;
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+
+    var instrucaoTema = `
+        INSERT INTO ${tema.tabela} (${colunas}, fkNotificacao)
+        SELECT ${valores}, id FROM notificacao WHERE fkFuncionario = ${fkFuncionario} LIMIT 1
+        ON DUPLICATE KEY UPDATE ${atualizacoes};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoNotificacao + instrucaoTema);
+
+    return database.executar(instrucaoNotificacao).then(function () {
+        return database.executar(instrucaoTema);
+    });
 }
 
 module.exports = {
-   salvarNotificacao
+    buscarTema,
+    salvarNotificacao
 };
