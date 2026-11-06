@@ -102,54 +102,7 @@
 
         <div class="rec-painel">
             <div id="rec-lista" class="rec-cards rec-cards-lista">
-                <div class="rec-card" data-genero="Pop" data-energia="72" data-danca="65" data-bpm-min="90" data-bpm-max="130" data-tom="C" data-anos="2">
-                    <span class="rec-card-nome">Recomendação 1</span>
-                    <span class="rec-card-info">Dua Lipa, Luísa Sonza, Veigh</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
-                </div>
-                <div class="rec-card" data-genero="Rap" data-energia="80" data-danca="60" data-bpm-min="120" data-bpm-max="160" data-tom="D" data-anos="1">
-                    <span class="rec-card-nome">Recomendação 2</span>
-                    <span class="rec-card-info">The Weeknd, Anitta, Matuê</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
-                </div>
-                <div class="rec-card" data-genero="Pop" data-energia="55" data-danca="70" data-bpm-min="80" data-bpm-max="120" data-tom="G" data-anos="3">
-                    <span class="rec-card-nome">Recomendação 3</span>
-                    <span class="rec-card-info">Taylor Swift, Jão, Billie Eilish</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
-                </div>
-                <div class="rec-card" data-genero="Sertanejo" data-energia="50" data-danca="55" data-bpm-min="85" data-bpm-max="125" data-tom="A" data-anos="2">
-                    <span class="rec-card-nome">Recomendação 4</span>
-                    <span class="rec-card-info">Bruno Mars, Ed Sheeran, Post Malone</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
-                </div>
-                <div class="rec-card" data-genero="Funk" data-energia="85" data-danca="80" data-bpm-min="110" data-bpm-max="140" data-tom="C#" data-anos="1">
-                    <span class="rec-card-nome">Recomendação 5</span>
-                    <span class="rec-card-info">Marília Mendonça, Michel Teló, Anitta</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
-                </div>
-                <div class="rec-card" data-genero="Rap" data-energia="75" data-danca="50" data-bpm-min="130" data-bpm-max="170" data-tom="F#" data-anos="4">
-                    <span class="rec-card-nome">Recomendação 6</span>
-                    <span class="rec-card-info">Drake, Travis Scott, Veigh</span>
-                    <div class="rec-card-acoes">
-                        <button type="button" class="rec-botao" onclick="editar(this)">Editar</button>
-                        <button type="button" class="rec-botao rec-botao-excluir" onclick="excluir(this)">Excluir</button>
-                    </div>
-                </div>
+                <!-- MUDOU: os cards agora são criados pelo featsCadastrados.js com os feats salvos no banco -->
             </div>
         </div>
     </main>
@@ -196,18 +149,18 @@
                     <label for="edit_tom">Tonalidade</label>
                     <select id="edit_tom">
                         <option value="">Qualquer tonalidade</option>
-                        <option>C</option>
-                        <option>C#</option>
-                        <option>D</option>
-                        <option>D#</option>
-                        <option>E</option>
-                        <option>F</option>
-                        <option>F#</option>
-                        <option>G</option>
-                        <option>G#</option>
-                        <option>A</option>
-                        <option>A#</option>
-                        <option>B</option>
+                        <option value="0">C</option>
+                        <option value="1">C#</option>
+                        <option value="2">D</option>
+                        <option value="3">D#</option>
+                        <option value="4">E</option>
+                        <option value="5">F</option>
+                        <option value="6">F#</option>
+                        <option value="7">G</option>
+                        <option value="8">G#</option>
+                        <option value="9">A</option>
+                        <option value="10">A#</option>
+                        <option value="11">B</option>
                     </select>
                 </div>
             </div>

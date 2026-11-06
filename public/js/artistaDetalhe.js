@@ -1,50 +1,54 @@
-let artistas = [
-    {
-        nome: 'Dua Lipa',
-        generos: ['Pop', 'Eletrônico'],
-        streams: '1,2 bi', views: '515 mi', curtidas: '9,6 mi', comentarios: '205 mil',
-        perfil: [['Dançabilidade', 52], ['Energia', 64], ['Valência', 40], ['Acústica', 13], ['Instrumentalidade', 7]],
-        bpm: '96 BPM', duracao: '3min 5s'
-    },
-    {
-        nome: 'Luísa Sonza',
-        generos: ['Funk', 'Pop'],
-        streams: '7,33 bi', views: '6,03 bi', curtidas: '48 mi', comentarios: '2,1 mi',
-        perfil: [['Dançabilidade', 72], ['Energia', 86], ['Valência', 46], ['Acústica', 41], ['Instrumentalidade', 4]],
-        bpm: '121 BPM', duracao: '3min 46s'
-    },
-    {
-        nome: 'Veigh',
-        generos: ['Rap', 'Hip Hop'],
-        streams: '14,8 bi', views: '7,6 bi', curtidas: '36 mi', comentarios: '2,6 mi',
-        perfil: [['Dançabilidade', 78], ['Energia', 69], ['Valência', 71], ['Acústica', 36], ['Instrumentalidade', 11]],
-        bpm: '158 BPM', duracao: '4min 0s'
+function formatarNumero(n) {
+    if (n >= 1000000000) {
+        return (n / 1000000000).toFixed(2).replace(".", ",") + " bi";
+    } else if (n >= 1000000) {
+        return (n / 1000000).toFixed(1).replace(".", ",") + " mi";
+    } else if (n >= 1000) {
+        return Math.round(n / 1000) + " mil";
     }
-];
+    return String(n);
+}
 
-function abrirModalArtista(posicao) {
-    let artista = artistas[posicao];
+function formatarDuracao(ms) {
+    let segundos = Math.round(ms / 1000);
+    return Math.floor(segundos / 60) + "min " + (segundos % 60) + "s";
+}
 
+function buscarArtista(id) {
+    return fetch("/artistas/" + id).then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error("Artista não encontrado");
+        }
+        return resposta.json();
+    });
+}
+
+function preencherArtista(artista) {
     nome_artista.textContent = artista.nome;
 
-    stat_streams.textContent = artista.streams;
-    stat_views.textContent = artista.views;
-    stat_curtidas.textContent = artista.curtidas;
-    stat_comentarios.textContent = artista.comentarios;
+    stat_streams.textContent = formatarNumero(artista.streams);
+    stat_views.textContent = formatarNumero(artista.views);
+    stat_curtidas.textContent = formatarNumero(artista.curtidas);
+    stat_comentarios.textContent = formatarNumero(artista.comentarios);
 
-    info_bpm.textContent = artista.bpm;
-    info_duracao.textContent = artista.duracao;
+    info_bpm.textContent = artista.bpm + ' BPM';
+    info_duracao.textContent = formatarDuracao(artista.duracaoMs);
 
+    // gêneros: ficam vazios até a API de gênero ser conectada
     tags_artista.innerHTML = '';
     perfil_sonoro.innerHTML = '';
 
-    for (let i = 0; i < artista.generos.length; i++) {
-        tags_artista.innerHTML += `<span class="art-tag">${artista.generos[i]}</span>`;
-    }
+    let perfil = [
+        ['Dançabilidade', artista.perfil.dancabilidade],
+        ['Energia', artista.perfil.energia],
+        ['Valência', artista.perfil.valencia],
+        ['Acústica', artista.perfil.acustica],
+        ['Instrumentalidade', artista.perfil.instrumentalidade]
+    ];
 
-    for (let i = 0; i < artista.perfil.length; i++) {
-        let nome = artista.perfil[i][0];
-        let valor = artista.perfil[i][1];
+    for (let i = 0; i < perfil.length; i++) {
+        let nome = perfil[i][0];
+        let valor = perfil[i][1];
 
         perfil_sonoro.innerHTML += `
             <div>
@@ -57,10 +61,31 @@ function abrirModalArtista(posicao) {
                 </div>
             </div>`;
     }
+}
 
-    modal_artista.style.display = 'flex';
+function abrirModalArtista(id) {
+    buscarArtista(id).then(function (artista) {
+        preencherArtista(artista);
+        modal_artista.style.display = 'flex';
+    }).catch(function (erro) {
+        console.log(erro);
+        alert("Não foi possível carregar os detalhes do artista.");
+    });
 }
 
 function fecharModalArtista() {
     modal_artista.style.display = 'none';
+}
+
+function carregarArtista() {
+    let id = new URLSearchParams(window.location.search).get("id");
+
+    buscarArtista(id).then(function (artista) {
+        preencherArtista(artista);
+        info_artista.textContent = artista.totalMusicas + " músicas na base";
+        avatar_artista.textContent = artista.nome.charAt(0);
+    }).catch(function (erro) {
+        console.log(erro);
+        nome_artista.textContent = "Artista não encontrado";
+    });
 }
