@@ -20,6 +20,8 @@ var usuarioRouter = require("./src/routes/usuarios");
 var funcionarioRouter = require("./src/routes/funcionarioRoutes");
 var cadastroFuncionarioRouter = require("./src/routes/cadastroFuncionarioRoutes");
 var primeiroAcessoRouter = require("./src/routes/primeiroAcessoRoutes");
+var featRouter = require("./src/routes/featRoutes");
+var artistaRouter = require("./src/routes/artistaRoutes");
 
 
 app.use(express.json({ limit: "2mb" }));
@@ -33,6 +35,8 @@ app.use("/usuarios", usuarioRouter);
 app.use("/funcionarios", funcionarioRouter); 
 app.use("/cadastroFuncionario", cadastroFuncionarioRouter);
 app.use("/primeiroAcesso", primeiroAcessoRouter);
+app.use("/feats", featRouter);
+app.use("/artistas", artistaRouter);
 
 
 app.listen(PORTA_APP, function () {
