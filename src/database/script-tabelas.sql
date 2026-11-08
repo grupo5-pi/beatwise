@@ -224,3 +224,7 @@ VALUES
     ('Responsável', 'empresa@beatwise.com', 'Empresa123#', 1, 2, 1),
     ('Produtor', 'produtor@beatwise.com', 'Produtor123#', 1, 3, 2),
     ('Marketing', 'marketing@beatwise.com', 'Marketing123#', 1, 4, 2);
+    
+ALTER TABLE musicaBD
+  ADD COLUMN genero VARCHAR(45) NULL,
+  ADD COLUMN statusItunes TINYINT NOT NULL DEFAULT 0;
