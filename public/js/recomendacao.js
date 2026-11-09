@@ -31,7 +31,7 @@ function gerarRecomendacao() {
         if (resposta.ok) {
             resposta.json().then(function (lista) {
                 if (lista.length == 0) {
-                    mostrarErroFiltros("Nenhum artista encontrado com esses filtros. Tente ampliar o BPM.");
+                    mostrarErroFiltros("Nenhum artista encontrado com esses filtros. Tente ampliar o BPM ou o intervalo de anos.");
                     return;
                 }
 

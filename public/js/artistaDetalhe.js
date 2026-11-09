@@ -34,8 +34,10 @@ function preencherArtista(artista) {
     info_bpm.textContent = artista.bpm + ' BPM';
     info_duracao.textContent = formatarDuracao(artista.duracaoMs);
 
-    // gêneros: ficam vazios até a API de gênero ser conectada
     tags_artista.innerHTML = '';
+    for (let i = 0; i < artista.generos.length; i++) {
+        tags_artista.innerHTML += `<span class="art-tag">${artista.generos[i]}</span>`;
+    }
     perfil_sonoro.innerHTML = '';
 
     let perfil = [
@@ -82,7 +84,8 @@ function carregarArtista() {
 
     buscarArtista(id).then(function (artista) {
         preencherArtista(artista);
-        info_artista.textContent = artista.totalMusicas + " músicas na base";
+        let ultimo = artista.ultimoLancamento ? " · último lançamento em " + artista.ultimoLancamento : "";
+        info_artista.textContent = artista.totalMusicas + " músicas na base" + ultimo;
         avatar_artista.textContent = artista.nome.charAt(0);
     }).catch(function (erro) {
         console.log(erro);

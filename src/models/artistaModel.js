@@ -4,6 +4,7 @@ function buscarPorId(id) {
     var instrucaoSql = `
         SELECT a.id, a.nome,
             COUNT(DISTINCT m.id) AS totalMusicas,
+            MAX(m.anoLancamento) AS ultimoAno,
             SUM(s.fluxo) AS streams,
             SUM(y.visitas) AS views,
             SUM(y.curtidas) AS curtidas,
@@ -26,4 +27,16 @@ function buscarPorId(id) {
     return database.executar(instrucaoSql, [id]);
 }
 
-module.exports = { buscarPorId };
+function generosDoArtista(id) {
+    var instrucaoSql = `
+        SELECT m.generoPadrao AS genero, COUNT(*) AS qtd
+        FROM musicaArtistaBD ma
+        JOIN musicaBD m ON m.id = ma.fkMusicaBD
+        WHERE ma.fkArtistaBD = ? AND m.generoPadrao IS NOT NULL
+        GROUP BY m.generoPadrao
+        ORDER BY qtd DESC;
+    `;
+    return database.executar(instrucaoSql, [id]);
+}
+
+module.exports = { buscarPorId, generosDoArtista };

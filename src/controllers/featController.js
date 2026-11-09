@@ -84,6 +84,16 @@ async function recomendar(req, res) {
     }
 }
 
+async function listarGeneros(req, res) {
+    try {
+        var linhas = await model.listarGeneros();
+        res.json(linhas.map(function (l) { return l.genero; }));
+    } catch (erro) {
+        console.log(erro);
+        res.status(500).json({ mensagem: "Erro ao carregar os gêneros." });
+    }
+}
+
 async function listar(req, res) {
     var idFuncionario = idValido(req.params.idFuncionario);
     if (!idFuncionario) return res.status(400).json({ mensagem: "Funcionário inválido." });
@@ -159,4 +169,4 @@ async function excluir(req, res) {
     }
 }
 
-module.exports = { recomendar, listar, cadastrar, atualizar, excluir };
+module.exports = { recomendar, listarGeneros, listar, cadastrar, atualizar, excluir };

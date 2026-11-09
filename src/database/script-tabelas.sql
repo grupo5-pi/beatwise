@@ -234,3 +234,29 @@ ALTER TABLE sugestaoFeat
   ADD COLUMN bpmMax INT NULL,
   ADD COLUMN tonalidade INT NULL,
   ADD COLUMN intervaloAnos INT NULL;
+
+  ALTER TABLE musicaBD
+  ADD COLUMN generoPadrao VARCHAR(45) NULL;
+
+UPDATE musicaBD SET generoPadrao = CASE
+    WHEN genero IS NULL THEN NULL
+    WHEN genero LIKE '%christmas%' OR genero LIKE '%holiday%' OR genero = 'Soundtrack' THEN 'Outros'
+    WHEN genero LIKE '%indian%' OR genero LIKE '%bollywood%'
+         OR genero IN ('Tamil', 'Telugu', 'Hindi', 'Punjabi') THEN 'Indiano'
+    WHEN genero LIKE '%afrobeat%' THEN 'Afrobeats'
+    WHEN genero LIKE '%latin%' OR genero LIKE '%latino%' OR genero LIKE '%tropical%'
+         OR genero LIKE '%mexican%' OR genero LIKE '%reggaeton%' OR genero = 'Flamenco' THEN 'Latino'
+    WHEN genero LIKE '%reggae%' OR genero LIKE '%dancehall%' THEN 'Reggae'
+    WHEN genero LIKE '%sertanej%' THEN 'Sertanejo'
+    WHEN genero LIKE '%funk%' THEN 'Funk'
+    WHEN genero LIKE '%hip-hop%' OR genero = 'Rap' THEN 'Rap'
+    WHEN genero LIKE '%r&b%' OR genero LIKE '%soul%' THEN 'R&B/Soul'
+    WHEN genero LIKE '%electro%' OR genero LIKE '%dance%' OR genero IN ('House', 'Techno') THEN 'Eletrônica'
+    WHEN genero LIKE '%country%' THEN 'Country'
+    WHEN genero LIKE '%jazz%' THEN 'Jazz'
+    WHEN genero LIKE '%pop%' THEN 'Pop'
+    WHEN genero LIKE '%rock%' OR genero LIKE '%metal%'
+         OR genero IN ('Alternative', 'Punk', 'Grunge') THEN 'Rock'
+    ELSE 'Outros'
+END
+WHERE id > 0 AND statusItunes = 1;

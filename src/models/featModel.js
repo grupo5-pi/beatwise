@@ -6,6 +6,9 @@ var database = require("../database/config");
 //   energia (15)      clima da música
 //   dançabilidade (15) clima da música
 //   tonalidade (10)   a menos crítica, pois da para ajustar o tom em estúdio
+//
+// O intervalo de anos NÃO entra na pontuação: é um filtro obrigatório
+// Se o usuário não preencher, é ignorado.
 
 var PESOS = { genero: 35, bpm: 25, energia: 15, dancabilidade: 15, tonalidade: 10 };
 
@@ -13,8 +16,14 @@ var TOLERANCIA_BPM = 30;
 
 
 function notaGenero(a, generoPedido) {
-    if (!generoPedido || !a.generos) return null;
-    return a.generos.indexOf(generoPedido) >= 0 ? 1 : 0;
+    if (!generoPedido || !a.generos || a.totalGeneros == 0) return null;
+    return (a.generos[generoPedido] || 0) / a.totalGeneros;
+}
+
+function dentroDoIntervalo(a, f) {
+    if (f.intervaloAnos === null || f.intervaloAnos === undefined) return true;
+    if (a.ultimoAno === null) return false;
+    return new Date().getFullYear() - a.ultimoAno <= f.intervaloAnos;
 }
 
 function notaBpm(a, f) {
@@ -58,6 +67,7 @@ function pontuar(a, f) {
 function perfisDosArtistas() {
     var instrucaoSql = `
         SELECT a.id, a.nome,
+            MAX(m.anoLancamento) AS ultimoAno,
             AVG(s.tempoBPM) AS bpm,
             AVG(s.energia) AS energia,
             AVG(s.dancabilidade) AS dancabilidade,
@@ -70,14 +80,46 @@ function perfisDosArtistas() {
               LIMIT 1) AS tonalidade
         FROM artistaBD a
         JOIN musicaArtistaBD ma ON ma.fkArtistaBD = a.id
+        JOIN musicaBD m ON m.id = ma.fkMusicaBD
         JOIN spotifyBD s ON s.fkMusicaBD = ma.fkMusicaBD
         GROUP BY a.id, a.nome;
     `;
     return database.executar(instrucaoSql);
 }
 
+function generosDosArtistas() {
+    var instrucaoSql = `
+        SELECT ma.fkArtistaBD AS idArtista, m.generoPadrao AS genero, COUNT(*) AS qtd
+        FROM musicaArtistaBD ma
+        JOIN musicaBD m ON m.id = ma.fkMusicaBD
+        WHERE m.generoPadrao IS NOT NULL
+        GROUP BY ma.fkArtistaBD, m.generoPadrao;
+    `;
+    return database.executar(instrucaoSql);
+}
+
+function listarGeneros() {
+    var instrucaoSql = `
+        SELECT generoPadrao AS genero, COUNT(*) AS qtd
+        FROM musicaBD
+        WHERE generoPadrao IS NOT NULL AND generoPadrao <> 'Outros'
+        GROUP BY generoPadrao
+        ORDER BY generoPadrao;
+    `;
+    return database.executar(instrucaoSql);
+}
+
 async function recomendar(f) {
     var linhas = await perfisDosArtistas();
+    var linhasGenero = await generosDosArtistas();
+
+    var generosPorArtista = {};
+    for (var g = 0; g < linhasGenero.length; g++) {
+        var lg = linhasGenero[g];
+        if (!generosPorArtista[lg.idArtista]) generosPorArtista[lg.idArtista] = { total: 0, porGenero: {} };
+        generosPorArtista[lg.idArtista].porGenero[lg.genero] = Number(lg.qtd);
+        generosPorArtista[lg.idArtista].total += Number(lg.qtd);
+    }
 
     var artistas = linhas.map(function (l) {
         var a = {
@@ -86,11 +128,15 @@ async function recomendar(f) {
             bpm: Number(l.bpm),
             energia: Number(l.energia),
             dancabilidade: Number(l.dancabilidade),
-            tonalidade: l.tonalidade === null ? null : Number(l.tonalidade)
-            // generos: colocar depois
+            tonalidade: l.tonalidade === null ? null : Number(l.tonalidade),
+            ultimoAno: l.ultimoAno === null ? null : Number(l.ultimoAno),
+            generos: generosPorArtista[l.id] ? generosPorArtista[l.id].porGenero : null,
+            totalGeneros: generosPorArtista[l.id] ? generosPorArtista[l.id].total : 0
         };
         a.compatibilidade = pontuar(a, f);
         return a;
+    }).filter(function (a) {
+        return dentroDoIntervalo(a, f);
     });
 
     artistas.sort(function (x, y) {
@@ -156,4 +202,4 @@ function excluir(id, idFuncionario) {
     return database.executar(instrucaoSql, [id, idFuncionario]);
 }
 
-module.exports = { recomendar, pontuar, listar, cadastrar, atualizar, excluir };
+module.exports = { recomendar, pontuar, listarGeneros, listar, cadastrar, atualizar, excluir };

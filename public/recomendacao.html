@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./css/artistaDetalhe.css">
     <link rel="stylesheet" href="./css/padrao.css">
     <script src="./js/recomendacao.js" defer></script>
+    <script src="./js/generos.js" defer></script>
     <script src="./js/artistaDetalhe.js" defer></script>
     <script src="./js/sidebar.js" defer></script>
     <script src="./js/controleDeAcesso.js"></script>
@@ -22,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body class="rec-page bw" onload="validarAcesso()">
+<body class="rec-page bw" onload="validarAcesso(); carregarGeneros('rec-genero')">
     <aside class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
@@ -108,11 +109,7 @@
                     <label for="rec-genero">Gênero</label>
                     <select id="rec-genero">
                         <option value="">Qualquer gênero</option>
-                        <option value="Pop">Pop</option>
-                        <option value="Rap">Rap</option>
-                        <option value="Funk">Funk</option>
-                        <option value="Sertanejo">Sertanejo</option>
-                        <option value="Eletrônica">Eletrônica</option>
+                    </select>
                     </select>
                 </div>
 

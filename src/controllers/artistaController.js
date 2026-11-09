@@ -12,10 +12,15 @@ async function buscar(req, res) {
         if (linhas.length == 0) return res.status(404).json({ mensagem: "Artista não encontrado." });
 
         var a = linhas[0];
+        var generos = await model.generosDoArtista(id);
+        var ultimoAno = a.ultimoAno === null ? null : Number(a.ultimoAno);
         res.json({
             id: a.id,
             nome: a.nome,
             totalMusicas: Number(a.totalMusicas),
+            generos: generos.slice(0, 3).map(function (g) { return g.genero; }),
+            ultimoLancamento: ultimoAno,
+            intervaloAnos: ultimoAno === null ? null : new Date().getFullYear() - ultimoAno,
             streams: Number(a.streams) || 0,
             views: Number(a.views) || 0,
             curtidas: Number(a.curtidas) || 0,
