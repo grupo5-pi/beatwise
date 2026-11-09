@@ -532,8 +532,12 @@ body.metricas select {
 
 .mensagem {
     min-height: 18px;
-    color: var(--perigo);
+    color: #C4B5FD;
     font-size: var(--fonte-texto);
+}
+
+.mensagem.erro {
+    color: var(--perigo);
 }
 
 .mensagem:empty {

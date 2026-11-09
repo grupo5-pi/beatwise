@@ -1,73 +1,61 @@
-let generos = ["Pop", "R&B", "MPB", "Hip-Hop", "Eletrônica", "Funk", "Samba"];
-
-let caracteristicas = [
-    { chave: "dancabilidade", nome: "Dançabilidade", min: 0, max: 1, passo: 0.01 },
-    { chave: "energia", nome: "Energia", min: 0, max: 1, passo: 0.01 },
-    { chave: "tonalidade", nome: "Tonalidade", min: 0, max: 11, passo: 1 },
-    { chave: "acustica", nome: "Acústica", min: 0, max: 1, passo: 0.01 },
-    { chave: "vivicidade", nome: "Vivacidade", min: 0, max: 1, passo: 0.01 },
-    { chave: "valenciaPositividade", nome: "Valência", min: 0, max: 1, passo: 0.01 },
-    { chave: "tempoBPM", nome: "BPM", min: 0, max: 250, passo: 1 }
-];
+let generos = [];
+let caracteristicas = [];
 
 let anoAtual = new Date().getFullYear();
-let totalBase = 18420;
 
 let analises = [];
 let idEditando = null;
 let idExcluindo = null;
 let periodo = "todos";
+let timerContador = null;
 
-function carregarDoNavegador() {
-    let salvas = localStorage.getItem("metricas_" + sessionStorage.ID_FUNCIONARIO);
-
-    if (salvas) {
-        analises = JSON.parse(salvas);
-    } else {
-        analises = [
-            { id: 1, nome: "Lançamentos – últimos 10 anos", periodo: "10anos", anoInicio: anoAtual - 10, anoFim: anoAtual, generos: [], faixas: {}, data: "2026-09-12" },
-            { id: 2, nome: "Campanha Pop – Verão", periodo: "10anos", anoInicio: anoAtual - 10, anoFim: anoAtual, generos: ["Pop"], faixas: { dancabilidade: [0.65, 1], energia: [0.7, 1] }, data: "2026-09-28" },
-            { id: 3, nome: "Base completa", periodo: "todos", anoInicio: "", anoFim: "", generos: [], faixas: {}, data: "2026-09-02" },
-            { id: 4, nome: "Referência – R&B calmo", periodo: "todos", anoInicio: "", anoFim: "", generos: ["R&B"], faixas: { energia: [0, 0.3] }, data: "2026-10-05" }
-        ];
-
-        for (let i = 0; i < analises.length; i++) {
-            analises[i].musicas = calcularMusicas(analises[i]);
-        }
-
-        salvarNoNavegador();
-    }
+function idFuncionario() {
+    return sessionStorage.getItem("ID_FUNCIONARIO");
 }
 
-function salvarNoNavegador() {
-    localStorage.setItem("metricas_" + sessionStorage.ID_FUNCIONARIO, JSON.stringify(analises));
+function escapar(texto) {
+    return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 }
 
-function calcularMusicas(analise) {
-    let fator = 1;
+function mostrarMensagem(texto, tipo) {
+    let mensagem = document.getElementById("mensagem-form");
+    mensagem.innerHTML = texto;
+    mensagem.classList.toggle("erro", tipo == "erro");
+}
 
-    if (analise.periodo == "5anos") {
-        fator = fator * 0.35;
-    } else if (analise.periodo == "10anos") {
-        fator = fator * 0.55;
-    } else if (analise.periodo == "personalizado" && analise.anoInicio && analise.anoFim) {
-        fator = fator * Math.min(1, (analise.anoFim - analise.anoInicio + 1) / 40);
+async function chamarApi(caminho, opcoes) {
+    let resposta = await fetch(caminho, opcoes);
+    let json = await resposta.json().catch(function () { return {}; });
+
+    if (!resposta.ok) {
+        throw new Error(json.mensagem || "Erro na comunicação com o servidor.");
     }
+    return json;
+}
 
-    if (analise.generos.length > 0) {
-        fator = fator * Math.min(1, analise.generos.length * 0.18);
+function enviarJson(metodo, corpo) {
+    return {
+        method: metodo,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(corpo)
+    };
+}
+
+async function carregarAnalises() {
+    try {
+        analises = await chamarApi("/metricas/funcionario/" + idFuncionario());
+    } catch (erro) {
+        analises = [];
+        document.getElementById("lista-analises").innerHTML =
+            '<div class="vazio"><p>' + escapar(erro.message) + '</p></div>';
+        return;
     }
-
-    for (let i = 0; i < caracteristicas.length; i++) {
-        let c = caracteristicas[i];
-        let faixa = analise.faixas[c.chave];
-
-        if (faixa) {
-            fator = fator * Math.max(0.01, (faixa[1] - faixa[0]) / (c.max - c.min));
-        }
-    }
-
-    return Math.round(totalBase * fator);
+    listarAnalises();
 }
 
 function montarTags(analise) {
@@ -83,7 +71,7 @@ function montarTags(analise) {
 
     for (let i = 0; i < caracteristicas.length; i++) {
         let c = caracteristicas[i];
-        let faixa = analise.faixas[c.chave];
+        let faixa = analise.caracteristicas[c.chave];
 
         if (faixa) {
             if (c.max == 1) {
@@ -108,14 +96,13 @@ function montarTags(analise) {
 
     let html = "";
     for (let i = 0; i < tags.length; i++) {
-        html += '<span class="tag">' + tags[i] + '</span>';
+        html += '<span class="tag">' + escapar(tags[i]) + '</span>';
     }
     return html;
 }
 
 function formatarData(data) {
-    let partes = data.slice(0, 10).split("-");
-    return partes[2] + "/" + partes[1] + "/" + partes[0];
+    return new Date(data).toLocaleDateString("pt-BR");
 }
 
 function listarAnalises() {
@@ -127,13 +114,13 @@ function listarAnalises() {
     });
 
     if (ordem == "recentes") {
-        lista.sort(function (a, b) { return b.data.localeCompare(a.data); });
+        lista.sort(function (a, b) { return new Date(b.dataCriacao) - new Date(a.dataCriacao); });
     } else if (ordem == "antigas") {
-        lista.sort(function (a, b) { return a.data.localeCompare(b.data); });
+        lista.sort(function (a, b) { return new Date(a.dataCriacao) - new Date(b.dataCriacao); });
     } else if (ordem == "nome") {
         lista.sort(function (a, b) { return a.nome.localeCompare(b.nome); });
     } else if (ordem == "musicas") {
-        lista.sort(function (a, b) { return b.musicas - a.musicas; });
+        lista.sort(function (a, b) { return b.totalMusicas - a.totalMusicas; });
     }
 
     let html = "";
@@ -143,12 +130,12 @@ function listarAnalises() {
 
         html += '<article class="card-analise">';
         html += '<div class="info">';
-        html += '<h3>' + a.nome + '</h3>';
+        html += '<h3>' + escapar(a.nome) + '</h3>';
         html += '<div class="tags">' + montarTags(a) + '</div>';
-        html += '<small>Criada em ' + formatarData(a.data) + ' · ' + a.musicas.toLocaleString("pt-BR") + ' músicas</small>';
+        html += '<small>Criada em ' + formatarData(a.dataCriacao) + ' · ' + Number(a.totalMusicas).toLocaleString("pt-BR") + ' músicas</small>';
         html += '</div>';
         html += '<div class="acoes">';
-        html += '<a class="btn primario" href="./dashboardGravadora.html">Ver dashboard</a>';
+        html += '<a class="btn primario" href="./dashboardProdutor.html?analise=' + a.id + '">Ver dashboard</a>';
         html += '<button type="button" class="btn" onclick="editarAnalise(' + a.id + ')">Editar</button>';
         html += '<button type="button" class="btn" onclick="abrirModal(' + a.id + ')">Excluir</button>';
         html += '</div>';
@@ -178,7 +165,7 @@ function mostrarFormulario(titulo) {
     document.getElementById("titulo-pagina").innerHTML = titulo;
     document.getElementById("tela-lista").hidden = true;
     document.getElementById("tela-form").hidden = false;
-    document.getElementById("mensagem-form").innerHTML = "";
+    mostrarMensagem("");
 }
 
 function novaAnalise() {
@@ -187,7 +174,7 @@ function novaAnalise() {
     document.getElementById("aba-nova").classList.add("ativa");
     document.getElementById("btn-excluir-form").hidden = true;
 
-    preencherFormulario({ nome: "", periodo: "todos", anoInicio: "", anoFim: "", generos: [], faixas: {} });
+    preencherFormulario({ nome: "", periodo: "todos", anoInicio: "", anoFim: "", generos: [], caracteristicas: {} });
     mostrarFormulario("Nova Análise");
 }
 
@@ -214,12 +201,12 @@ function preencherFormulario(analise) {
 
     let chips = document.querySelectorAll("#chips-genero .chip");
     for (let i = 0; i < chips.length; i++) {
-        chips[i].classList.toggle("ativo", analise.generos.includes(chips[i].innerText));
+        chips[i].classList.toggle("ativo", analise.generos.includes(chips[i].dataset.genero));
     }
 
     for (let i = 0; i < caracteristicas.length; i++) {
         let c = caracteristicas[i];
-        let faixa = analise.faixas[c.chave] || [c.min, c.max];
+        let faixa = analise.caracteristicas[c.chave] || [c.min, c.max];
         document.getElementById("min-" + c.chave).value = faixa[0];
         document.getElementById("max-" + c.chave).value = faixa[1];
         atualizarSlider(i);
@@ -265,7 +252,7 @@ function generosMarcados() {
     let marcados = [];
     let chips = document.querySelectorAll("#chips-genero .chip.ativo");
     for (let i = 0; i < chips.length; i++) {
-        marcados.push(chips[i].innerText);
+        marcados.push(chips[i].dataset.genero);
     }
     return marcados;
 }
@@ -284,6 +271,20 @@ function faixasEscolhidas() {
     }
 
     return faixas;
+}
+
+function desenharGeneros() {
+    let html = "";
+    for (let i = 0; i < generos.length; i++) {
+        let g = escapar(generos[i].genero);
+        html += '<button type="button" class="chip" data-genero="' + g + '" onclick="trocarGenero(this)">' + g + '</button>';
+    }
+
+    if (generos.length == 0) {
+        html = '<small>Nenhum gênero disponível ainda. Rode a integração do iTunes para preencher os gêneros das músicas.</small>';
+    }
+
+    document.getElementById("chips-genero").innerHTML = html;
 }
 
 function desenharSliders() {
@@ -341,9 +342,8 @@ function atualizarSlider(i) {
 
     document.getElementById("min-" + c.chave).style.zIndex = inicio > 90 ? 4 : 3;
 
-    let casas = c.passo < 1 ? 2 : 0;
-    document.getElementById("texto-min-" + c.chave).innerHTML = "Mín: " + min.toFixed(casas);
-    document.getElementById("texto-max-" + c.chave).innerHTML = "Máx: " + max.toFixed(casas);
+    document.getElementById("texto-min-" + c.chave).innerHTML = "Mín: " + min.toFixed(c.casas);
+    document.getElementById("texto-max-" + c.chave).innerHTML = "Máx: " + max.toFixed(c.casas);
 }
 
 function limparCaracteristicas() {
@@ -363,13 +363,13 @@ function lerFormulario() {
         anoInicio: Number(document.getElementById("ano-inicio").value),
         anoFim: Number(document.getElementById("ano-fim").value),
         generos: generosMarcados(),
-        faixas: faixasEscolhidas()
+        caracteristicas: faixasEscolhidas()
     };
 }
 
 function atualizarContador() {
     let analise = lerFormulario();
-    let semFiltro = analise.periodo == "todos" && analise.generos.length == 0 && Object.keys(analise.faixas).length == 0;
+    let semFiltro = analise.periodo == "todos" && analise.generos.length == 0 && Object.keys(analise.caracteristicas).length == 0;
 
     if (semFiltro) {
         document.getElementById("contador-rotulo").innerHTML = "Músicas na base (sem filtros)";
@@ -377,65 +377,69 @@ function atualizarContador() {
         document.getElementById("contador-rotulo").innerHTML = "Músicas encontradas";
     }
 
-    document.getElementById("contador-valor").innerHTML = calcularMusicas(analise).toLocaleString("pt-BR");
+    if (analise.periodo == "personalizado" && (!analise.anoInicio || !analise.anoFim)) {
+        document.getElementById("contador-valor").innerHTML = "—";
+        return;
+    }
+
+    clearTimeout(timerContador);
+    timerContador = setTimeout(async function () {
+        try {
+            let resposta = await chamarApi("/metricas/contagem", enviarJson("POST", analise));
+            document.getElementById("contador-valor").innerHTML = Number(resposta.total).toLocaleString("pt-BR");
+        } catch (erro) {
+            document.getElementById("contador-valor").innerHTML = "—";
+        }
+    }, 300);
 }
 
-function salvar(evento) {
+async function salvar(evento) {
     evento.preventDefault();
 
     let analise = lerFormulario();
-    let mensagem = document.getElementById("mensagem-form");
 
     if (analise.nome.length < 3) {
-        mensagem.innerHTML = "Dê um nome à análise (mínimo de 3 caracteres).";
+        mostrarMensagem("Dê um nome à análise (mínimo de 3 caracteres).", "erro");
         return;
     }
 
     if (analise.periodo == "personalizado") {
         if (!analise.anoInicio || !analise.anoFim) {
-            mensagem.innerHTML = "Preencha os anos de início e fim do período.";
+            mostrarMensagem("Preencha os anos de início e fim do período.", "erro");
             return;
         }
         if (analise.anoInicio > analise.anoFim || analise.anoFim > anoAtual) {
-            mensagem.innerHTML = "Informe um período válido (até " + anoAtual + ").";
+            mostrarMensagem("Informe um período válido (até " + anoAtual + ").", "erro");
             return;
         }
     }
 
-    if (analise.periodo == "todos") {
-        analise.anoInicio = "";
-        analise.anoFim = "";
-    }
+    analise.idFuncionario = idFuncionario();
 
-    analise.musicas = calcularMusicas(analise);
+    let botao = document.getElementById("btn-salvar");
+    botao.disabled = true;
+    mostrarMensagem("Salvando...");
 
-    if (idEditando == null) {
-        let maiorId = 0;
-        for (let i = 0; i < analises.length; i++) {
-            if (analises[i].id > maiorId) maiorId = analises[i].id;
+    try {
+        if (idEditando == null) {
+            await chamarApi("/metricas", enviarJson("POST", analise));
+        } else {
+            await chamarApi("/metricas/" + idEditando, enviarJson("PUT", analise));
         }
-        analise.id = maiorId + 1;
-        analise.data = new Date().toISOString();
-        analises.push(analise);
-    } else {
-        for (let i = 0; i < analises.length; i++) {
-            if (analises[i].id == idEditando) {
-                analise.id = idEditando;
-                analise.data = analises[i].data;
-                analises[i] = analise;
-            }
-        }
+        await carregarAnalises();
+        mostrarLista();
+    } catch (erro) {
+        mostrarMensagem(escapar(erro.message), "erro");
+    } finally {
+        botao.disabled = false;
     }
-
-    salvarNoNavegador();
-    mostrarLista();
 }
 
 function abrirModal(id) {
     let analise = analises.find(function (a) { return a.id == id; });
 
     idExcluindo = id;
-    document.getElementById("modal-texto").innerHTML = 'A análise "' + analise.nome + '" e o dashboard gerado a partir dela serão excluídos permanentemente. Essa ação não pode ser desfeita.';
+    document.getElementById("modal-texto").innerHTML = 'A análise "' + escapar(analise.nome) + '" e o dashboard gerado a partir dela serão excluídos permanentemente. Essa ação não pode ser desfeita.';
     document.getElementById("modal-excluir").hidden = false;
 }
 
@@ -444,27 +448,44 @@ function fecharModal() {
     document.getElementById("modal-excluir").hidden = true;
 }
 
-function confirmarExclusao() {
-    analises = analises.filter(function (a) {
-        return a.id != idExcluindo;
-    });
+async function confirmarExclusao() {
+    let botao = document.getElementById("btn-confirmar-exclusao");
+    botao.disabled = true;
 
-    salvarNoNavegador();
-    fecharModal();
-    mostrarLista();
+    try {
+        await chamarApi("/metricas/" + idExcluindo + "?idFuncionario=" + idFuncionario(), { method: "DELETE" });
+        fecharModal();
+        await carregarAnalises();
+        mostrarLista();
+    } catch (erro) {
+        document.getElementById("modal-texto").innerHTML = escapar(erro.message);
+    } finally {
+        botao.disabled = false;
+    }
 }
 
-function iniciarPagina() {
-    let html = "";
-    for (let i = 0; i < generos.length; i++) {
-        html += '<button type="button" class="chip" onclick="trocarGenero(this)">' + generos[i] + '</button>';
-    }
-    document.getElementById("chips-genero").innerHTML = html;
-
+async function iniciarPagina() {
     document.getElementById("ano-inicio").max = anoAtual;
     document.getElementById("ano-fim").max = anoAtual;
 
+    document.getElementById("ano-inicio").oninput = atualizarContador;
+    document.getElementById("ano-fim").oninput = atualizarContador;
+
+    try {
+        let lista = await chamarApi("/metricas/caracteristicas");
+        caracteristicas = [];
+        for (let chave in lista) {
+            let c = lista[chave];
+            caracteristicas.push({ chave: chave, nome: c.rotulo, min: c.min, max: c.max, passo: c.passo, casas: c.casas });
+        }
+        generos = await chamarApi("/metricas/generos");
+    } catch (erro) {
+        document.getElementById("lista-analises").innerHTML =
+            '<div class="vazio"><p>Não foi possível carregar os filtros: ' + escapar(erro.message) + '</p></div>';
+        return;
+    }
+
+    desenharGeneros();
     desenharSliders();
-    carregarDoNavegador();
-    listarAnalises();
+    await carregarAnalises();
 }
