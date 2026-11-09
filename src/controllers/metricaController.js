@@ -2,14 +2,13 @@ var model = require("../models/metricaModel");
 var caracteristicas = require("../models/caracteristicas");
 
 var PERIODOS = ["5anos", "10anos", "todos", "personalizado"];
-var GENEROS = ["Pop", "R&B", "MPB", "Hip-Hop", "Eletrônica", "Funk", "Samba"];
 
-function lerAnalise(body) {
-    var nome = (body.nome || "").trim();
-    if (nome.length < 3 || nome.length > 60) {
-        return { erro: "O nome da análise deve ter entre 3 e 60 caracteres." };
-    }
+async function generosDisponiveis() {
+    var linhas = await model.listarGeneros();
+    return linhas.map(function (l) { return l.genero; });
+}
 
+function lerFiltros(body, generosValidos) {
     var periodo = PERIODOS.indexOf(body.periodo) >= 0 ? body.periodo : "todos";
     var anoAtual = new Date().getFullYear();
     var anoInicio = null;
@@ -31,24 +30,42 @@ function lerAnalise(body) {
 
     var generos = Array.isArray(body.generos) ? body.generos : [];
     generos = generos.filter(function (g, i) {
-        return GENEROS.indexOf(g) >= 0 && generos.indexOf(g) == i;
+        return generosValidos.indexOf(g) >= 0 && generos.indexOf(g) == i;
     });
 
-    var filtros = caracteristicas.normalizar(body.caracteristicas);
-    if (!filtros) {
+    var faixas = caracteristicas.normalizar(body.caracteristicas);
+    if (!faixas) {
         return { erro: "Nas características musicais, o mínimo não pode ser maior que o máximo." };
     }
 
     return {
-        analise: {
-            nome: nome,
+        filtros: {
             periodo: periodo,
             anoInicio: anoInicio,
             anoFim: anoFim,
-            generos: generos.length ? generos.join(",") : null,
-            caracteristicas: filtros
+            generos: generos,
+            caracteristicas: faixas
         }
     };
+}
+
+function lerAnalise(body, generosValidos) {
+    var nome = (body.nome || "").trim();
+    if (nome.length < 3 || nome.length > 60) {
+        return { erro: "O nome da análise deve ter entre 3 e 60 caracteres." };
+    }
+
+    var lido = lerFiltros(body, generosValidos);
+    if (lido.erro) return lido;
+
+    lido.filtros.nome = nome;
+    return { analise: lido.filtros };
+}
+
+function paraBanco(analise) {
+    return Object.assign({}, analise, {
+        generos: analise.generos.length ? analise.generos.join(",") : null
+    });
 }
 
 function formatar(linha) {
@@ -101,15 +118,69 @@ async function buscar(req, res) {
     }
 }
 
+function numeroOuNulo(valor) {
+    if (valor === null || valor === undefined || valor === "") return null;
+    var n = Number(valor);
+    return isNaN(n) ? null : n;
+}
+
+async function dashboard(req, res) {
+    var id = idValido(req.params.id);
+    var idFuncionario = idValido(req.query.idFuncionario);
+    if (!id || !idFuncionario) return res.status(400).json({ mensagem: "Requisição inválida." });
+    try {
+        var linhas = await model.buscarPorId(id, idFuncionario);
+        if (linhas.length == 0) return res.status(404).json({ mensagem: "Análise não encontrada." });
+
+        var analise = formatar(linhas[0]);
+        var musicas = await model.listarMusicasFiltradas(analise);
+
+        res.json({
+            analise: analise,
+            musicas: musicas.map(function (m) {
+                return {
+                    id: m.id,
+                    titulo: m.titulo,
+                    artista: m.artista || "",
+                    genero: m.genero,
+                    anoLancamento: m.anoLancamento,
+                    dancabilidade: numeroOuNulo(m.dancabilidade),
+                    energia: numeroOuNulo(m.energia),
+                    tonalidade: numeroOuNulo(m.tonalidade),
+                    acustica: numeroOuNulo(m.acustica),
+                    vivicidade: numeroOuNulo(m.vivicidade),
+                    valenciaPositividade: numeroOuNulo(m.valenciaPositividade),
+                    tempoBPM: numeroOuNulo(m.tempoBPM),
+                    duracaoMs: numeroOuNulo(m.duracaoMs),
+                    streams: numeroOuNulo(m.streams),
+                    views: numeroOuNulo(m.views)
+                };
+            })
+        });
+    } catch (erro) {
+        console.log(erro);
+        res.status(500).json({ mensagem: "Erro ao carregar o dashboard da análise." });
+    }
+}
+
 function listarCaracteristicas(req, res) {
     res.json(caracteristicas.CARACTERISTICAS);
 }
 
-async function contagem(req, res) {
-    var filtros = caracteristicas.normalizar(req.query.filtros);
-    if (!filtros) return res.status(400).json({ mensagem: "Faixa inválida." });
+async function listarGeneros(req, res) {
     try {
-        res.json({ total: await contar(filtros) });
+        res.json(await model.listarGeneros());
+    } catch (erro) {
+        console.log(erro);
+        res.status(500).json({ mensagem: "Erro ao carregar os gêneros." });
+    }
+}
+
+async function contagem(req, res) {
+    try {
+        var lido = lerFiltros(req.body, await generosDisponiveis());
+        if (lido.erro) return res.status(400).json({ mensagem: lido.erro });
+        res.json({ total: await contar(lido.filtros) });
     } catch (erro) {
         console.log(erro);
         res.status(500).json({ mensagem: "Erro ao contar as músicas." });
@@ -120,12 +191,12 @@ async function cadastrar(req, res) {
     var idFuncionario = idValido(req.body.idFuncionario);
     if (!idFuncionario) return res.status(400).json({ mensagem: "Funcionário inválido." });
 
-    var lido = lerAnalise(req.body);
-    if (lido.erro) return res.status(400).json({ mensagem: lido.erro });
-
     try {
-        lido.analise.totalMusicas = await contar(lido.analise.caracteristicas);
-        var resultado = await model.cadastrar(lido.analise, idFuncionario);
+        var lido = lerAnalise(req.body, await generosDisponiveis());
+        if (lido.erro) return res.status(400).json({ mensagem: lido.erro });
+
+        lido.analise.totalMusicas = await contar(lido.analise);
+        var resultado = await model.cadastrar(paraBanco(lido.analise), idFuncionario);
         res.status(201).json({ id: resultado.insertId, totalMusicas: lido.analise.totalMusicas });
     } catch (erro) {
         console.log(erro);
@@ -138,12 +209,12 @@ async function atualizar(req, res) {
     var idFuncionario = idValido(req.body.idFuncionario);
     if (!id || !idFuncionario) return res.status(400).json({ mensagem: "Requisição inválida." });
 
-    var lido = lerAnalise(req.body);
-    if (lido.erro) return res.status(400).json({ mensagem: lido.erro });
-
     try {
-        lido.analise.totalMusicas = await contar(lido.analise.caracteristicas);
-        var resultado = await model.atualizar(id, lido.analise, idFuncionario);
+        var lido = lerAnalise(req.body, await generosDisponiveis());
+        if (lido.erro) return res.status(400).json({ mensagem: lido.erro });
+
+        lido.analise.totalMusicas = await contar(lido.analise);
+        var resultado = await model.atualizar(id, paraBanco(lido.analise), idFuncionario);
         if (resultado.affectedRows == 0) return res.status(404).json({ mensagem: "Análise não encontrada." });
         res.json({ ok: true, totalMusicas: lido.analise.totalMusicas });
     } catch (erro) {
@@ -166,4 +237,4 @@ async function excluir(req, res) {
     }
 }
 
-module.exports = { listarCaracteristicas, listar, buscar, contagem, cadastrar, atualizar, excluir };
+module.exports = { listarCaracteristicas, listarGeneros, listar, buscar, dashboard, contagem, cadastrar, atualizar, excluir };
