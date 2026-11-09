@@ -8,14 +8,14 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo_B.png">
 
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/dashboardProdutor.css">
+    <link rel="stylesheet" href="./css/dashboardProdutor.css?v=3">
     <link rel="stylesheet" href="./css/padrao.css">
     <link rel="stylesheet" href="./css/dispersaoProdutor.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
     <script src="./js/musicasExemplo.js"></script>
-    <script src="./js/dispersaoProdutor.js"></script>
-    <script src="./js/dashboardProdutor.js"></script>
+    <script src="./js/dispersaoProdutor.js?v=2"></script>
+    <script src="./js/dashboardProdutor.js?v=4"></script>
     <script src="./js/sidebar.js" defer></script>
     <script src="./js/controleDeAcesso.js"></script>
 
@@ -24,7 +24,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body class="dash-page bw" onload="carregarDashboardProdutor(); carregarDispersao(); validarAcesso();">
+<body class="dash-page bw" onload="carregarDashboardProdutor(); validarAcesso();">
     <aside class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
@@ -96,6 +96,8 @@
                 <h1>Produção Musical</h1>
             </div>
         </div>
+
+        <section class="dash-analise" id="indicador_analise" hidden></section>
 
         <section class="dash-alertas" id="lista_alertas"></section>
 

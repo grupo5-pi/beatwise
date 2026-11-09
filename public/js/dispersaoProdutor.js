@@ -1,5 +1,12 @@
-function carregarDispersao() {
-    const musicas = musicasExemplo;
+function carregarDispersao(musicasDaAnalise) {
+    const LIMITE_PONTOS = 1000;
+
+    const musicas = musicasDaAnalise
+        ? musicasDaAnalise
+            .filter(m => Number(m.views) > 0)
+            .sort((a, b) => b.views - a.views)
+            .slice(0, LIMITE_PONTOS)
+        : musicasExemplo;
 
     const caracteristicas = {
         dancabilidade: {
@@ -40,8 +47,13 @@ function carregarDispersao() {
         }
     };
 
-    const VIEWS_MINIMO = 1e8;
-    const VIEWS_MAXIMO = 1e10;
+    const todasViews = musicas.map(m => Number(m.views)).filter(v => v > 0);
+    const VIEWS_MINIMO = todasViews.length
+        ? Math.min(1e8, 10 ** Math.floor(Math.log10(Math.min(...todasViews))))
+        : 1e8;
+    const VIEWS_MAXIMO = todasViews.length
+        ? Math.max(1e10, 10 ** Math.ceil(Math.log10(Math.max(...todasViews))))
+        : 1e10;
 
     const COR_TEXTO = '#c4b5fd';
     const COR_PONTOS = 'rgba(168, 85, 247, 0.8)';
