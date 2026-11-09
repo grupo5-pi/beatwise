@@ -8,6 +8,7 @@ public class ItunesMusicaDto {
     private String artistName;
     private String collectionName;
     private String primaryGenreName;
+    private String releaseDate;
 
     public ItunesMusicaDto(String trackName, String artistName, String collectionName, String primaryGenreName) {
         this.trackName = trackName;
@@ -50,6 +51,10 @@ public class ItunesMusicaDto {
     public void setPrimaryGenreName(String primaryGenreName) {
         this.primaryGenreName = primaryGenreName;
     }
+
+    public String getReleaseDate() { return releaseDate; }
+
+    public void setReleaseDate(String releaseDate) { this.releaseDate = releaseDate; }
 
     @Override
     public String toString() {

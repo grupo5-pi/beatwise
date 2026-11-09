@@ -46,17 +46,16 @@ public class MusicaRepository {
         );
     }
 
-    public void atualizarGenero(Integer id, String genero) {
-
+    public void atualizarGeneroEAno(Integer id, String genero, Integer ano) {
         jdbcTemplate.update(
                 """
                 UPDATE musicaBD
                 SET genero = ?,
+                    anoLancamento = ?,
                     statusItunes = 1
                 WHERE id = ?
                 """,
-                genero,
-                id
+                genero, ano, id
         );
     }
 
@@ -71,5 +70,6 @@ public class MusicaRepository {
                 id
         );
     }
+
 }
 

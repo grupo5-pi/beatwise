@@ -60,10 +60,16 @@ public class ItunesGet {
                 }
 
                 if (musicaEncontrada != null) {
-                    System.out.println("MATCH -> " + musicaBanco.getFaixa());
-                    musicaRepository.atualizarGenero(
+                    Integer ano = extrairAno(musicaEncontrada.getReleaseDate());
+
+                    System.out.println("MATCH -> " + musicaBanco.getFaixa()
+                            + " | " + musicaEncontrada.getPrimaryGenreName()
+                            + " | " + ano);
+
+                    musicaRepository.atualizarGeneroEAno(
                             musicaBanco.getId(),
-                            musicaEncontrada.getPrimaryGenreName()
+                            musicaEncontrada.getPrimaryGenreName(),
+                            ano
                     );
                 } else {
                     System.out.println("SEM MATCH -> " + musicaBanco.getFaixa());
@@ -80,6 +86,18 @@ public class ItunesGet {
             e.printStackTrace();
         }
     }
+
+    private static Integer extrairAno(String releaseDate) {
+        if (releaseDate == null || releaseDate.length() < 4) {
+            return null;
+        }
+        try {
+            return Integer.valueOf(releaseDate.substring(0, 4));
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     private static String limparNome(String nome) {
         return nome
                 .replaceAll("\\(.*?\\)", "")
