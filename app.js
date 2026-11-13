@@ -21,6 +21,7 @@ var funcionarioRouter = require("./src/routes/funcionarioRoutes");
 var cadastroFuncionarioRouter = require("./src/routes/cadastroFuncionarioRoutes");
 var primeiroAcessoRouter = require("./src/routes/primeiroAcessoRoutes");
 var musicaRouter = require("./src/routes/musicaRoutes");
+var dashGravadoraRouter = require("./src/routes/dashGravadoraRoutes");
 
 
 
@@ -36,6 +37,7 @@ app.use("/funcionarios", funcionarioRouter);
 app.use("/cadastroFuncionario", cadastroFuncionarioRouter);
 app.use("/primeiroAcesso", primeiroAcessoRouter);
 app.use("/musicas", musicaRouter);
+app.use("/dashGravadora", dashGravadoraRouter);
 
 
 app.listen(PORTA_APP, function () {
