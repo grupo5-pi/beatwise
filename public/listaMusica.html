@@ -266,7 +266,7 @@
             spotify = await retornarSpotify(paginaAtual);
             youtube = await retornarYoutube(paginaAtual);
 
-            let musicas = [];
+            let listaMusicas = [];
             for (let i = 0; i < musica.length; i++) {
                 let musicaAtual = musica[i];
                 let albumAtual = album.find(a => a.id == musicaAtual.fkAlbumBD);
@@ -278,7 +278,7 @@
                 let spotifyAtual = spotify.find(s => s.fkMusicaBD == musicaAtual.id);
                 let youtubeAtual = youtube.find(y => y.fkMusicaBD == musicaAtual.id);
 
-                musicas.push({
+                listaMusicas.push({
                     id: musicaAtual.id != null ? musicaAtual.id : 0,
                     track: musicaAtual.nome != null ? musicaAtual.nome : "Título não encontrado",
                     artist: artistasAtuais != null ? artistasAtuais : "Artista não encontrado",
@@ -309,7 +309,7 @@
                     officialVideo: youtubeAtual?.videoOficial != null ? youtubeAtual.videoOficial : false,
                 })
             }
-            return musicas;
+            return listaMusicas;
         }
 
         async function iniciarPagina() {
@@ -437,10 +437,10 @@
 
         // Campo de pesquisa
         async function pesquisar() {
-            let palavraPesquisa = pesquisa.value.toLowerCase();
+            let palavraPesquisa = pesquisa.value.trim().toLowerCase();
             paginaAtual = 1;
 
-            if (palavraPesquisa.trim() == '' || palavraPesquisa == null) {
+            if (palavraPesquisa === '') {
                 musicas = await retornarMusicas();
                 quantidadeMusicas = await retornarTotalMusicas();
 
