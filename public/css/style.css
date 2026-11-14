@@ -247,7 +247,7 @@ header {
     left: 0;
     width: 100%;
     z-index: 1000;
-    height: 14%;
+    height: 11%;
     position: fixed;
     border-bottom: 5px solid;
     border-image: linear-gradient(to right, var(--roxo-claro), var(--roxo-escuro), black) 1;
