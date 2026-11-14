@@ -133,7 +133,7 @@ public class EmailService {
             this.sessao = Session.getInstance(props);
         }
 
-        String enderecoSite = Env.obter("APP_URL", "http://localhost:3333");
+        String enderecoSite = Env.obter("APP_URL", "http://localhost:3334");
         if (enderecoSite.endsWith("/")) {
             enderecoSite = enderecoSite.substring(0, enderecoSite.length() - 1);
         }
