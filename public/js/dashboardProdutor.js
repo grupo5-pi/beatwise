@@ -1,17 +1,8 @@
-let dadosAlertas = [
-    {
-        tipo: 'positivo',
-        texto: 'Aumento de 12% de visualizações no gênero Funk desde a última atualização - (Gênero top 5 mais escutados) - Spotify'
-    },
-    {
-        tipo: 'negativo',
-        texto: 'Queda de 8% nas curtidas do gênero Pop desde a última atualização'
-    }
-]
+let dadosAlertas = []
 
 let dadosKpiFator = {
-    valor: 'Energia ↑↑',
-    texto: 'Músicas de sucesso (top 10) têm, em média, 35% mais energia que as de baixo desempenho.'
+    valor: '...',
+    texto: 'Carregando...'
 }
 
 let dadosKpiDuracaoIdeal = {
@@ -26,16 +17,13 @@ let dadosKpiTotalStreams = {
 
 let dadosBpmFaixa = {
     genero: 'Pop',
-    faixas: ['80–90', '90–100', '100–110', '110–120', '120–130', '130–140', '140–150'],
-    views: [0.5, 4.8, 3.7, 2.9, 2.1, 4.7, 2.7],
-    qtd: [8, 14, 22, 30, 25, 12, 5],
-    retornoEsperado: 3
+    faixas: [],
+    views: [],
+    qtd: [],
+    retornoEsperado: 0
 }
 
-// valores / valoresReais -> músicas de sucesso
-// valoresGeral / valoresReaisGeral -> todas as músicas (linha de comparação)
-// "valores" vai de 0 a 100 (desenha o gráfico), "valoresReais" aparece ao passar o mouse
-// OBS: são dados de exemplo, troque pelos dados reais
+
 let dadosRadar = {
     genero: 'Pop',
     rotulos: ['BPM', 'Tonalidade', 'Energia', 'Valência', 'Dançabilidade'],
@@ -53,10 +41,27 @@ function carregarDashboardProdutor() {
     carregarAlertas();
     carregarKpis();
     montarGraficoBpm();
+    carregarGeneros();
     montarGraficoRadar();
 }
 
 function carregarAlertas() {
+    fetch('/dashboardProdutor/alertas').then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar os alertas');
+        }
+        return resposta.json();
+    }).then(function (lista) {
+        dadosAlertas = lista;
+        mostrarAlertas();
+    }).catch(function (erro) {
+        console.log(erro);
+        dadosAlertas = [];
+        mostrarAlertas();
+    });
+}
+
+function mostrarAlertas() {
     lista_alertas.innerHTML = '';
 
     for (let i = 0; i < dadosAlertas.length; i++) {
@@ -78,14 +83,32 @@ function carregarAlertas() {
 }
 
 function carregarKpis() {
-    kpi_fator_valor.textContent = dadosKpiFator.valor;
-    kpi_fator_texto.textContent = dadosKpiFator.texto;
+    carregarKpiFator();
 
     kpi_duracao_ideal_valor.textContent = dadosKpiDuracaoIdeal.valor;
     kpi_duracao_ideal_texto.textContent = dadosKpiDuracaoIdeal.texto;
 
     kpi_total_streams_valor.textContent = dadosKpiTotalStreams.valor;
     kpi_total_streams_texto.textContent = dadosKpiTotalStreams.texto;
+}
+
+function carregarKpiFator() {
+    kpi_fator_valor.textContent = dadosKpiFator.valor;
+    kpi_fator_texto.textContent = dadosKpiFator.texto;
+
+    fetch('/dashboardProdutor/fatorDecisivo').then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar o fator decisivo');
+        }
+        return resposta.json();
+    }).then(function (dados) {
+        kpi_fator_valor.textContent = dados.valor;
+        kpi_fator_texto.textContent = dados.texto;
+    }).catch(function (erro) {
+        console.log(erro);
+        kpi_fator_valor.textContent = '—';
+        kpi_fator_texto.textContent = 'Não foi possível carregar este indicador.';
+    });
 }
 
 let pluginTextoRetorno = {
@@ -104,44 +127,27 @@ let pluginTextoRetorno = {
 
 function montarGraficoBpm() {
     let corDestaque = '#A855F7';
-    let corApagada = '#6D28D9';
     let corBorda = 'rgba(139, 92, 246, 0.28)';
 
     Chart.defaults.color = corDestaque;
 
-    titulo_bpm.textContent = dadosBpmFaixa.genero.toUpperCase() + ': média de views por faixa de BPM';
-
-    let retorno = dadosBpmFaixa.retornoEsperado;
-    let linhaRetorno = [];
-    let cores = [];
-
-    for (let i = 0; i < dadosBpmFaixa.views.length; i++) {
-        linhaRetorno.push(retorno);
-
-        if (dadosBpmFaixa.views[i] >= retorno) {
-            cores.push(corDestaque);
-        } else {
-            cores.push(corApagada);
-        }
-    }
-
     graficoBpm = new Chart(grafico_bpm, {
         type: 'bar',
         data: {
-            labels: dadosBpmFaixa.faixas,
+            labels: [],
             datasets: [
                 {
                     type: 'bar',
                     label: 'Views médias (milhões)',
-                    data: dadosBpmFaixa.views,
-                    backgroundColor: cores,
+                    data: [],
+                    backgroundColor: [],
                     borderRadius: 4,
                     order: 1
                 },
                 {
                     type: 'line',
                     label: 'Retorno esperado',
-                    data: linhaRetorno,
+                    data: [],
                     borderColor: 'white',
                     borderDash: [6, 6],
                     borderWidth: 2,
@@ -168,9 +174,8 @@ function montarGraficoBpm() {
             },
             scales: {
                 y: {
-                    beginAtZero: true, suggestedMax: 5,
+                    beginAtZero: true,
                     ticks: {
-                        stepSize: 1,
                         callback: function (valor) {
                             return valor + ' mi';
                         }
@@ -181,6 +186,82 @@ function montarGraficoBpm() {
             }
         }
     })
+}
+
+function carregarGeneros() {
+    fetch('/dashboardProdutor/generos').then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar os gêneros');
+        }
+        return resposta.json();
+    }).then(function (lista) {
+        select_genero_bpm.innerHTML = '';
+
+        if (lista.length == 0) {
+            titulo_bpm.textContent = 'Nenhum gênero na base ainda';
+            return;
+        }
+
+        let padrao = lista[0].genero;
+
+        for (let i = 0; i < lista.length; i++) {
+            select_genero_bpm.innerHTML += `<option value="${lista[i].genero}">${lista[i].genero}</option>`;
+
+            if (lista[i].genero == 'Pop') {
+                padrao = 'Pop';
+            }
+        }
+
+        select_genero_bpm.value = padrao;
+        carregarGraficoBpm();
+    }).catch(function (erro) {
+        console.log(erro);
+        titulo_bpm.textContent = 'Não foi possível carregar os gêneros';
+    });
+}
+
+function carregarGraficoBpm() {
+    let genero = select_genero_bpm.value;
+
+    fetch('/dashboardProdutor/viewsPorBpm?genero=' + encodeURIComponent(genero)).then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar o gráfico');
+        }
+        return resposta.json();
+    }).then(function (dados) {
+        dadosBpmFaixa = dados;
+        atualizarGraficoBpm();
+    }).catch(function (erro) {
+        console.log(erro);
+        titulo_bpm.textContent = 'Não foi possível carregar o gráfico';
+    });
+}
+
+function atualizarGraficoBpm() {
+    let corDestaque = '#A855F7';
+    let corApagada = '#6D28D9';
+
+    titulo_bpm.textContent = dadosBpmFaixa.genero.toUpperCase() + ': média de views por faixa de BPM';
+
+    let retorno = dadosBpmFaixa.retornoEsperado;
+    let linhaRetorno = [];
+    let cores = [];
+
+    for (let i = 0; i < dadosBpmFaixa.views.length; i++) {
+        linhaRetorno.push(retorno);
+
+        if (dadosBpmFaixa.views[i] >= retorno) {
+            cores.push(corDestaque);
+        } else {
+            cores.push(corApagada);
+        }
+    }
+
+    graficoBpm.data.labels = dadosBpmFaixa.faixas;
+    graficoBpm.data.datasets[0].data = dadosBpmFaixa.views;
+    graficoBpm.data.datasets[0].backgroundColor = cores;
+    graficoBpm.data.datasets[1].data = linhaRetorno;
+    graficoBpm.update();
 }
 
 function montarGraficoRadar() {

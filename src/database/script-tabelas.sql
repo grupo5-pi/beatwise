@@ -224,3 +224,17 @@ VALUES
     ('Responsável', 'empresa@beatwise.com', 'Empresa123#', 1, 2, 1),
     ('Produtor', 'produtor@beatwise.com', 'Produtor123#', 1, 3, 2),
     ('Marketing', 'marketing@beatwise.com', 'Marketing123#', 1, 4, 2);
+
+
+CREATE TABLE snapshotGenero (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  dataAtualizacao DATETIME NOT NULL,
+  genero VARCHAR(45) NOT NULL,
+  views BIGINT NOT NULL,
+  curtidas BIGINT NOT NULL,
+  streams BIGINT NOT NULL
+);
+
+// Para testar se os alertas funcionam 
+UPDATE snapshotGenero SET views = ROUND(views / 1.12) WHERE genero = 'Funk' ORDER BY id DESC LIMIT 1;
+UPDATE snapshotGenero SET curtidas = ROUND(curtidas / 0.92) WHERE genero = 'Pop' ORDER BY id DESC LIMIT 1;

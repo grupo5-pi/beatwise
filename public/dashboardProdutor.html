@@ -119,8 +119,16 @@
 
         <section class="dash-graficos">
             <div class="dash-grafico">
-                <h2 class="dash-grafico-titulo" id="titulo_bpm"></h2>
-                <p class="dash-grafico-subtitulo">Views médias (milhões) por faixa de BPM</p>
+                <div class="dash-dispersao-topo">
+                    <div>
+                        <h2 class="dash-grafico-titulo" id="titulo_bpm"></h2>
+                        <p class="dash-grafico-subtitulo">Views médias (milhões) por faixa de BPM</p>
+                    </div>
+                    <div class="dash-seletor">
+                        <label for="select_genero_bpm">Gênero</label>
+                        <select id="select_genero_bpm" onchange="carregarGraficoBpm()"></select>
+                    </div>
+                </div>
                 <div class="dash-grafico-area">
                     <canvas id="grafico_bpm"></canvas>
                 </div>
