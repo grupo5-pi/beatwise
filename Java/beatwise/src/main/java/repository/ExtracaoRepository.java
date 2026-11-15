@@ -1,6 +1,5 @@
 package repository;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
@@ -34,12 +33,13 @@ public class ExtracaoRepository {
 
     public void saveMusicaArtista(Integer artista, Integer musica) {
         jdbcTemplate.update(
-                "INSERT  IGNORE INTO musicaArtistaBD (fkArtistaBD, fkMusicaBD) VALUES (?, ?);", artista, musica);
+                "INSERT IGNORE INTO musicaArtistaBD (fkArtistaBD, fkMusicaBD) VALUES (?, ?);", artista, musica);
     }
 
     public void saveSpotify(
             Integer musica,
             String url,
+            String tipoAlbum,
             Double dancabilidade,
             Double energia,
             Integer tonalidade,
@@ -53,11 +53,11 @@ public class ExtracaoRepository {
             Long stream) {
 
         jdbcTemplate.update(
-                "INSERT INTO spotifyBD (fkMusicaBD, url, dancabilidade, energia, tonalidade, " +
+                "INSERT INTO spotifyBD (fkMusicaBD, url, tipoAlbum, dancabilidade, energia, tonalidade, " +
                         "intensidadeSonora, acustica, instrumentalidade, vivicidade, " +
                         "valenciaPositividade, tempoBPM, duracaoMs, fluxo) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                musica, url, dancabilidade, energia, tonalidade, intensidadeSonora,
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                musica, url, tipoAlbum, dancabilidade, energia, tonalidade, intensidadeSonora,
                 acustica, instrumentalidade, vivicidade, valenciaPositividade,
                 tempoBPM, duracaoMs, stream);
     }
@@ -99,7 +99,7 @@ public class ExtracaoRepository {
             return jdbcTemplate.queryForObject(
                     "SELECT id FROM albumBD where ? = nome", Integer.class, nome);
 
-        } catch (EmptyResultDataAccessException e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -109,7 +109,7 @@ public class ExtracaoRepository {
             return jdbcTemplate.queryForObject(
                     "SELECT id FROM artistaBD where ? = nome", Integer.class, nome);
 
-        } catch (EmptyResultDataAccessException e) {
+        } catch (Exception e) {
             return null;
         }
     }
