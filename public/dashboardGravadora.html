@@ -254,11 +254,11 @@
         Chart.defaults.maintainAspectRatio = false;
 
         async function carregarGraficos() {
-            let dados = await retornarDiferencaTipoAlbum();
-            let viewsAlbum = dados.viewsAlbum;
-            let viewsSolo = dados.viewsSolo;
-            let streamAlbum = dados.streamAlbum;
-            let streamSolo = dados.streamSolo;
+            let categorias = await retornarDiferencaTipoAlbum();
+            let viewsAlbum = categorias[0].youtube;
+            let viewsSolo = categorias[1].youtube;
+            let streamAlbum = categorias[0].spotify;
+            let streamSolo = categorias[1].spotify;
 
             // 1) Tipo de lançamento x desempenho: Spotify x YouTube (em milhões)
             new Chart(graficoLancamento, {
@@ -271,10 +271,23 @@
                     ]
                 },
                 options: {
-                    plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y.toString().replace('.', ',')} mi` } } },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: c => `${c.dataset.label}: ${formatarNumero(c.parsed.y)}`
+                            }
+                        }
+                    },
                     scales: {
-                        y: { beginAtZero: true, ticks: { callback: v => v + ' mi' } },
-                        x: { grid: { display: false } }
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: v => formatarNumero(v)
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
                     }
                 }
             });
@@ -340,6 +353,14 @@
                     }
                 }
             });
+        }
+
+        function formatarNumero(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                notation: 'compact',
+                compactDisplay: 'short',
+                maximumFractionDigits: 2
+            }).format(valor);
         }
 
         function iniciar() {

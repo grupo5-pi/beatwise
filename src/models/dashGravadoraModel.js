@@ -110,11 +110,28 @@ function obterTipoAlbum() {
 }
 
 function obterDiferencaTipoAlbum() {
+  var instrucaoSql = `
+  SELECT
+        CASE
+            WHEN spotify.tipoAlbum = 'single' THEN 'Solo'
+            ELSE 'Álbum'
+        END AS categoria,
+        SUM(spotify.fluxo) AS spotify,
+        SUM(youtube.visitas) AS youtube
+    FROM spotifyBD spotify
+        JOIN youtubeBD youtube
+    ON youtube.fkMusicaBD = spotify.fkMusicaBD
+        GROUP BY categoria;
+    `;
 
+  return database.executar(instrucaoSql);
 }
 
 function obterGeneroEngajamento() {
-    
+  var instrucaoSql = `
+    `;
+
+  return database.executar(instrucaoSql);
 }
 
 module.exports = {
