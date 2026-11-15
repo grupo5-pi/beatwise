@@ -129,8 +129,47 @@ function mediaViewsDoGenero(genero) {
     return database.executar(instrucaoSql, [genero]);
 }
 
+function musicasParaDispersao() {
+    var instrucaoSql = `
+        SELECT m.nome AS titulo,
+               (SELECT GROUP_CONCAT(a.nome SEPARATOR ', ')
+                  FROM musicaArtistaBD ma
+                  JOIN artistaBD a ON a.id = ma.fkArtistaBD
+                 WHERE ma.fkMusicaBD = m.id) AS artista,
+               ${VIEWS} AS views,
+               s.dancabilidade, s.energia, s.tonalidade, s.acustica, s.vivicidade,
+               s.valenciaPositividade, s.tempoBPM
+        FROM musicaBD m
+        JOIN spotifyBD s ON s.fkMusicaBD = m.id
+        JOIN youtubeBD y ON y.fkMusicaBD = m.id
+        WHERE ${VIEWS} BETWEEN 100000000 AND 10000000000
+          AND s.dancabilidade IS NOT NULL AND s.energia IS NOT NULL
+          AND s.tonalidade IS NOT NULL AND s.acustica IS NOT NULL
+          AND s.vivicidade IS NOT NULL AND s.valenciaPositividade IS NOT NULL
+          AND s.tempoBPM > 0
+          AND MOD(m.id, 10) = 0
+        ORDER BY views DESC
+        LIMIT 3000;
+    `;
+    return database.executar(instrucaoSql);
+}
+
+function streamsPorBlocoDuracao() {
+    var instrucaoSql = `
+        SELECT FLOOR(s.duracaoMs / 30000) AS bloco,
+               COUNT(*) AS total,
+               AVG(${STREAMS}) AS streams
+        FROM spotifyBD s
+        WHERE s.duracaoMs BETWEEN 60000 AND 600000 AND ${STREAMS} > 0
+        GROUP BY bloco
+        ORDER BY bloco;
+    `;
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     totaisPorGenero, ultimoSnapshot, snapshotAnterior, salvarSnapshot,
     mediasPorDesempenho, desvioDasCaracteristicas,
-    listarGeneros, viewsPorFaixaBpm, mediaViewsDoGenero
+    listarGeneros, viewsPorFaixaBpm, mediaViewsDoGenero,
+    musicasParaDispersao, streamsPorBlocoDuracao
 };
