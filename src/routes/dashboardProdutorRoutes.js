@@ -6,5 +6,7 @@ router.get("/alertas", controller.alertas);
 router.get("/fatorDecisivo", controller.fatorDecisivo);
 router.get("/generos", controller.generos);
 router.get("/viewsPorBpm", controller.viewsPorBpm);   // ?genero=Pop
+router.get("/duracaoIdeal", controller.duracaoIdeal);
+router.get("/dispersao", controller.dispersao);
 
 module.exports = router;
