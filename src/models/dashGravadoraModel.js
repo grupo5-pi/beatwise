@@ -1,18 +1,18 @@
 var database = require("../database/config");
 
 function obterDiferencaClipe() {
-  var instrucaoSql = `
+    var instrucaoSql = `
     SELECT 
 	    (SELECT SUM(visitas) FROM youtubeBD WHERE videoOficial = 1) AS comClipe, 
         (SELECT SUM(visitas) FROM youtubeBD WHERE videoOficial = 0)	AS semClipe, 
         (((SELECT SUM(visitas) FROM youtubeBD WHERE videoOficial = 1) - (SELECT SUM(visitas) FROM youtubeBD WHERE videoOficial = 0)) / (SELECT SUM(visitas) FROM youtubeBD WHERE videoOficial = 0)) * 100 AS porcentagem
     FROM youtubeBD LIMIT 1`;
 
-  return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 function obterMelhorGenero() {
-  var instrucaoSql = `
+    var instrucaoSql = `
     WITH base AS (
         SELECT
             COALESCE(NULLIF(TRIM(m.generoPadrao), ''), NULLIF(TRIM(m.genero), '')) AS genero,
@@ -32,11 +32,11 @@ function obterMelhorGenero() {
     ORDER BY mediaGenero DESC
     LIMIT 1`;
 
-  return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 function obterMelhorPlataforma() {
-  var instrucaoSql = `
+    var instrucaoSql = `
     SELECT
         spotify,
         youtube,
@@ -50,11 +50,11 @@ function obterMelhorPlataforma() {
                 WHERE fkMusicaBD IN (SELECT fkMusicaBD FROM spotifyBD)) AS youtube
     ) AS totais`;
 
-  return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 function obterFeatSolo() {
-  var instrucaoSql = `
+    var instrucaoSql = `
     SELECT
         engajamentoFeat,
         engajamentoSolo,
@@ -74,12 +74,12 @@ function obterFeatSolo() {
         ) AS qtd ON qtd.fkMusicaBD = y.fkMusicaBD
     ) AS engajamento`;
 
-  return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 
 function obterTipoAlbum() {
-  var instrucaoSql = `
+    var instrucaoSql = `
     SELECT
         categoria,
         SUM(fluxo) AS total,
@@ -107,14 +107,14 @@ function obterTipoAlbum() {
     ) AS base
     GROUP BY categoria`;
 
-  return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 function obterDiferencaTipoAlbum() {
-  var instrucaoSql = `
+    var instrucaoSql = `
   SELECT
         CASE
-            WHEN spotify.tipoAlbum = 'single' THEN 'Solo'
+            WHEN spotify.tipoAlbum = 'single' THEN 'single'
             ELSE 'Álbum'
         END AS categoria,
         SUM(spotify.fluxo) AS spotify,
@@ -125,22 +125,31 @@ function obterDiferencaTipoAlbum() {
         GROUP BY categoria;
     `;
 
-  return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 function obterGeneroEngajamento() {
-  var instrucaoSql = `
+    var instrucaoSql = `
+    SELECT
+        m.genero,
+        ROUND( (SUM(y.curtidas) + SUM(y.comentarios)) / NULLIF(SUM(y.visitas), 0) * 100, 2) AS engajamento
+    FROM musicaBD m
+    JOIN youtubeBD y
+        ON y.fkMusicaBD = m.id
+    WHERE m.genero IS NOT NULL
+        GROUP BY m.genero HAVING SUM(y.visitas) > 0
+    ORDER BY engajamento DESC LIMIT 8;    
     `;
 
-  return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 module.exports = {
-  obterDiferencaClipe,
-  obterMelhorGenero,
-  obterMelhorPlataforma,
-  obterFeatSolo,  
-  obterTipoAlbum,
-  obterDiferencaTipoAlbum,
-  obterGeneroEngajamento,
+    obterDiferencaClipe,
+    obterMelhorGenero,
+    obterMelhorPlataforma,
+    obterFeatSolo,
+    obterTipoAlbum,
+    obterDiferencaTipoAlbum,
+    obterGeneroEngajamento,
 };

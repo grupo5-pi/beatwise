@@ -256,18 +256,18 @@
         async function carregarGraficos() {
             let categorias = await retornarDiferencaTipoAlbum();
             let viewsAlbum = categorias[0].youtube;
-            let viewsSolo = categorias[1].youtube;
+            let viewsSingle = categorias[1].youtube;
             let streamAlbum = categorias[0].spotify;
-            let streamSolo = categorias[1].spotify;
+            let streamSingle = categorias[1].spotify;
 
             // 1) Tipo de lançamento x desempenho: Spotify x YouTube (em milhões)
             new Chart(graficoLancamento, {
                 type: 'bar',
                 data: {
-                    labels: ['Álbum', 'Solo'],
+                    labels: ['Álbum', 'Single'],
                     datasets: [
-                        { label: 'Spotify', data: [streamAlbum, streamSolo], backgroundColor: roxo, borderRadius: 6 },
-                        { label: 'YouTube', data: [viewsAlbum, viewsSolo], backgroundColor: roxoClaro, borderRadius: 6 }
+                        { label: 'Spotify', data: [streamAlbum, streamSingle], backgroundColor: roxo, borderRadius: 6 },
+                        { label: 'YouTube', data: [viewsAlbum, viewsSingle], backgroundColor: roxoClaro, borderRadius: 6 }
                     ]
                 },
                 options: {
@@ -294,16 +294,14 @@
 
             let generos = await retornarGeneroEngajamento();
 
-            // 2) Gêneros com mais engajamento (% de curtidas + comentários / views)
+            // 2) Gêneros com mais engajamento ((curtidas + comentários / views) * 100)
             new Chart(graficoGeneros, {
                 type: 'bar',
                 data: {
-                    // labels: [generos[0].nome, generos[1].nome, generos[2].nome, generos[3].nome, generos[4].nome, generos[5].nome, generos[6].nome, generos[7].nome],
-                    labels: ['Pop', 'Funk', 'Trap', 'MPB', 'Rock', 'Eletrônica', 'Sertanejo', 'Samba'],
+                    labels: [generos[0].genero, generos[1].genero, generos[2].genero, generos[3].genero, generos[4].genero, generos[5].genero, generos[6].genero, generos[7].genero],
                     datasets: [{
                         label: 'Engajamento',
-                        // data: [generos[0].valor, generos[1].valor, generos[2].valor, generos[3].valor, generos[4].valor, generos[5].valor, generos[6].valor, generos[7].valorva],
-                        data: [7.0, 5.2, 4.9, 4.3, 3.9, 3.9, 3.5, 3.5],
+                        data: [generos[0].engajamento, generos[1].engajamento, generos[2].engajamento, generos[3].engajamento, generos[4].engajamento, generos[5].engajamento, generos[6].engajamento, generos[7].engajamento],
                         backgroundColor: roxo,
                         borderRadius: 6
                     }]
