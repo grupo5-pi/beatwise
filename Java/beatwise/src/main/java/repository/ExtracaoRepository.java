@@ -26,7 +26,7 @@ public class ExtracaoRepository {
         }
     }
 
-    public void saveMusica(String nome, Integer album) {
+    public void saveMusica(String nome, Integer album, String albumType) {
         jdbcTemplate.update(
                 "INSERT INTO musicaBD (nome, fkAlbumBD) VALUES (?, ?);", nome, album);
     }

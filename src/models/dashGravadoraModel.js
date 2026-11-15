@@ -13,21 +13,22 @@ function obterDiferencaClipe() {
 
 function obterMelhorGenero() {
   var instrucaoSql = `
+    WITH base AS (
+        SELECT
+            COALESCE(NULLIF(TRIM(m.generoPadrao), ''), NULLIF(TRIM(m.genero), '')) AS genero,
+            s.fluxo
+        FROM musicaBD m
+        JOIN spotifyBD s ON s.fkMusicaBD = m.id
+    )
     SELECT
-        m.generoPadrao AS genero,
-        AVG(s.fluxo) AS mediaGenero,
+        base.genero AS genero,
+        AVG(base.fluxo) AS mediaGenero,
         geral.media AS mediaGeral,
-        ((AVG(s.fluxo) - geral.media) / geral.media) * 100 AS porcentagem
-    FROM musicaBD m
-    JOIN spotifyBD s ON s.fkMusicaBD = m.id
-    JOIN (
-        SELECT AVG(s2.fluxo) AS media
-        FROM spotifyBD s2
-        JOIN musicaBD m2 ON m2.id = s2.fkMusicaBD
-        WHERE m2.generoPadrao IS NOT NULL
-    ) AS geral
-    WHERE m.generoPadrao IS NOT NULL
-    GROUP BY m.generoPadrao, geral.media
+        ((AVG(base.fluxo) - geral.media) / geral.media) * 100 AS porcentagem
+    FROM base
+    JOIN (SELECT AVG(fluxo) AS media FROM base WHERE genero IS NOT NULL) AS geral
+    WHERE base.genero IS NOT NULL
+    GROUP BY base.genero, geral.media
     ORDER BY mediaGenero DESC
     LIMIT 1`;
 
