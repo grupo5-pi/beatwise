@@ -253,15 +253,21 @@
         Chart.defaults.borderColor = linhaGrade;
         Chart.defaults.maintainAspectRatio = false;
 
-        function carregarGraficos() {
+        async function carregarGraficos() {
+            let dados = await retornarDiferencaTipoAlbum();
+            let viewsAlbum = dados.viewsAlbum;
+            let viewsSolo = dados.viewsSolo;
+            let streamAlbum = dados.streamAlbum;
+            let streamSolo = dados.streamSolo;
+
             // 1) Tipo de lançamento x desempenho: Spotify x YouTube (em milhões)
             new Chart(graficoLancamento, {
                 type: 'bar',
                 data: {
                     labels: ['Álbum', 'Solo'],
                     datasets: [
-                        { label: 'Spotify', data: [5.2, 8.0], backgroundColor: roxo, borderRadius: 6 },
-                        { label: 'YouTube', data: [5.5, 8.6], backgroundColor: roxoClaro, borderRadius: 6 }
+                        { label: 'Spotify', data: [streamAlbum, streamSolo], backgroundColor: roxo, borderRadius: 6 },
+                        { label: 'YouTube', data: [viewsAlbum, viewsSolo], backgroundColor: roxoClaro, borderRadius: 6 }
                     ]
                 },
                 options: {
@@ -273,13 +279,17 @@
                 }
             });
 
+            let generos = await retornarGeneroEngajamento();
+
             // 2) Gêneros com mais engajamento (% de curtidas + comentários / views)
             new Chart(graficoGeneros, {
                 type: 'bar',
                 data: {
+                    // labels: [generos[0].nome, generos[1].nome, generos[2].nome, generos[3].nome, generos[4].nome, generos[5].nome, generos[6].nome, generos[7].nome],
                     labels: ['Pop', 'Funk', 'Trap', 'MPB', 'Rock', 'Eletrônica', 'Sertanejo', 'Samba'],
                     datasets: [{
                         label: 'Engajamento',
+                        // data: [generos[0].valor, generos[1].valor, generos[2].valor, generos[3].valor, generos[4].valor, generos[5].valor, generos[6].valor, generos[7].valorva],
                         data: [7.0, 5.2, 4.9, 4.3, 3.9, 3.9, 3.5, 3.5],
                         backgroundColor: roxo,
                         borderRadius: 6
