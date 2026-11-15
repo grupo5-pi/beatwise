@@ -45,10 +45,30 @@ function obterTipoAlbum(req, res) {
   });
 }
 
+function obterDiferencaTipoAlbum(req, res) {
+  musicaModel.obterDiferencaTipoAlbum().then((resultado) => {
+    res.status(200).json(resultado);
+  }).catch(erro => {
+    console.error(erro);
+    res.status(500).json(erro);
+  });
+}
+
+function obterGeneroEngajamento(req, res) {
+  musicaModel.obterGeneroEngajamento().then((resultado) => {
+    res.status(200).json(resultado);
+  }).catch(erro => {
+    console.error(erro);
+    res.status(500).json(erro);
+  });
+}
+
 module.exports = {
   obterDiferencaClipe,
   obterMelhorGenero,
   obterMelhorPlataforma,
   obterFeatSolo,
-  obterTipoAlbum
+  obterTipoAlbum,
+  obterDiferencaTipoAlbum,
+  obterGeneroEngajamento
 };

@@ -110,10 +110,20 @@ function obterTipoAlbum() {
   return database.executar(instrucaoSql);
 }
 
+function obterDiferencaTipoAlbum() {
+
+}
+
+function obterGeneroEngajamento() {
+    
+}
+
 module.exports = {
   obterDiferencaClipe,
   obterMelhorGenero,
   obterMelhorPlataforma,
   obterFeatSolo,  
-  obterTipoAlbum
+  obterTipoAlbum,
+  obterDiferencaTipoAlbum,
+  obterGeneroEngajamento,
 };
