@@ -1,5 +1,18 @@
-function carregarDispersao() {
-    const musicas = musicasExemplo;
+async function carregarDispersao(musicasDaAnalise) {
+    let musicas = musicasDaAnalise;
+
+    if (!musicas) {
+        musicas = [];
+        try {
+            const resposta = await fetch('/dashboardProdutor/dispersao');
+            if (!resposta.ok) {
+                throw new Error('Erro ao carregar a dispersão');
+            }
+            musicas = await resposta.json();
+        } catch (erro) {
+            console.log(erro);
+        }
+    }
 
     const caracteristicas = {
         dancabilidade: {
@@ -44,7 +57,7 @@ function carregarDispersao() {
     const VIEWS_MAXIMO = 1e10;
 
     const COR_TEXTO = '#c4b5fd';
-    const COR_PONTOS = 'rgba(168, 85, 247, 0.8)';
+    const COR_PONTOS = 'rgba(168, 85, 247, 0.5)';
     const COR_GRADE = 'rgba(139, 92, 246, 0.28)';
     const COR_TENDENCIA = '#ddd6fe';
 
@@ -135,7 +148,9 @@ function carregarDispersao() {
                 {
                     label: 'Músicas',
                     backgroundColor: COR_PONTOS,
-                    pointRadius: 7,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    pointHitRadius: 8,
                     clip: false
                 },
                 {
