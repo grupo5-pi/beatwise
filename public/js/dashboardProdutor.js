@@ -6,8 +6,8 @@ let dadosKpiFator = {
 }
 
 let dadosKpiDuracaoIdeal = {
-    valor: '2:30 - 3:30',
-    texto: 'Músicas nessa faixa têm streams 2x acima da média (980 mil vs média geral)'
+    valor: '...',
+    texto: 'Carregando...'
 }
 
 let dadosKpiTotalStreams = {
@@ -84,9 +84,7 @@ function mostrarAlertas() {
 
 function carregarKpis() {
     carregarKpiFator();
-
-    kpi_duracao_ideal_valor.textContent = dadosKpiDuracaoIdeal.valor;
-    kpi_duracao_ideal_texto.textContent = dadosKpiDuracaoIdeal.texto;
+    carregarKpiDuracao();
 
     kpi_total_streams_valor.textContent = dadosKpiTotalStreams.valor;
     kpi_total_streams_texto.textContent = dadosKpiTotalStreams.texto;
@@ -108,6 +106,25 @@ function carregarKpiFator() {
         console.log(erro);
         kpi_fator_valor.textContent = '—';
         kpi_fator_texto.textContent = 'Não foi possível carregar este indicador.';
+    });
+}
+
+function carregarKpiDuracao() {
+    kpi_duracao_ideal_valor.textContent = dadosKpiDuracaoIdeal.valor;
+    kpi_duracao_ideal_texto.textContent = dadosKpiDuracaoIdeal.texto;
+
+    fetch('/dashboardProdutor/duracaoIdeal').then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar a duração ideal');
+        }
+        return resposta.json();
+    }).then(function (dados) {
+        kpi_duracao_ideal_valor.textContent = dados.valor;
+        kpi_duracao_ideal_texto.textContent = dados.texto;
+    }).catch(function (erro) {
+        console.log(erro);
+        kpi_duracao_ideal_valor.textContent = '—';
+        kpi_duracao_ideal_texto.textContent = 'Não foi possível carregar este indicador.';
     });
 }
 
