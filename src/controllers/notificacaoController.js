@@ -1,7 +1,7 @@
 var notificacaoModel = require("../models/notificacaoModel");
 
 function salvarNotificacao(req, res) {
-    
+
     var fkFuncionario = Number(req.body.fkFuncionarioServer);
     var tema = req.body.temaServer;
     var opcoes = req.body.opcoesServer;
@@ -38,6 +38,59 @@ function salvarNotificacao(req, res) {
     }
 }
 
-module.exports = {
-    salvarNotificacao
+function buscarConfiguracao(req, res) {
+    var fkFuncionario = Number(req.params.fkFuncionario);
+
+    if (Number.isInteger(fkFuncionario) == false) {
+        res.status(400).send("O fkFuncionario precisa ser um número inteiro!");
+    } else {
+        notificacaoModel.buscarConfiguracao(fkFuncionario)
+            .then(
+                function (config) {
+                    res.json(config);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao buscar a configuração! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
 }
+
+function excluirTema(req, res) {
+    var fkFuncionario = Number(req.params.fkFuncionario);
+    var tema = req.params.tema;
+
+    if (Number.isInteger(fkFuncionario) == false) {
+        res.status(400).send("O fkFuncionario precisa ser um número inteiro!");
+    } else if (notificacaoModel.buscarTema(tema) == null) {
+        res.status(400).send("Tema inválido!");
+    } else {
+        notificacaoModel.excluirTema(fkFuncionario, tema)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao excluir o tema! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+module.exports = {
+    salvarNotificacao,
+    buscarConfiguracao,
+    excluirTema
+};

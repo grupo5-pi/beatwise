@@ -60,7 +60,60 @@ function salvarNotificacao(fkFuncionario, chaveTema, opcoes) {
     });
 }
 
+function buscarConfiguracao(fkFuncionario) {
+    console.log("ACESSEI O notificacao MODEL \n function buscarConfiguracao():");
+
+    var consultas = temas.map(function (tema) {
+        var instrucao = `
+            SELECT ${tema.colunas.join(", ")}
+            FROM ${tema.tabela} t
+            JOIN notificacao n ON n.id = t.fkNotificacao
+            WHERE n.fkFuncionario = ${fkFuncionario}
+            LIMIT 1;
+        `;
+
+        return database.executar(instrucao).then(function (linhas) {
+            if (linhas.length == 0) {
+                return null;
+            }
+            return {
+                chave: tema.chave,
+                opcoes: tema.colunas.map(function (coluna) {
+                    return linhas[0][coluna] === 1;
+                })
+            };
+        });
+    });
+
+    return Promise.all(consultas).then(function (resultados) {
+        var config = {};
+        resultados.forEach(function (r) {
+            if (r != null) {
+                config[r.chave] = r.opcoes;
+            }
+        });
+        return config;
+    });
+}
+
+function excluirTema(fkFuncionario, chaveTema) {
+    console.log("ACESSEI O notificacao MODEL \n function excluirTema():");
+
+    var tema = buscarTema(chaveTema);
+
+    var instrucao = `
+        DELETE t FROM ${tema.tabela} t
+        JOIN notificacao n ON n.id = t.fkNotificacao
+        WHERE n.fkFuncionario = ${fkFuncionario};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 module.exports = {
     buscarTema,
-    salvarNotificacao
+    salvarNotificacao,
+    buscarConfiguracao,
+    excluirTema
 };
