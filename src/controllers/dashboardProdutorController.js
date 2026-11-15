@@ -234,4 +234,109 @@ async function viewsPorBpm(req, res) {
     }
 }
 
-module.exports = { alertas, fatorDecisivo, generos, viewsPorBpm };
+var MIN_MUSICAS_FAIXA = 30;
+
+function formatarTempo(segundos) {
+    var min = Math.floor(segundos / 60);
+    var seg = segundos % 60;
+    return min + ":" + (seg < 10 ? "0" : "") + seg;
+}
+
+function abreviar(valor) {
+    if (valor >= 1000000000) return (valor / 1000000000).toFixed(1).replace(".", ",") + " bi";
+    if (valor >= 1000000) return (valor / 1000000).toFixed(1).replace(".", ",") + " milhões";
+    if (valor >= 1000) return Math.round(valor / 1000) + " mil";
+    return String(Math.round(valor));
+}
+
+function calcularDuracaoIdeal(linhas) {
+    var blocos = {};
+    var totalMusicas = 0;
+    var somaStreams = 0;
+
+    for (var i = 0; i < linhas.length; i++) {
+        var total = numero(linhas[i].total);
+        var streams = numero(linhas[i].streams);
+        blocos[numero(linhas[i].bloco)] = { total: total, streams: streams };
+        totalMusicas += total;
+        somaStreams += total * streams;
+    }
+    if (totalMusicas == 0) return null;
+
+    var mediaGeral = somaStreams / totalMusicas;
+    var melhor = null;
+
+    for (var chave in blocos) {
+        var b = Number(chave);
+        var a = blocos[b];
+        var c = blocos[b + 1];
+        if (!c) continue;
+
+        var qtd = a.total + c.total;
+        if (qtd < MIN_MUSICAS_FAIXA) continue;
+
+        var media = (a.total * a.streams + c.total * c.streams) / qtd;
+        if (!melhor || media > melhor.media) {
+            melhor = { bloco: b, media: media };
+        }
+    }
+    if (!melhor) return null;
+
+    var inicio = melhor.bloco * 30;
+    var fator = melhor.media / mediaGeral;
+
+    return {
+        valor: formatarTempo(inicio) + " - " + formatarTempo(inicio + 60),
+        texto: "Músicas nessa faixa têm streams " + fator.toFixed(1).replace(".", ",") +
+            "x acima da média (" + abreviar(melhor.media) + " vs " + abreviar(mediaGeral) + " da média geral)"
+    };
+}
+
+async function duracaoIdeal(req, res) {
+    try {
+        var linhas = await model.streamsPorBlocoDuracao();
+        var resultado = calcularDuracaoIdeal(linhas);
+        if (!resultado) {
+            return res.json({ valor: "—", texto: "Ainda não há dados suficientes para calcular." });
+        }
+        res.json(resultado);
+    } catch (erro) {
+        console.log(erro);
+        res.status(500).json({ mensagem: "Erro ao calcular a duração ideal." });
+    }
+}
+
+async function dispersao(req, res) {
+    try {
+        var linhas = await model.musicasParaDispersao();
+        var vistos = {};
+        var pontos = [];
+
+        for (var i = 0; i < linhas.length; i++) {
+            var l = linhas[i];
+            var chave = l.titulo + "|" + l.artista;
+            if (vistos[chave]) continue;
+            vistos[chave] = true;
+
+            pontos.push({
+                titulo: l.titulo,
+                artista: l.artista || "—",
+                views: numero(l.views),
+                dancabilidade: l.dancabilidade,
+                energia: l.energia,
+                tonalidade: l.tonalidade,
+                acustica: l.acustica,
+                vivicidade: l.vivicidade,
+                valenciaPositividade: l.valenciaPositividade,
+                tempoBPM: l.tempoBPM
+            });
+        }
+
+        res.json(pontos);
+    } catch (erro) {
+        console.log(erro);
+        res.status(500).json({ mensagem: "Erro ao carregar a dispersão." });
+    }
+}
+
+module.exports = { alertas, fatorDecisivo, generos, viewsPorBpm, duracaoIdeal, dispersao };
