@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./css/artistaDetalhe.css">
     <link rel="stylesheet" href="./css/padrao.css">
     <script src="./js/recomendacao.js" defer></script>
+    <script src="./js/generos.js" defer></script>
     <script src="./js/artistaDetalhe.js" defer></script>
     <script src="./js/sidebar.js" defer></script>
     <script src="./js/controleDeAcesso.js"></script>
@@ -22,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body class="rec-page bw" onload="validarAcesso()">
+<body class="rec-page bw" onload="validarAcesso(); carregarGeneros('rec-genero')">
     <aside class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="./assets/imgs/Logo_nav.png" alt="banner da BeatWise" class="logo-banner">
@@ -108,11 +109,7 @@
                     <label for="rec-genero">Gênero</label>
                     <select id="rec-genero">
                         <option value="">Qualquer gênero</option>
-                        <option value="Pop">Pop</option>
-                        <option value="Rap">Rap</option>
-                        <option value="Funk">Funk</option>
-                        <option value="Sertanejo">Sertanejo</option>
-                        <option value="Eletrônica">Eletrônica</option>
+                    </select>
                     </select>
                 </div>
 
@@ -144,21 +141,24 @@
                         <label for="rec-tom">Tonalidade</label>
                         <select id="rec-tom">
                             <option value="">Qualquer tonalidade</option>
-                            <option>C</option>
-                            <option>C#</option>
-                            <option>D</option>
-                            <option>D#</option>
-                            <option>E</option>
-                            <option>F</option>
-                            <option>F#</option>
-                            <option>G</option>
-                            <option>G#</option>
-                            <option>A</option>
-                            <option>A#</option>
-                            <option>B</option>
+                            <option value="0">C</option>
+                            <option value="1">C#</option>
+                            <option value="2">D</option>
+                            <option value="3">D#</option>
+                            <option value="4">E</option>
+                            <option value="5">F</option>
+                            <option value="6">F#</option>
+                            <option value="7">G</option>
+                            <option value="8">G#</option>
+                            <option value="9">A</option>
+                            <option value="10">A#</option>
+                            <option value="11">B</option>
                         </select>
                     </div>
                 </div>
+
+                <!-- MUDOU: mensagem de erro da busca (JS preenche) -->
+                <p id="mensagem_filtros" class="rec-erro" style="display: none;"></p>
 
                 <div class="rec-linha rec-linha-rodape">
                     <div class="rec-campo">
@@ -177,21 +177,6 @@
 
             <div class="rec-painel">
                 <div id="rec-cards" class="rec-cards">
-                    <div class="rec-card" onclick="abrirModalArtista(0)">
-                        <span class="rec-card-nome">Dua Lipa</span>
-                        <span class="rec-card-info">Pop · 96 BPM · Tom C</span>
-                        <span class="rec-match">94% compatível</span>
-                    </div>
-                    <div class="rec-card" onclick="abrirModalArtista(1)">
-                        <span class="rec-card-nome">Luísa Sonza</span>
-                        <span class="rec-card-info">Funk · 121 BPM · Tom C#</span>
-                        <span class="rec-match">89% compatível</span>
-                    </div>
-                    <div class="rec-card" onclick="abrirModalArtista(2)">
-                        <span class="rec-card-nome">Veigh</span>
-                        <span class="rec-card-info">Rap · 158 BPM · Tom D</span>
-                        <span class="rec-match">85% compatível</span>
-                    </div>
                 </div>
             </div>
 
