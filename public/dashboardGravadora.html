@@ -17,6 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="./js/sidebar.js" defer></script>
     <script src="./js/controleDeAcesso.js"></script>
+    <script src="./js/dashGravadora.js"></script>
 </head>
 
 <body class="dash-gravadora bw" onload="iniciar(), validarAcesso()">
@@ -66,7 +67,8 @@
             </li>
             <li id="funcionarios">
                 <a href="./cadastroFuncionario.html" title="Funcionários">
-                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone"></div>
+                    <div class="icone-box"><img src="./assets/imgs/user-pen-alt-1-svgrepo-com.svg" alt="" class="icone">
+                    </div>
                     <div class="texto">Funcionários</div>
                 </a>
             </li>
@@ -136,15 +138,94 @@
             }
         }
 
-        /* ---------- KPIs (dados mockados) ---------- */
-        let dadosKpis = [
-            { titulo: "Comparativo músicas com clipe X sem clipe", valor: "Com Clipe", desc: "Músicas com clipe têm maior taxa de engajamento:  <span class='destaque'>6,0%</span>", seta: "↑↑" },
-            { titulo: "Gênero com melhor desempenho", valor: "Pop", desc: "Pop está performando  <span class='destaque'>44%</span> acima da média geral", seta: "↑↑" },
-            { titulo: "Qual a melhor plataforma", valor: "YouTube", desc: "O YouTube apresenta maior taxa de aproveitamento: <span class='destaque'>+11%</span>", seta: "↑↑" },
-            { titulo: "Comparativo Feat/Solo", valor: "Feat", desc: "Músicas feat têm maior taxa de engajamento: <span class='destaque'>+8%</span>", seta: "↑↑" },
-        ];
+        let dadosKpis = [];
 
-        function carregarKpis() {
+        async function dadosDiferencaClipe() {
+            let dados = await retornarDiferencaClipe();
+            let engajamentoClipe = dados[0].comClipe;
+            let engajamentoSemClipe = dados[0].semClipe;
+            let diferenca = dados[0].porcentagem;
+
+            dadosKpis.push({
+                titulo: "Comparativo músicas com clipe X sem clipe",
+                valor: engajamentoClipe > engajamentoSemClipe ? "Com Clipe" : "Sem Clipe",
+                desc: engajamentoClipe > engajamentoSemClipe ? `Músicas com clipe têm maior taxa de engajamento:  <span class='destaque'>${diferenca.toFixed(2)}%</span>` : `Músicas sem clipe têm maior taxa de engajamento:  <span class='destaque'>${diferenca.toFixed(2)}%</span>`,
+                seta: "↑↑"
+            })
+        }
+
+        /* ---------- Buscas no back-end (KPIs e gráfico Tipo de álbum) ---------- */
+        async function retornarMelhorGenero() {
+            let resposta = await fetch("/dashGravadora/obterMelhorGenero");
+            return await resposta.json();
+        }
+
+        async function retornarMelhorPlataforma() {
+            let resposta = await fetch("/dashGravadora/obterMelhorPlataforma");
+            return await resposta.json();
+        }
+
+        async function retornarFeatSolo() {
+            let resposta = await fetch("/dashGravadora/obterFeatSolo");
+            return await resposta.json();
+        }
+
+        async function retornarTipoAlbum() {
+            let resposta = await fetch("/dashGravadora/obterTipoAlbum");
+            return await resposta.json();
+        }
+
+        /* ---------- KPIs vindas do banco ---------- */
+        async function dadosMelhorGenero() {
+            let dados = await retornarMelhorGenero();
+            let genero = dados[0].genero;
+            let porcentagem = Number(dados[0].porcentagem || 0);
+
+            dadosKpis.push({
+                titulo: "Gênero com melhor desempenho",
+                valor: genero,
+                desc: `${genero} está performando <span class='destaque'>${porcentagem.toFixed(0)}%</span> acima da média geral`,
+                seta: "↑↑"
+            });
+        }
+
+        async function dadosMelhorPlataforma() {
+            let dados = await retornarMelhorPlataforma();
+            let plataforma = dados[0].plataforma;
+            let porcentagem = Number(dados[0].porcentagem || 0);
+
+            dadosKpis.push({
+                titulo: "Qual a melhor plataforma",
+                valor: plataforma,
+                desc: `O ${plataforma} apresenta maior taxa de aproveitamento: <span class='destaque'>+${porcentagem.toFixed(0)}%</span>`,
+                seta: "↑↑"
+            });
+        }
+
+        async function dadosFeatSolo() {
+            let dados = await retornarFeatSolo();
+            let vencedor = dados[0].vencedor;
+            let porcentagem = Number(dados[0].porcentagem || 0);
+
+            dadosKpis.push({
+                titulo: "Comparativo Feat/Solo",
+                valor: vencedor,
+                desc: `Músicas ${vencedor.toLowerCase()} têm maior taxa de engajamento: <span class='destaque'>+${porcentagem.toFixed(0)}%</span>`,
+                seta: "↑↑"
+            });
+        }
+
+        async function carregarKpis() {
+            let funcoes = [dadosDiferencaClipe, dadosMelhorGenero, dadosMelhorPlataforma, dadosFeatSolo];
+
+            for (let i = 0; i < funcoes.length; i++) {
+                try {
+                    await funcoes[i]();
+                } catch (erro) {
+                    console.error(`Erro ao carregar KPI (${funcoes[i].name}):`, erro);
+                }
+            }
+
             lista_kpis.innerHTML = '';
 
             for (let i = 0; i < dadosKpis.length; i++) {
@@ -164,7 +245,7 @@
         const roxoClaro = '#A78BFA';
         const indigo = '#4F46E5';
         const lilas = '#C4B5FD';
-        const texto= '#fff';
+        const texto = '#fff';
         const linhaGrade = 'rgba(139, 92, 246, 0.15)';
 
         Chart.defaults.color = texto
@@ -172,34 +253,55 @@
         Chart.defaults.borderColor = linhaGrade;
         Chart.defaults.maintainAspectRatio = false;
 
-        function carregarGraficos() {
+        async function carregarGraficos() {
+            let categorias = await retornarDiferencaTipoAlbum();
+            let viewsAlbum = categorias[0].youtube;
+            let viewsSingle = categorias[1].youtube;
+            let streamAlbum = categorias[0].spotify;
+            let streamSingle = categorias[1].spotify;
+
             // 1) Tipo de lançamento x desempenho: Spotify x YouTube (em milhões)
             new Chart(graficoLancamento, {
                 type: 'bar',
                 data: {
-                    labels: ['Álbum', 'Solo'],
+                    labels: ['Álbum', 'Single'],
                     datasets: [
-                        { label: 'Spotify', data: [5.2, 8.0], backgroundColor: roxo, borderRadius: 6 },
-                        { label: 'YouTube', data: [5.5, 8.6], backgroundColor: roxoClaro, borderRadius: 6 }
+                        { label: 'Spotify', data: [streamAlbum, streamSingle], backgroundColor: roxo, borderRadius: 6 },
+                        { label: 'YouTube', data: [viewsAlbum, viewsSingle], backgroundColor: roxoClaro, borderRadius: 6 }
                     ]
                 },
                 options: {
-                    plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y.toString().replace('.', ',')} mi` } } },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: c => `${c.dataset.label}: ${formatarNumero(c.parsed.y)}`
+                            }
+                        }
+                    },
                     scales: {
-                        y: { beginAtZero: true, ticks: { callback: v => v + ' mi' } },
-                        x: { grid: { display: false } }
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: v => formatarNumero(v)
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
                     }
                 }
             });
 
-            // 2) Gêneros com mais engajamento (% de curtidas + comentários / views)
+            let generos = await retornarGeneroEngajamento();
+
+            // 2) Gêneros com mais engajamento ((curtidas + comentários / views) * 100)
             new Chart(graficoGeneros, {
                 type: 'bar',
                 data: {
-                    labels: ['Pop', 'Funk', 'Trap', 'MPB', 'Rock', 'Eletrônica', 'Sertanejo', 'Samba'],
+                    labels: [generos[0].genero, generos[1].genero, generos[2].genero, generos[3].genero, generos[4].genero, generos[5].genero, generos[6].genero, generos[7].genero],
                     datasets: [{
                         label: 'Engajamento',
-                        data: [7.0, 5.2, 4.9, 4.3, 3.9, 3.9, 3.5, 3.5],
+                        data: [generos[0].engajamento, generos[1].engajamento, generos[2].engajamento, generos[3].engajamento, generos[4].engajamento, generos[5].engajamento, generos[6].engajamento, generos[7].engajamento],
                         backgroundColor: roxo,
                         borderRadius: 6
                     }]
@@ -213,14 +315,29 @@
                     }
                 }
             });
+        }
 
-            // 3) Tipo de álbum (% do desempenho)
+        // 3) Tipo de álbum (% do desempenho) - dados do banco
+        async function carregarGraficoTipoAlbum() {
+            let labels = ['Feat - Single', 'Feat - Álbum', 'Solo - Single', 'Solo - Álbum'];
+            let valores = [0, 0, 0, 0];
+
+            try {
+                let dados = await retornarTipoAlbum();
+                valores = labels.map(l => {
+                    let item = dados.find(d => d.categoria == l);
+                    return item ? Number(item.porcentagem) : 0;
+                });
+            } catch (erro) {
+                console.error("Erro ao carregar gráfico Tipo de álbum:", erro);
+            }
+
             new Chart(graficoTipoAlbum, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Feat - Single', 'Feat - Álbum', 'Solo - Single', 'Solo - Álbum'],
+                    labels: labels,
                     datasets: [{
-                        data: [41, 16, 19, 24],
+                        data: valores,
                         backgroundColor: [roxo, indigo, roxoClaro, lilas],
                         borderColor: '#15131D',
                         borderWidth: 3
@@ -228,15 +345,27 @@
                 },
                 options: {
                     cutout: '65%',
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12 } },
+                        tooltip: { callbacks: { label: c => `${c.label}: ${c.parsed}%` } }
+                    }
                 }
             });
+        }
+
+        function formatarNumero(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                notation: 'compact',
+                compactDisplay: 'short',
+                maximumFractionDigits: 2
+            }).format(valor);
         }
 
         function iniciar() {
             carregarAlertas();
             carregarKpis();
             carregarGraficos();
+            carregarGraficoTipoAlbum();
         }
     </script>
 </body>

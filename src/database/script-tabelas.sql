@@ -94,6 +94,7 @@ CREATE TABLE spotifyBD (
   id INT PRIMARY KEY AUTO_INCREMENT,
   fkMusicaBD INT NOT NULL,
   url VARCHAR(400),
+  tipoAlbum VARCHAR(20),
   dancabilidade DOUBLE,
   energia DOUBLE,
   tonalidade INT,
@@ -224,13 +225,6 @@ VALUES
     ('Responsável', 'empresa@beatwise.com', 'Empresa123#', 1, 2, 1),
     ('Produtor', 'produtor@beatwise.com', 'Produtor123#', 1, 3, 2),
     ('Marketing', 'marketing@beatwise.com', 'Marketing123#', 1, 4, 2);
-    
-ALTER TABLE musicaBD
-  ADD COLUMN genero VARCHAR(45) NULL,
-  ADD COLUMN statusItunes TINYINT NOT NULL DEFAULT 0;
-
-ALTER TABLE musicaBD
-  ADD COLUMN anoLancamento INT NULL;
 
 
 ALTER TABLE sugestaoFeat
@@ -242,8 +236,18 @@ ALTER TABLE sugestaoFeat
   ADD COLUMN tonalidade INT NULL,
   ADD COLUMN intervaloAnos INT NULL;
 
+ALTER TABLE musicaBD
+  ADD COLUMN genero VARCHAR(45) NULL,
+  ADD COLUMN statusItunes TINYINT NOT NULL DEFAULT 0;
+  
   ALTER TABLE musicaBD
+  ADD COLUMN anoLancamento INT NULL;
+
+ALTER TABLE musicaBD
   ADD COLUMN generoPadrao VARCHAR(45) NULL;
+
+
+
 
 UPDATE musicaBD SET generoPadrao = CASE
     WHEN genero IS NULL THEN NULL
@@ -269,3 +273,13 @@ UPDATE musicaBD SET generoPadrao = CASE
     ELSE 'Outros'
 END
 WHERE id > 0 AND statusItunes = 1;
+
+
+CREATE TABLE snapshotGenero (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  dataAtualizacao DATETIME NOT NULL,
+  genero VARCHAR(45) NOT NULL,
+  views BIGINT NOT NULL,
+  curtidas BIGINT NOT NULL,
+  streams BIGINT NOT NULL
+);

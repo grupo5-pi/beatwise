@@ -24,6 +24,7 @@ var primeiroAcessoRouter = require("./src/routes/primeiroAcessoRoutes");
 var featRouter = require("./src/routes/featRoutes");
 var artistaRouter = require("./src/routes/artistaRoutes");
 var musicaRouter = require("./src/routes/musicaRoutes");
+var dashGravadoraRouter = require("./src/routes/dashGravadoraRoutes");
 
 
 
@@ -42,6 +43,7 @@ app.use("/primeiroAcesso", primeiroAcessoRouter);
 app.use("/feats", featRouter);
 app.use("/artistas", artistaRouter);
 app.use("/musicas", musicaRouter);
+app.use("/dashGravadora", dashGravadoraRouter);
 
 
 app.listen(PORTA_APP, function () {

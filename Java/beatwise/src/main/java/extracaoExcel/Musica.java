@@ -76,13 +76,14 @@ public class Musica {
 
         repository.saveArtista(artist);
 
-        repository.saveMusica(track, repository.selectAlbum(album));
+        repository.saveMusica(track, repository.selectAlbum(album), albumType);
 
         repository.saveMusicaArtista(repository.selectArtista(artist), repository.selectMusica(track, repository.selectAlbum(album)));
 
         repository.saveSpotify(
                 repository.selectMusica(track, repository.selectAlbum(album)),
                 urlSpotify,
+                albumType,
                 danceability,
                 energy,
                 key,
