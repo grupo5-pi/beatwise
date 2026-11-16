@@ -94,6 +94,7 @@ CREATE TABLE spotifyBD (
   id INT PRIMARY KEY AUTO_INCREMENT,
   fkMusicaBD INT NOT NULL,
   url VARCHAR(400),
+  tipoAlbum VARCHAR(20),
   dancabilidade DOUBLE,
   energia DOUBLE,
   tonalidade INT,
@@ -143,21 +144,16 @@ CREATE TABLE sugestaoFeat (
 
 CREATE TABLE metricaDash (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  nome VARCHAR(45) NOT NULL,
-  data_inicial DATE,
-  data_final DATE,
-  genero VARCHAR(45),
-  dancabilidade DOUBLE,
-  intensidadeSonora DOUBLE,
-  vivacidade DOUBLE,
-  energia DOUBLE,
-  acustica DOUBLE,
-  valencia DOUBLE,
-  tonalidade DOUBLE,
-  intrumentalidade DOUBLE,
-  bpm DOUBLE,
+  nome VARCHAR(60) NOT NULL,
+  periodo VARCHAR(20) NOT NULL DEFAULT 'todos',
+  anoInicio INT NULL,
+  anoFim INT NULL,
+  generos VARCHAR(500) NULL,
+  caracteristicas TEXT NULL,
+  totalMusicas INT NOT NULL DEFAULT 0,
+  dataCriacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   fkFuncionario INT NOT NULL,
-  CONSTRAINT fk_metricaDash_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
+  CONSTRAINT fk_metricaDash_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id) ON DELETE CASCADE
 );
 
 CREATE TABLE notificacao (
@@ -225,6 +221,51 @@ VALUES
     ('Produtor', 'produtor@beatwise.com', 'Produtor123#', 1, 3, 2),
     ('Marketing', 'marketing@beatwise.com', 'Marketing123#', 1, 4, 2);
 
+
+ALTER TABLE sugestaoFeat
+  ADD COLUMN genero VARCHAR(45) NULL,
+  ADD COLUMN energia INT NULL,
+  ADD COLUMN dancabilidade INT NULL,
+  ADD COLUMN bpmMin INT NULL,
+  ADD COLUMN bpmMax INT NULL,
+  ADD COLUMN tonalidade INT NULL,
+  ADD COLUMN intervaloAnos INT NULL;
+
+ALTER TABLE musicaBD
+  ADD COLUMN genero VARCHAR(45) NULL,
+  ADD COLUMN statusItunes TINYINT NOT NULL DEFAULT 0;
+  
+  ALTER TABLE musicaBD
+  ADD COLUMN anoLancamento INT NULL;
+
+ALTER TABLE musicaBD
+  ADD COLUMN generoPadrao VARCHAR(45) NULL;
+
+
+UPDATE musicaBD SET generoPadrao = CASE
+    WHEN genero IS NULL THEN NULL
+    WHEN genero LIKE '%christmas%' OR genero LIKE '%holiday%' OR genero LIKE '%children%' OR genero IN ('Soundtrack', 'Original Score', 'TV Soundtrack', 'Video Game', 'Musicals', 'Comedy', 'Spoken Word', 'Sound Effects', 'Worldwide', 'Arabesque', 'Halk', 'Turkish', 'Modern Era', 'Instrumental', 'New Age') THEN 'Outros'
+    WHEN genero LIKE '%brazil%' OR genero IN ('MPB', 'Pagode', 'Samba', 'Forró', 'Axé', 'Bossa Nova') THEN 'Brasileiro'
+    WHEN genero LIKE '%sertanej%' THEN 'Sertanejo'
+    WHEN genero LIKE '%funk%' THEN 'Funk'
+    WHEN genero LIKE '%indian%' OR genero LIKE '%bollywood%' OR genero LIKE '%punjabi%' OR genero IN ('Tamil', 'Telugu', 'Hindi', 'Malayalam', 'Indo Pop') THEN 'Indiano'
+    WHEN genero LIKE '%afro%' OR genero LIKE '%amapiano%' OR genero LIKE '%african%' OR genero IN ('Alte') THEN 'Afrobeats'
+    WHEN genero LIKE '%latin%' OR genero LIKE '%tropical%' OR genero LIKE '%mexican%' OR genero LIKE '%reggaeton%' OR genero IN ('Flamenco', 'Baladas y Boleros', 'Bolero', 'Raíces', 'Iberia', 'Tex-Mex', 'Rock y Alternativo') THEN 'Latino'
+    WHEN genero LIKE '%reggae%' OR genero LIKE '%dancehall%' OR genero IN ('Ska') THEN 'Reggae'
+    WHEN genero LIKE '%hip-hop%' OR genero LIKE '%rap%' OR genero IN ('Dirty South') THEN 'Rap'
+    WHEN genero LIKE '%r&b%' OR genero LIKE '%soul%' THEN 'R&B/Soul'
+    WHEN genero LIKE '%electro%' OR genero LIKE '%dance%' OR genero LIKE '%house%' OR genero LIKE '%techno%' OR genero LIKE '%dubstep%' OR genero LIKE '%drum%' OR genero IN ('Disco', 'Ambient') THEN 'Eletrônica'
+    WHEN genero LIKE '%country%' OR genero IN ('Urban Cowboy') THEN 'Country'
+    WHEN genero LIKE '%jazz%' OR genero IN ('Blues', 'Standards', 'Vocal', 'Fusion') THEN 'Jazz'
+    WHEN genero LIKE '%classical%' OR genero LIKE '%orchestral%' OR genero LIKE '%opera%' THEN 'Clássica'
+    WHEN genero LIKE '%christian%' OR genero LIKE '%gospel%' OR genero LIKE '%devotional%' OR genero LIKE '%islamic%' OR genero IN ('CCM', 'Inspirational') THEN 'Gospel/Religioso'
+    WHEN genero LIKE '%folk%' OR genero IN ('Singer/Songwriter') THEN 'Folk'
+    WHEN genero IN ('Pop/Rock') THEN 'Pop'
+    WHEN genero LIKE '%rock%' OR genero LIKE '%metal%' OR genero LIKE '%punk%' OR genero LIKE '%grunge%' OR genero IN ('Alternative', 'Adult Alternative', 'Britpop', 'British Invasion') THEN 'Rock'
+    WHEN genero LIKE '%pop%' OR genero IN ('Adult Contemporary', 'Easy Listening', 'Oldies') THEN 'Pop'
+    ELSE 'Outros'
+END
+WHERE id > 0 AND statusItunes = 1;
 
 CREATE TABLE snapshotGenero (
   id INT PRIMARY KEY AUTO_INCREMENT,
