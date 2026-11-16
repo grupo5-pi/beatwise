@@ -1,342 +1,497 @@
-var model = require("../models/dashboardProdutorModel");
+let dadosAlertas = []
 
-
-var LIMITE_VARIACAO = 5;
-var MAX_ALERTAS = 4;
-var QTD_MUSICAS_GRUPO = 10;
-
-
-function numero(valor) {
-    return Number(valor) || 0;
+let dadosKpiFator = {
+    valor: '...',
+    texto: 'Carregando...'
 }
 
-function normalizar(linhas) {
-    return linhas.map(function (l) {
-        return {
-            genero: l.genero,
-            views: Math.round(numero(l.views)),
-            curtidas: Math.round(numero(l.curtidas)),
-            streams: Math.round(numero(l.streams))
-        };
+let dadosKpiDuracaoIdeal = {
+    valor: '...',
+    texto: 'Carregando...'
+}
+
+let dadosKpiTotalStreams = {
+    valor: '...',
+    texto: 'Carregando...'
+}
+
+let dadosBpmFaixa = {
+    genero: 'Pop',
+    faixas: [],
+    views: [],
+    qtd: [],
+    retornoEsperado: 0
+}
+
+
+let dadosRadar = {
+    genero: 'Todos os gêneros',
+    rotulos: ['BPM', 'Tonalidade', 'Energia', 'Valência', 'Dançabilidade'],
+    valores: [],
+    valoresReais: [],
+    valoresGeral: [],
+    valoresReaisGeral: []
+}
+
+
+let graficoBpm;
+let graficoRadar;
+
+// Campo do Session Storage onde fica a métrica usada para filtrar a dashboard.
+// Formato (todos os campos são opcionais):
+// { "nome": "Pop anos 2010", "anoInicio": 2010, "anoFim": 2019, "generos": ["Pop", "Rock"] }
+// Para limpar o filtro: sessionStorage.removeItem('METRICA_DASHBOARD')
+const CHAVE_METRICA = 'METRICA_DASHBOARD';
+
+function lerMetricaSessao() {
+    let bruto = sessionStorage.getItem(CHAVE_METRICA);
+
+    if (bruto == null) {
+        return null;
+    }
+
+    try {
+        return JSON.parse(bruto);
+    } catch (erro) {
+        console.log('Métrica inválida no Session Storage:', erro);
+        return null;
+    }
+}
+
+// Transforma a métrica em query string: "?anoInicio=2010&anoFim=2019&generos=Pop,Rock"
+function montarQueryMetrica() {
+    let metrica = lerMetricaSessao();
+
+    if (metrica == null) {
+        return '';
+    }
+
+    let parametros = [];
+
+    if (metrica.anoInicio != null && metrica.anoInicio !== '') {
+        parametros.push('anoInicio=' + encodeURIComponent(metrica.anoInicio));
+    }
+
+    if (metrica.anoFim != null && metrica.anoFim !== '') {
+        parametros.push('anoFim=' + encodeURIComponent(metrica.anoFim));
+    }
+
+    let generos = metrica.generos;
+
+    if (typeof generos == 'string') {
+        generos = generos.split(',');
+    }
+
+    if (Array.isArray(generos)) {
+        let limpos = [];
+
+        for (let i = 0; i < generos.length; i++) {
+            let nome = String(generos[i]).trim();
+
+            if (nome != '') {
+                limpos.push(nome);
+            }
+        }
+
+        if (limpos.length > 0) {
+            parametros.push('generos=' + encodeURIComponent(limpos.join(',')));
+        }
+    }
+
+    if (parametros.length == 0) {
+        return '';
+    }
+
+    return '?' + parametros.join('&');
+}
+
+function carregarDashboardProdutor() {
+    carregarAlertas();
+    carregarKpis();
+    montarGraficoBpm();
+    carregarGeneros();
+    montarGraficoRadar();
+    carregarRadar();
+}
+
+function carregarAlertas() {
+    fetch('/dashboardProdutor/alertas').then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar os alertas');
+        }
+        return resposta.json();
+    }).then(function (lista) {
+        dadosAlertas = lista;
+        mostrarAlertas();
+    }).catch(function (erro) {
+        console.log(erro);
+        dadosAlertas = [];
+        mostrarAlertas();
     });
 }
 
-function baseMudou(atuais, ultimo) {
-    if (atuais.length != ultimo.length) return true;
+function mostrarAlertas() {
+    lista_alertas.innerHTML = '';
 
-    var antes = {};
-    for (var i = 0; i < ultimo.length; i++) {
-        antes[ultimo[i].genero] = ultimo[i];
-    }
-    for (var j = 0; j < atuais.length; j++) {
-        var a = atuais[j];
-        var u = antes[a.genero];
-        if (!u || u.views != a.views || u.curtidas != a.curtidas || u.streams != a.streams) return true;
-    }
-    return false;
-}
+    for (let i = 0; i < dadosAlertas.length; i++) {
+        let tipo = dadosAlertas[i].tipo;
+        let icone = '';
 
-var verificacaoEmAndamento = null;
-
-
-function verificarAtualizacao() {
-    if (!verificacaoEmAndamento) {
-        verificacaoEmAndamento = (async function () {
-            var atuais = normalizar(await model.totaisPorGenero());
-            if (atuais.length == 0) return;   // ainda sem gênero na base: nada a comparar
-
-            var ultimo = normalizar(await model.ultimoSnapshot());
-            if (ultimo.length == 0 || baseMudou(atuais, ultimo)) {
-                await model.salvarSnapshot(atuais);
-            }
-        })().finally(function () {
-            verificacaoEmAndamento = null;
-        });
-    }
-    return verificacaoEmAndamento;
-}
-
-var METRICAS = [
-    { campo: "views", rotulo: "visualizações" },
-    { campo: "curtidas", rotulo: "curtidas" },
-    { campo: "streams", rotulo: "streams" }
-];
-
-function montarAlertas(novo, antigo) {
-    var anterior = {};
-    for (var i = 0; i < antigo.length; i++) {
-        anterior[antigo[i].genero] = antigo[i];
-    }
-
-    var porStreams = novo.slice().sort(function (x, y) { return y.streams - x.streams; });
-    var top5 = porStreams.slice(0, 5).map(function (g) { return g.genero; });
-
-    var alertas = [];
-    for (var j = 0; j < novo.length; j++) {
-        var g = novo[j];
-        var a = anterior[g.genero];
-        if (!a) continue;   // gênero novo, sem como comparar
-
-        for (var k = 0; k < METRICAS.length; k++) {
-            var campo = METRICAS[k].campo;
-            if (a[campo] <= 0) continue;
-
-            var variacao = (g[campo] - a[campo]) / a[campo] * 100;
-            if (Math.abs(variacao) < LIMITE_VARIACAO) continue;
-
-            var texto = (variacao > 0 ? "Aumento" : "Queda") + " de " + Math.round(Math.abs(variacao)) +
-                "% de " + METRICAS[k].rotulo + " no gênero " + g.genero + " desde a última atualização";
-            if (top5.indexOf(g.genero) >= 0) {
-                texto += " - (Gênero top 5 mais escutados) - Spotify";
-            }
-
-            alertas.push({
-                tipo: variacao > 0 ? "positivo" : "negativo",
-                texto: texto,
-                peso: Math.abs(variacao)
-            });
-        }
-    }
-
-    alertas.sort(function (x, y) { return y.peso - x.peso; });
-    return alertas.slice(0, MAX_ALERTAS).map(function (a) {
-        return { tipo: a.tipo, texto: a.texto };
-    });
-}
-
-async function alertas(req, res) {
-    try {
-        await verificarAtualizacao();
-
-        var antigo = normalizar(await model.snapshotAnterior());
-        if (antigo.length == 0) {
-            return res.json([]);   // só existe a carga inicial: ainda não houve atualização
-        }
-        var novo = normalizar(await model.ultimoSnapshot());
-        res.json(montarAlertas(novo, antigo));
-    } catch (erro) {
-        console.log(erro);
-        res.status(500).json({ mensagem: "Erro ao carregar os alertas." });
-    }
-}
-
-var FATORES = [
-    { campo: "energia", nome: "Energia", comparativo: "energia" },
-    { campo: "dancabilidade", nome: "Dançabilidade", comparativo: "dançabilidade" },
-    { campo: "valencia", nome: "Valência", comparativo: "valência" },
-    { campo: "acustica", nome: "Acústica", comparativo: "acústica" },
-    { campo: "bpm", nome: "BPM", comparativo: "BPM" }
-];
-
-function calcularFator(top, baixo, desvio) {
-    var escolhido = null;
-
-    for (var i = 0; i < FATORES.length; i++) {
-        var f = FATORES[i];
-        var mediaTop = numero(top[f.campo]);
-        var mediaBaixo = numero(baixo[f.campo]);
-        var dp = numero(desvio[f.campo]);
-        if (dp <= 0 || mediaBaixo <= 0) continue;
-
-        var distancia = Math.abs(mediaTop - mediaBaixo) / dp;
-        if (!escolhido || distancia > escolhido.distancia) {
-            escolhido = { fator: f, distancia: distancia, mediaTop: mediaTop, mediaBaixo: mediaBaixo };
-        }
-    }
-
-    if (!escolhido) return null;
-
-    var subiu = escolhido.mediaTop >= escolhido.mediaBaixo;
-    var percentual = Math.round(Math.abs(escolhido.mediaTop - escolhido.mediaBaixo) / escolhido.mediaBaixo * 100);
-
-    return {
-        valor: escolhido.fator.nome + (subiu ? " ↑↑" : " ↓↓"),
-        texto: "Músicas de sucesso (top " + QTD_MUSICAS_GRUPO + ") têm, em média, " + percentual + "% " +
-            (subiu ? "mais " : "menos ") + escolhido.fator.comparativo + " que as de baixo desempenho."
-    };
-}
-
-async function fatorDecisivo(req, res) {
-    try {
-        var resultados = await Promise.all([
-            model.mediasPorDesempenho("DESC", QTD_MUSICAS_GRUPO),
-            model.mediasPorDesempenho("ASC", QTD_MUSICAS_GRUPO),
-            model.desvioDasCaracteristicas()
-        ]);
-
-        var fator = calcularFator(resultados[0][0], resultados[1][0], resultados[2][0]);
-        if (!fator) {
-            return res.json({ valor: "—", texto: "Ainda não há dados suficientes para calcular." });
-        }
-        res.json(fator);
-    } catch (erro) {
-        console.log(erro);
-        res.status(500).json({ mensagem: "Erro ao calcular o fator decisivo." });
-    }
-}
-
-
-async function generos(req, res) {
-    try {
-        var linhas = await model.listarGeneros();
-        res.json(linhas.map(function (l) {
-            return { genero: l.genero, total: numero(l.total) };
-        }));
-    } catch (erro) {
-        console.log(erro);
-        res.status(500).json({ mensagem: "Erro ao carregar os gêneros." });
-    }
-}
-
-function emMilhoes(valor) {
-    return Math.round(numero(valor) / 1000000 * 100) / 100;
-}
-
-function montarFaixas(genero, linhas, mediaGenero) {
-    var resposta = { genero: genero, faixas: [], views: [], qtd: [], retornoEsperado: emMilhoes(mediaGenero) };
-    if (linhas.length == 0) return resposta;
-
-    var porFaixa = {};
-    for (var i = 0; i < linhas.length; i++) {
-        porFaixa[numero(linhas[i].faixa)] = linhas[i];
-    }
-
-    // vai da primeira à última faixa que existe, preenchendo com 0 as faixas sem música
-    var primeira = numero(linhas[0].faixa);
-    var ultima = numero(linhas[linhas.length - 1].faixa);
-
-    for (var faixa = primeira; faixa <= ultima; faixa += 10) {
-        resposta.faixas.push(faixa + "–" + (faixa + 10));
-        if (porFaixa[faixa]) {
-            resposta.views.push(emMilhoes(porFaixa[faixa].views));
-            resposta.qtd.push(numero(porFaixa[faixa].total));
+        if (tipo == 'positivo') {
+            icone = '✓';
         } else {
-            resposta.views.push(0);
-            resposta.qtd.push(0);
+            icone = '✗';
         }
+
+        lista_alertas.innerHTML += `
+            <div class="dash-alerta dash-alerta-${tipo}">
+                <span class="dash-alerta-icone">${icone}</span>
+                <span>${dadosAlertas[i].texto}</span>
+            </div>`;
     }
-    return resposta;
 }
 
-async function viewsPorBpm(req, res) {
-    var genero = String(req.query.genero || "").trim();
-    if (genero == "") {
-        return res.status(400).json({ mensagem: "Informe o gênero." });
-    }
+function carregarKpis() {
+    carregarKpiFator();
+    carregarKpiDuracao();
+    carregarKpiTotalStreams();
+}
 
-    try {
-        var linhas = await model.viewsPorFaixaBpm(genero);
-        var media = await model.mediaViewsDoGenero(genero);
-        res.json(montarFaixas(genero, linhas, media.length ? media[0].views : 0));
-    } catch (erro) {
+function carregarKpiFator() {
+    kpi_fator_valor.textContent = dadosKpiFator.valor;
+    kpi_fator_texto.textContent = dadosKpiFator.texto;
+
+    fetch('/dashboardProdutor/fatorDecisivo').then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar o fator decisivo');
+        }
+        return resposta.json();
+    }).then(function (dados) {
+        kpi_fator_valor.textContent = dados.valor;
+        kpi_fator_texto.textContent = dados.texto;
+    }).catch(function (erro) {
         console.log(erro);
-        res.status(500).json({ mensagem: "Erro ao carregar o gráfico." });
-    }
+        kpi_fator_valor.textContent = '—';
+        kpi_fator_texto.textContent = 'Não foi possível carregar este indicador.';
+    });
 }
 
-var MIN_MUSICAS_FAIXA = 30;
+function carregarKpiDuracao() {
+    kpi_duracao_ideal_valor.textContent = dadosKpiDuracaoIdeal.valor;
+    kpi_duracao_ideal_texto.textContent = dadosKpiDuracaoIdeal.texto;
 
-function formatarTempo(segundos) {
-    var min = Math.floor(segundos / 60);
-    var seg = segundos % 60;
-    return min + ":" + (seg < 10 ? "0" : "") + seg;
-}
-
-function abreviar(valor) {
-    if (valor >= 1000000000) return (valor / 1000000000).toFixed(1).replace(".", ",") + " bi";
-    if (valor >= 1000000) return (valor / 1000000).toFixed(1).replace(".", ",") + " milhões";
-    if (valor >= 1000) return Math.round(valor / 1000) + " mil";
-    return String(Math.round(valor));
-}
-
-function calcularDuracaoIdeal(linhas) {
-    var blocos = {};
-    var totalMusicas = 0;
-    var somaStreams = 0;
-
-    for (var i = 0; i < linhas.length; i++) {
-        var total = numero(linhas[i].total);
-        var streams = numero(linhas[i].streams);
-        blocos[numero(linhas[i].bloco)] = { total: total, streams: streams };
-        totalMusicas += total;
-        somaStreams += total * streams;
-    }
-    if (totalMusicas == 0) return null;
-
-    var mediaGeral = somaStreams / totalMusicas;
-    var melhor = null;
-
-    for (var chave in blocos) {
-        var b = Number(chave);
-        var a = blocos[b];
-        var c = blocos[b + 1];
-        if (!c) continue;
-
-        var qtd = a.total + c.total;
-        if (qtd < MIN_MUSICAS_FAIXA) continue;
-
-        var media = (a.total * a.streams + c.total * c.streams) / qtd;
-        if (!melhor || media > melhor.media) {
-            melhor = { bloco: b, media: media };
+    fetch('/dashboardProdutor/duracaoIdeal').then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar a duração ideal');
         }
-    }
-    if (!melhor) return null;
-
-    var inicio = melhor.bloco * 30;
-    var fator = melhor.media / mediaGeral;
-
-    return {
-        valor: formatarTempo(inicio) + " - " + formatarTempo(inicio + 60),
-        texto: "Músicas nessa faixa têm streams " + fator.toFixed(1).replace(".", ",") +
-            "x acima da média (" + abreviar(melhor.media) + " vs " + abreviar(mediaGeral) + " da média geral)"
-    };
-}
-
-async function duracaoIdeal(req, res) {
-    try {
-        var linhas = await model.streamsPorBlocoDuracao();
-        var resultado = calcularDuracaoIdeal(linhas);
-        if (!resultado) {
-            return res.json({ valor: "—", texto: "Ainda não há dados suficientes para calcular." });
-        }
-        res.json(resultado);
-    } catch (erro) {
+        return resposta.json();
+    }).then(function (dados) {
+        kpi_duracao_ideal_valor.textContent = dados.valor;
+        kpi_duracao_ideal_texto.textContent = dados.texto;
+    }).catch(function (erro) {
         console.log(erro);
-        res.status(500).json({ mensagem: "Erro ao calcular a duração ideal." });
+        kpi_duracao_ideal_valor.textContent = '—';
+        kpi_duracao_ideal_texto.textContent = 'Não foi possível carregar este indicador.';
+    });
+}
+
+function carregarKpiTotalStreams() {
+    kpi_total_streams_valor.textContent = dadosKpiTotalStreams.valor;
+    kpi_total_streams_texto.textContent = dadosKpiTotalStreams.texto;
+
+    fetch('/dashboardProdutor/streamsPorGenero' + montarQueryMetrica()).then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar o total de streams por gênero');
+        }
+        return resposta.json();
+    }).then(function (dados) {
+        kpi_total_streams_valor.textContent = dados.valor;
+        kpi_total_streams_texto.textContent = dados.texto;
+    }).catch(function (erro) {
+        console.log(erro);
+        kpi_total_streams_valor.textContent = '—';
+        kpi_total_streams_texto.textContent = 'Não foi possível carregar este indicador.';
+    });
+}
+
+let pluginTextoRetorno = {
+    id: 'textoRetorno',
+    afterDatasetsDraw: function (grafico) {
+        let ctx = grafico.ctx;
+        let y = grafico.scales.y.getPixelForValue(dadosBpmFaixa.retornoEsperado);
+
+        ctx.save();
+        ctx.fillStyle = 'white';
+        ctx.font = '12px Arial';
+        ctx.fillText('Retorno esperado', grafico.chartArea.left + 8, y - 6);
+        ctx.restore();
     }
 }
 
-async function dispersao(req, res) {
-    try {
-        var linhas = await model.musicasParaDispersao();
-        var vistos = {};
-        var pontos = [];
+function montarGraficoBpm() {
+    let corDestaque = '#A855F7';
+    let corBorda = 'rgba(139, 92, 246, 0.28)';
 
-        for (var i = 0; i < linhas.length; i++) {
-            var l = linhas[i];
-            var chave = l.titulo + "|" + l.artista;
-            if (vistos[chave]) continue;
-            vistos[chave] = true;
+    Chart.defaults.color = corDestaque;
 
-            pontos.push({
-                titulo: l.titulo,
-                artista: l.artista || "—",
-                views: numero(l.views),
-                dancabilidade: l.dancabilidade,
-                energia: l.energia,
-                tonalidade: l.tonalidade,
-                acustica: l.acustica,
-                vivicidade: l.vivicidade,
-                valenciaPositividade: l.valenciaPositividade,
-                tempoBPM: l.tempoBPM
-            });
+    graficoBpm = new Chart(grafico_bpm, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    type: 'bar',
+                    label: 'Views médias (milhões)',
+                    data: [],
+                    backgroundColor: [],
+                    borderRadius: 4,
+                    order: 1
+                },
+                {
+                    type: 'line',
+                    label: 'Retorno esperado',
+                    data: [],
+                    borderColor: 'white',
+                    borderDash: [6, 6],
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    order: 0
+                }
+            ]
+        },
+        plugins: [pluginTextoRetorno],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        afterLabel: function (item) {
+                            if (item.datasetIndex == 0) {
+                                return 'Músicas na faixa: ' + dadosBpmFaixa.qtd[item.dataIndex];
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function (valor) {
+                            return valor + ' mi';
+                        }
+                    },
+                    grid: { color: corBorda }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    })
+}
+
+function carregarGeneros() {
+    fetch('/dashboardProdutor/generos').then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar os gêneros');
+        }
+        return resposta.json();
+    }).then(function (lista) {
+        select_genero_bpm.innerHTML = '';
+
+        if (lista.length == 0) {
+            titulo_bpm.textContent = 'Nenhum gênero na base ainda';
+            return;
         }
 
-        res.json(pontos);
-    } catch (erro) {
+        let padrao = lista[0].genero;
+
+        for (let i = 0; i < lista.length; i++) {
+            select_genero_bpm.innerHTML += `<option value="${lista[i].genero}">${lista[i].genero}</option>`;
+
+            if (lista[i].genero == 'Pop') {
+                padrao = 'Pop';
+            }
+        }
+
+        select_genero_bpm.value = padrao;
+        carregarGraficoBpm();
+    }).catch(function (erro) {
         console.log(erro);
-        res.status(500).json({ mensagem: "Erro ao carregar a dispersão." });
-    }
+        titulo_bpm.textContent = 'Não foi possível carregar os gêneros';
+    });
 }
 
-module.exports = { alertas, fatorDecisivo, generos, viewsPorBpm, duracaoIdeal, dispersao };
+function carregarGraficoBpm() {
+    let genero = select_genero_bpm.value;
+
+    fetch('/dashboardProdutor/viewsPorBpm?genero=' + encodeURIComponent(genero)).then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar o gráfico');
+        }
+        return resposta.json();
+    }).then(function (dados) {
+        dadosBpmFaixa = dados;
+        atualizarGraficoBpm();
+    }).catch(function (erro) {
+        console.log(erro);
+        titulo_bpm.textContent = 'Não foi possível carregar o gráfico';
+    });
+}
+
+function atualizarGraficoBpm() {
+    let corDestaque = '#A855F7';
+    let corApagada = '#6D28D9';
+
+    titulo_bpm.textContent = dadosBpmFaixa.genero.toUpperCase() + ': média de views por faixa de BPM';
+
+    let retorno = dadosBpmFaixa.retornoEsperado;
+    let linhaRetorno = [];
+    let cores = [];
+
+    for (let i = 0; i < dadosBpmFaixa.views.length; i++) {
+        linhaRetorno.push(retorno);
+
+        if (dadosBpmFaixa.views[i] >= retorno) {
+            cores.push(corDestaque);
+        } else {
+            cores.push(corApagada);
+        }
+    }
+
+    graficoBpm.data.labels = dadosBpmFaixa.faixas;
+    graficoBpm.data.datasets[0].data = dadosBpmFaixa.views;
+    graficoBpm.data.datasets[0].backgroundColor = cores;
+    graficoBpm.data.datasets[1].data = linhaRetorno;
+    graficoBpm.update();
+}
+
+function montarGraficoRadar() {
+    let corDestaque = '#A855F7';
+    let corBorda = 'rgba(139, 92, 246, 0.28)';
+
+    titulo_radar.textContent = 'Carregando...';
+
+    graficoRadar = new Chart(grafico_radar, {
+        type: 'radar',
+        data: {
+            labels: dadosRadar.rotulos,
+            datasets: [
+                {
+                    label: 'Perfil das músicas de sucesso',
+                    data: [],
+                    backgroundColor: 'rgba(168, 85, 247, 0.3)',
+                    borderColor: corDestaque,
+                    borderWidth: 2,
+                    pointBackgroundColor: corDestaque,
+                    pointRadius: 4
+                },
+                {
+                    label: 'Perfil de todas as músicas',
+                    data: [],
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    borderColor: 'white',
+                    borderDash: [6, 6],
+                    borderWidth: 2,
+                    pointBackgroundColor: 'white',
+                    pointRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: { color: 'white' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (item) {
+                            let valorReal = '';
+
+                            if (item.datasetIndex == 0) {
+                                valorReal = dadosRadar.valoresReais[item.dataIndex];
+                            } else {
+                                valorReal = dadosRadar.valoresReaisGeral[item.dataIndex];
+                            }
+
+                            return item.dataset.label + ': ' + valorReal;
+                        }
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        display: false,
+                        stepSize: 25
+                    },
+                    grid: { color: corBorda },
+                    angleLines: { color: corBorda },
+                    pointLabels: {
+                        color: 'white',
+                        font: { size: 13 }
+                    }
+                }
+            }
+        }
+    })
+}
+
+function carregarRadar() {
+    let metrica = lerMetricaSessao();
+    let textoMetrica = '';
+
+    if (metrica != null && metrica.nome) {
+        textoMetrica = ' | Métrica aplicada: ' + metrica.nome;
+    }
+
+    fetch('/dashboardProdutor/radar' + montarQueryMetrica()).then(function (resposta) {
+        if (!resposta.ok) {
+            throw new Error('Erro ao carregar o radar');
+        }
+        return resposta.json();
+    }).then(function (dados) {
+        dadosRadar.genero = dados.genero;
+
+        if (dados.vazio) {
+            dadosRadar.valores = [];
+            dadosRadar.valoresReais = [];
+            dadosRadar.valoresGeral = [];
+            dadosRadar.valoresReaisGeral = [];
+
+            atualizarGraficoRadar();
+            titulo_radar.textContent = 'Nenhuma música encontrada para a métrica aplicada';
+            subtitulo_radar.textContent = 'Características musicais' + textoMetrica;
+            return;
+        }
+
+        dadosRadar.valores = dados.valores;
+        dadosRadar.valoresReais = dados.valoresReais;
+        dadosRadar.valoresGeral = dados.valoresGeral;
+        dadosRadar.valoresReaisGeral = dados.valoresReaisGeral;
+
+        atualizarGraficoRadar();
+
+        subtitulo_radar.textContent = 'Características musicais - sucesso: ' +
+            dados.qtdSucesso.toLocaleString('pt-BR') + ' músicas mais vistas de ' +
+            dados.qtdTotal.toLocaleString('pt-BR') + textoMetrica;
+    }).catch(function (erro) {
+        console.log(erro);
+        titulo_radar.textContent = 'Não foi possível carregar o gráfico';
+    });
+}
+
+function atualizarGraficoRadar() {
+    titulo_radar.textContent = dadosRadar.genero.toUpperCase() + ' - Perfil musical das músicas de sucesso x todas as músicas';
+
+    graficoRadar.data.datasets[0].data = dadosRadar.valores;
+    graficoRadar.data.datasets[1].data = dadosRadar.valoresGeral;
+    graficoRadar.update();
+}

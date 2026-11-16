@@ -8,5 +8,7 @@ router.get("/generos", controller.generos);
 router.get("/viewsPorBpm", controller.viewsPorBpm);   // ?genero=Pop
 router.get("/duracaoIdeal", controller.duracaoIdeal);
 router.get("/dispersao", controller.dispersao);
+router.get("/radar", controller.radar);
+router.get("/streamsPorGenero", controller.streamsPorGenero); 
 
 module.exports = router;

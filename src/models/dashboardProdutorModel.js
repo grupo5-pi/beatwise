@@ -6,6 +6,36 @@ var SO_GENEROS_REAIS = "m.generoPadrao IS NOT NULL AND m.generoPadrao <> 'Outros
 var VIEWS = "CAST(y.visitas AS DECIMAL(20,0))";
 var STREAMS = "CAST(s.fluxo AS DECIMAL(20,0))";
 
+function montarFiltro(filtro) {
+    var condicoes = [];
+    var valores = [];
+
+    if (filtro.anoInicio != null) {
+        condicoes.push("m.anoLancamento >= ?");
+        valores.push(filtro.anoInicio);
+    }
+
+    if (filtro.anoFim != null) {
+        condicoes.push("m.anoLancamento <= ?");
+        valores.push(filtro.anoFim);
+    }
+
+    if (filtro.generos.length > 0) {
+        var interrogacoes = filtro.generos.map(function () { return "?"; });
+        condicoes.push("m.generoPadrao IN (" + interrogacoes.join(", ") + ")");
+        for (var i = 0; i < filtro.generos.length; i++) {
+            valores.push(filtro.generos[i]);
+        }
+    }
+
+    var where = "";
+    if (condicoes.length > 0) {
+        where = " AND " + condicoes.join(" AND ");
+    }
+
+    return { where: where, valores: valores };
+}
+
 
 function totaisPorGenero() {
     var instrucaoSql = `
@@ -167,9 +197,69 @@ function streamsPorBlocoDuracao() {
     return database.executar(instrucaoSql);
 }
 
+function consultaRadarBase(filtro, limite) {
+    var instrucaoSql = `
+        SELECT s.tempoBPM AS bpm, s.energia AS energia,
+               s.valenciaPositividade AS valencia, s.dancabilidade AS dancabilidade,
+               s.tonalidade AS tonalidade
+        FROM musicaBD m
+        JOIN spotifyBD s ON s.fkMusicaBD = m.id
+        JOIN youtubeBD y ON y.fkMusicaBD = m.id
+        WHERE ${VIEWS} > 0 AND s.tempoBPM > 0 ${filtro.where}
+    `;
+
+    if (limite) {
+        instrucaoSql += ` ORDER BY ${VIEWS} DESC, m.id LIMIT ${Number(limite)}`;
+    }
+
+    return instrucaoSql;
+}
+
+function mediasRadar(filtro, limite) {
+    var f = montarFiltro(filtro);
+
+    var instrucaoSql = `
+        SELECT AVG(t.bpm) AS bpm, AVG(t.energia) AS energia,
+               AVG(t.valencia) AS valencia, AVG(t.dancabilidade) AS dancabilidade,
+               COUNT(*) AS total
+        FROM (${consultaRadarBase(f, limite)}) t;
+    `;
+    return database.executar(instrucaoSql, f.valores);
+}
+
+// A tonalidade é um número (0 a 11), então o "perfil" dela é a mais frequente, não a média.
+function tonalidadeMaisComum(filtro, limite) {
+    var f = montarFiltro(filtro);
+
+    var instrucaoSql = `
+        SELECT t.tonalidade AS tonalidade, COUNT(*) AS total
+        FROM (${consultaRadarBase(f, limite)}) t
+        WHERE t.tonalidade >= 0
+        GROUP BY t.tonalidade
+        ORDER BY total DESC, t.tonalidade
+        LIMIT 1;
+    `;
+    return database.executar(instrucaoSql, f.valores);
+}
+
+function streamsPorGenero(filtro) {
+    var f = montarFiltro(filtro);
+
+    var instrucaoSql = `
+        SELECT m.generoPadrao AS genero, SUM(${STREAMS}) AS streams
+        FROM musicaBD m
+        JOIN spotifyBD s ON s.fkMusicaBD = m.id
+        WHERE ${SO_GENEROS_REAIS} AND ${STREAMS} > 0 ${f.where}
+        GROUP BY m.generoPadrao
+        ORDER BY streams DESC;
+    `;
+    return database.executar(instrucaoSql, f.valores);
+}
+
 module.exports = {
     totaisPorGenero, ultimoSnapshot, snapshotAnterior, salvarSnapshot,
     mediasPorDesempenho, desvioDasCaracteristicas,
     listarGeneros, viewsPorFaixaBpm, mediaViewsDoGenero,
-    musicasParaDispersao, streamsPorBlocoDuracao
+    musicasParaDispersao, streamsPorBlocoDuracao,
+    mediasRadar, tonalidadeMaisComum, streamsPorGenero
 };
