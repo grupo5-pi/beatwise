@@ -17,6 +17,7 @@ var app = express();
 
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
+var notificacaoRouter = require("./src/routes/notificacao");
 var funcionarioRouter = require("./src/routes/funcionarioRoutes");
 var cadastroFuncionarioRouter = require("./src/routes/cadastroFuncionarioRoutes");
 var primeiroAcessoRouter = require("./src/routes/primeiroAcessoRoutes");
@@ -32,6 +33,7 @@ app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
+app.use("/notificacao", notificacaoRouter);
 app.use("/funcionarios", funcionarioRouter); 
 app.use("/cadastroFuncionario", cadastroFuncionarioRouter);
 app.use("/primeiroAcesso", primeiroAcessoRouter);
