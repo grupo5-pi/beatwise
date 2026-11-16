@@ -64,21 +64,87 @@ function excluir(id, idFuncionario) {
     return database.executar(instrucaoSql, [id, idFuncionario]);
 }
 
-function contarMusicas(filtros) {
-    var condicoes = [];
-    var valores = [];
-    for (var coluna in filtros) {
-        if (!CARACTERISTICAS[coluna]) continue;
-        condicoes.push(coluna + " BETWEEN ? AND ?");
-        valores.push(filtros[coluna][0], filtros[coluna][1]);
-    }
-
+function listarGeneros() {
     var instrucaoSql = `
-        SELECT COUNT(DISTINCT fkMusicaBD) AS total
-        FROM spotifyBD
-        ${condicoes.length ? "WHERE " + condicoes.join(" AND ") : ""};
+        SELECT generoPadrao AS genero, COUNT(*) AS total
+        FROM musicaBD
+        WHERE generoPadrao IS NOT NULL AND generoPadrao <> 'Outros'
+        GROUP BY generoPadrao
+        ORDER BY total DESC, generoPadrao ASC;
     `;
-    return database.executar(instrucaoSql, valores);
+    return database.executar(instrucaoSql);
 }
 
-module.exports = { listar, buscarPorId, cadastrar, atualizar, excluir, contarMusicas };
+function montarFiltro(filtros) {
+    var condicoes = [];
+    var valores = [];
+
+    var faixas = filtros.caracteristicas || {};
+    for (var coluna in faixas) {
+        if (!CARACTERISTICAS[coluna]) continue;
+        condicoes.push("s." + coluna + " BETWEEN ? AND ?");
+        valores.push(faixas[coluna][0], faixas[coluna][1]);
+    }
+
+    if (filtros.generos && filtros.generos.length) {
+        condicoes.push("m.generoPadrao IN (?)");
+        valores.push(filtros.generos);
+    }
+
+    if (filtros.anoInicio && filtros.anoFim) {
+        condicoes.push("m.anoLancamento BETWEEN ? AND ?");
+        valores.push(filtros.anoInicio, filtros.anoFim);
+    }
+
+    return {
+        where: condicoes.length ? "WHERE " + condicoes.join(" AND ") : "",
+        valores: valores
+    };
+}
+
+function contarMusicas(filtros) {
+    var filtro = montarFiltro(filtros);
+    var instrucaoSql = `
+        SELECT COUNT(DISTINCT CONCAT(m.nome, '|', IFNULL((
+            SELECT MIN(a.nome)
+              FROM musicaArtistaBD ma
+              JOIN artistaBD a ON a.id = ma.fkArtistaBD
+             WHERE ma.fkMusicaBD = m.id), ''))) AS total
+        FROM spotifyBD s
+        JOIN musicaBD m ON m.id = s.fkMusicaBD
+        ${filtro.where};
+    `;
+    return database.executar(instrucaoSql, filtro.valores);
+}
+
+function listarMusicasFiltradas(filtros) {
+    var filtro = montarFiltro(filtros);
+    var instrucaoSql = `
+        SELECT
+            m.id,
+            m.nome AS titulo,
+            m.generoPadrao AS genero,
+            m.anoLancamento,
+            (SELECT MIN(a.nome)
+               FROM musicaArtistaBD ma
+               JOIN artistaBD a ON a.id = ma.fkArtistaBD
+              WHERE ma.fkMusicaBD = m.id) AS artista,
+            s.dancabilidade, s.energia, s.tonalidade, s.acustica,
+            s.vivicidade, s.valenciaPositividade, s.tempoBPM,
+            CAST(s.duracaoMs AS DECIMAL(20)) AS duracaoMs,
+            CAST(s.fluxo AS DECIMAL(20)) AS streams,
+            (SELECT MAX(CAST(y.visitas AS DECIMAL(20)))
+               FROM youtubeBD y
+              WHERE y.fkMusicaBD = m.id) AS views
+        FROM spotifyBD s
+        JOIN musicaBD m ON m.id = s.fkMusicaBD
+        ${filtro.where}
+        ORDER BY views DESC;
+    `;
+    return database.executar(instrucaoSql, filtro.valores);
+}
+
+module.exports = {
+    listar, buscarPorId, cadastrar, atualizar, excluir,
+    listarGeneros, contarMusicas, listarMusicasFiltradas
+};

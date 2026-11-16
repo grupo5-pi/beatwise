@@ -20,6 +20,7 @@ var usuarioRouter = require("./src/routes/usuarios");
 var funcionarioRouter = require("./src/routes/funcionarioRoutes");
 var cadastroFuncionarioRouter = require("./src/routes/cadastroFuncionarioRoutes");
 var primeiroAcessoRouter = require("./src/routes/primeiroAcessoRoutes");
+var metricaRouter = require("./src/routes/metricaRoutes");
 var dashboardProdutorRouter = require("./src/routes/dashboardProdutorRoutes");  // MUDOU
 
 
@@ -34,6 +35,7 @@ app.use("/usuarios", usuarioRouter);
 app.use("/funcionarios", funcionarioRouter); 
 app.use("/cadastroFuncionario", cadastroFuncionarioRouter);
 app.use("/primeiroAcesso", primeiroAcessoRouter);
+app.use("/metricas", metricaRouter);
 app.use("/dashboardProdutor", dashboardProdutorRouter);  // MUDOU
 
 
