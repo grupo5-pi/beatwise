@@ -21,6 +21,8 @@ var notificacaoRouter = require("./src/routes/notificacao");
 var funcionarioRouter = require("./src/routes/funcionarioRoutes");
 var cadastroFuncionarioRouter = require("./src/routes/cadastroFuncionarioRoutes");
 var primeiroAcessoRouter = require("./src/routes/primeiroAcessoRoutes");
+var featRouter = require("./src/routes/featRoutes");
+var artistaRouter = require("./src/routes/artistaRoutes");
 var musicaRouter = require("./src/routes/musicaRoutes");
 
 
@@ -37,6 +39,8 @@ app.use("/notificacao", notificacaoRouter);
 app.use("/funcionarios", funcionarioRouter); 
 app.use("/cadastroFuncionario", cadastroFuncionarioRouter);
 app.use("/primeiroAcesso", primeiroAcessoRouter);
+app.use("/feats", featRouter);
+app.use("/artistas", artistaRouter);
 app.use("/musicas", musicaRouter);
 
 
