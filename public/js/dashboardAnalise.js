@@ -341,6 +341,9 @@
 
         return {
             genero: generoTitulo,
+            vazio: sucesso.length == 0,
+            qtdSucesso: sucesso.length,
+            qtdTotal: todas.length,
             rotulos: ['BPM', 'Tonalidade', 'Energia', 'Valência', 'Dançabilidade'],
             valores: perfilSucesso.valores,
             valoresReais: perfilSucesso.valoresReais,
@@ -399,7 +402,9 @@
             '/dashboardProdutor/duracaoIdeal': dados.duracao,
             '/dashboardProdutor/generos': dados.generos,
             '/dashboardProdutor/viewsPorBpm': dados.bpm,
-            '/dashboardProdutor/dispersao': dados.dispersao
+            '/dashboardProdutor/dispersao': dados.dispersao,
+            '/dashboardProdutor/streamsPorGenero': dados.streams,
+            '/dashboardProdutor/radar': dados.radar
         };
         var fetchOriginal = window.fetch.bind(window);
 
