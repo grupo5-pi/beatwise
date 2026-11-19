@@ -178,44 +178,70 @@ body.dash-marketing>main.conteudo {
     flex-shrink: 0;
 }
 
+/* KPIs */
 .dash-marketing .dash-kpi {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
+    gap: 20px;
+    align-items: stretch;
     width: 92%;
     min-width: 0;
     margin-bottom: 10px;
 }
 
 .dash-marketing .kpi {
-    min-width: 0;
-    width: 100%;
-    min-height: 200px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 18px 20px;
+    justify-content: flex-start;
+    gap: 10px;
+    min-width: 0;
+    width: 100%;
+    min-height: 0;
+    padding: 22px 24px;
+    background: rgba(76, 29, 149, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.28);
     border-radius: 18px;
     overflow-wrap: anywhere;
 }
 
 .dash-marketing .kpi .kpi-titulo {
-    min-height: 2.6em;
-    line-height: 1.4;
+    min-height: 0;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #FFFFFF;
 }
 
 .dash-marketing .kpi .kpi-valor {
+    display: block;
     max-width: 100%;
-    font-size: clamp(20px, 1.7vw, 32px);
+    font-size: clamp(28px, 2.6vw, 40px);
+    font-weight: 500;
     line-height: 1.2;
-    white-space: normal;
-    overflow-wrap: anywhere;
+    color: #FFFFFF;
+}
+
+.dash-marketing .kpi .kpi-seta {
+    font-size: 20px;
+    font-weight: 700;
+    margin-left: 6px;
 }
 
 .dash-marketing .kpi .kpi-descricao {
-    min-height: 3.9em;
-    line-height: 1.45;
+    min-height: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #FFFFFF;
+}
+
+.dash-marketing .kpi .positivo {
+    color: #4ADE80;
+    font-weight: 600;
+}
+
+.dash-marketing .kpi .negativo {
+    color: #F87171;
+    font-weight: 600;
 }
 
 .dash-marketing .graficos {
