@@ -142,6 +142,7 @@
 
         async function dadosDiferencaClipe() {
             let dados = await retornarDiferencaClipe();
+
             let engajamentoClipe = dados[0].comClipe;
             let engajamentoSemClipe = dados[0].semClipe;
             let diferenca = dados[0].porcentagem;
@@ -149,9 +150,11 @@
             dadosKpis.push({
                 titulo: "Comparativo músicas com clipe X sem clipe",
                 valor: engajamentoClipe > engajamentoSemClipe ? "Com Clipe" : "Sem Clipe",
-                desc: engajamentoClipe > engajamentoSemClipe ? `Músicas com clipe têm maior taxa de engajamento:  <span class='destaque'>${diferenca.toFixed(2)}%</span>` : `Músicas sem clipe têm maior taxa de engajamento:  <span class='destaque'>${diferenca.toFixed(2)}%</span>`,
+                desc: engajamentoClipe > engajamentoSemClipe
+                    ? `Músicas com clipe têm maior taxa de engajamento: <span class='destaque'>+${diferenca.toFixed(1)}%</span>`
+                    : `Músicas sem clipe têm maior taxa de engajamento: <span class='destaque'>+${diferenca.toFixed(1)}%</span>`,
                 seta: "↑↑"
-            })
+            });
         }
 
         /* ---------- Buscas no back-end (KPIs e gráfico Tipo de álbum) ---------- */

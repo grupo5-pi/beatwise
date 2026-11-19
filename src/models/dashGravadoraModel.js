@@ -2,12 +2,25 @@ var database = require("../database/config");
 
 function obterDiferencaClipe() {
     var instrucaoSql = `
-    SELECT 
-	    (SELECT SUM(visitas) FROM youtubeBD WHERE videoOficial = 1) AS comClipe, 
-        (SELECT SUM(visitas) FROM youtubeBD WHERE videoOficial = 0)	AS semClipe, 
-        (((SELECT SUM(visitas) FROM youtubeBD WHERE videoOficial = 1) - (SELECT SUM(visitas) FROM youtubeBD WHERE videoOficial = 0)) / (SELECT SUM(visitas) FROM youtubeBD WHERE videoOficial = 0)) * 100 AS porcentagem
-    FROM youtubeBD LIMIT 1`;
+    SELECT
+        (SELECT SUM(curtidas) / SUM(visitas) * 100
+         FROM youtubeBD
+         WHERE videoOficial = 1 AND visitas > 0) AS comClipe,
 
+        (SELECT SUM(curtidas) / SUM(visitas) * 100
+         FROM youtubeBD
+         WHERE videoOficial = 0 AND visitas > 0) AS semClipe,
+
+        ABS(
+            (SELECT SUM(curtidas) / SUM(visitas) * 100
+             FROM youtubeBD
+             WHERE videoOficial = 1 AND visitas > 0)
+            -
+            (SELECT SUM(curtidas) / SUM(visitas) * 100
+             FROM youtubeBD
+             WHERE videoOficial = 0 AND visitas > 0)
+        ) AS porcentagem;
+`;
     return database.executar(instrucaoSql);
 }
 

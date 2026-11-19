@@ -63,13 +63,20 @@ function engajamentoFeat() {
 
 function mediaPlataformas() {
     var instrucaoSql = `
-        SELECT AVG(s.fluxo + 0) AS spotify,
-               AVG(y.visitas + 0) AS youtube
-        FROM spotifyBD s
-        JOIN youtubeBD y ON y.fkMusicaBD = s.fkMusicaBD
-        WHERE s.fluxo + 0 > 0 AND y.visitas + 0 > 0;
-    `;
-    return database.executar(instrucaoSql);
+    SELECT
+         spotify,
+         youtube,
+         CASE WHEN youtube > spotify THEN 'YouTube' ELSE 'Spotify' END AS plataforma,
+         (ABS(youtube - spotify) / LEAST(youtube, spotify)) * 100 AS porcentagem
+     FROM (
+         SELECT
+             (SELECT SUM(fluxo) FROM spotifyBD
+                 WHERE fkMusicaBD IN (SELECT fkMusicaBD FROM youtubeBD)) AS spotify,
+             (SELECT SUM(visitas) FROM youtubeBD
+                 WHERE fkMusicaBD IN (SELECT fkMusicaBD FROM spotifyBD)) AS youtube
+     ) AS totais`;
+ 
+     return database.executar(instrucaoSql);
 }
 
 function topYoutube() {

@@ -205,8 +205,8 @@
             let menor = Math.min(comClipe, semClipe);
 
             dadosKpis[0].dado = clipeGanha ? 'Com Clipe' : 'Sem Clipe';
-            dadosKpis[0].descricao = `Músicas ${clipeGanha ? 'com' : 'sem'} clipe têm maior taxa de engajamento: <span class="${clipeGanha ? 'positivo' : 'negativo'}">${fmt(maior - menor)}%</span>`;
-            dadosKpis[0].positivo = clipeGanha;
+            dadosKpis[0].descricao = `Músicas ${clipeGanha ? 'com' : 'sem'} clipe têm maior taxa de engajamento: <span class="positivo">+${fmt(maior - menor)}%</span>`;
+            dadosKpis[0].positivo = true;
 
             // KPI 2 - Música com maior taxa de likes (base toda)
             if (dados.melhor) {
