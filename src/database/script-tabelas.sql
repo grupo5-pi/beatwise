@@ -144,21 +144,16 @@ CREATE TABLE sugestaoFeat (
 
 CREATE TABLE metricaDash (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  nome VARCHAR(45) NOT NULL,
-  data_inicial DATE,
-  data_final DATE,
-  genero VARCHAR(45),
-  dancabilidade DOUBLE,
-  intensidadeSonora DOUBLE,
-  vivacidade DOUBLE,
-  energia DOUBLE,
-  acustica DOUBLE,
-  valencia DOUBLE,
-  tonalidade DOUBLE,
-  intrumentalidade DOUBLE,
-  bpm DOUBLE,
+  nome VARCHAR(60) NOT NULL,
+  periodo VARCHAR(20) NOT NULL DEFAULT 'todos',
+  anoInicio INT NULL,
+  anoFim INT NULL,
+  generos VARCHAR(500) NULL,
+  caracteristicas TEXT NULL,
+  totalMusicas INT NOT NULL DEFAULT 0,
+  dataCriacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   fkFuncionario INT NOT NULL,
-  CONSTRAINT fk_metricaDash_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
+  CONSTRAINT fk_metricaDash_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id) ON DELETE CASCADE
 );
 
 CREATE TABLE notificacao (
@@ -247,8 +242,6 @@ ALTER TABLE musicaBD
   ADD COLUMN generoPadrao VARCHAR(45) NULL;
 
 
-
-
 UPDATE musicaBD SET generoPadrao = CASE
     WHEN genero IS NULL THEN NULL
     WHEN genero LIKE '%christmas%' OR genero LIKE '%holiday%' OR genero LIKE '%children%' OR genero IN ('Soundtrack', 'Original Score', 'TV Soundtrack', 'Video Game', 'Musicals', 'Comedy', 'Spoken Word', 'Sound Effects', 'Worldwide', 'Arabesque', 'Halk', 'Turkish', 'Modern Era', 'Instrumental', 'New Age') THEN 'Outros'
@@ -273,7 +266,6 @@ UPDATE musicaBD SET generoPadrao = CASE
     ELSE 'Outros'
 END
 WHERE id > 0 AND statusItunes = 1;
-
 
 CREATE TABLE snapshotGenero (
   id INT PRIMARY KEY AUTO_INCREMENT,
