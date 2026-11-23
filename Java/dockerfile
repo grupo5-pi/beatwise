@@ -1,0 +1,13 @@
+FROM maven:3.9-eclipse-temurin-21
+WORKDIR /app
+COPY beatwise ./beatwise
+COPY beatwise-email ./beatwise-email
+COPY iTunes ./iTunes
+RUN mvn -q -f beatwise/pom.xml compile dependency:copy-dependencies -DincludeScope=runtime && \
+    mvn -q -f beatwise-email/pom.xml compile dependency:copy-dependencies -DincludeScope=runtime && \
+    mvn -q -f iTunes/pom.xml compile dependency:copy-dependencies -DincludeScope=runtime
+ENV DB_HOST=mysql
+ENV DB_PORT=3306
+ENV DB_DATABASE=beatwise
+ENV DB_URL=jdbc:mysql://mysql:3306/beatwise
+CMD ["java", "-cp", "beatwise-email/target/classes:beatwise-email/target/dependency/*", "com.beatwise.mail.Main"]
