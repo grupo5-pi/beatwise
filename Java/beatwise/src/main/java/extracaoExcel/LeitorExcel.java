@@ -1,5 +1,6 @@
 package extracaoExcel;
 
+import bucket.S3Provider;
 import logs.LogExtracaoExcel;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -9,8 +10,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import repository.ConexaoBD;
 import repository.ExtracaoRepository;
 import repository.LogRepository;
+import software.amazon.awssdk.core.sync.ResponseTransformer;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -18,20 +22,25 @@ import java.util.List;
 
 public class LeitorExcel {
 
-    public List<Musica> extrairMusica(String nomeArquivo) {
+    public List<Musica> extrairMusica(String nomeBucket, String chaveArquivo) {
         List<Musica> musicasExtraidas = new ArrayList<>();
 
         ConexaoBD conexao = new ConexaoBD();
         JdbcTemplate jdbcTemplate = conexao.getJdbcTemplate();
         LogRepository repository = new LogRepository(jdbcTemplate);
         ExtracaoRepository extracaoRepository = new ExtracaoRepository(jdbcTemplate);
+        S3Client s3Client = new S3Provider().getS3Client();
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(nomeBucket)
+                .key(chaveArquivo)
+                .build();
 
         try (
-              InputStream arquivo = new FileInputStream(nomeArquivo);
-              Workbook workbook = new XSSFWorkbook(arquivo) // caso seja .xls troque para HSSFWorkbook
+                InputStream arquivo = s3Client.getObject(getObjectRequest, ResponseTransformer.toInputStream());
+                Workbook workbook = new XSSFWorkbook(arquivo) // caso seja .xls troque para HSSFWorkbook
         ) {
 
-            System.out.printf("Iniciando leitura do arquivo %s, para inserção no banco de dados da BeatWise", nomeArquivo);
+            System.out.printf("Iniciando leitura do arquivo %s do bucket %s, para inserção no banco de dados da BeatWise", chaveArquivo, nomeBucket);
 
             Sheet sheet = workbook.getSheetAt(0);
 
@@ -94,7 +103,7 @@ public class LeitorExcel {
             logExtracaoExcel.registrarLog();
 
             return musicasExtraidas;
-        } catch (IOException e) {
+        } catch (IOException | S3Exception e) {
 
             LogExtracaoExcel logExtracaoExcel = new LogExtracaoExcel("WARNING", "Ocorreu um erro ao realizar a leitura dos arquivos!", repository);
             logExtracaoExcel.registrarLog();
