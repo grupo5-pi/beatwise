@@ -1,0 +1,39 @@
+services:
+  mysql:
+    container_name: beatwiseBanco
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD: urubu100
+      - MYSQL_DATABASE: beatwise
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - 
+    ports: 
+      - "3306:3306"
+
+volumes:
+  mysql_data:
+
+  site:
+    container_name: beatwiseSite
+    image: nsei
+    build: 
+      context: .
+    restart: always
+    ports: 
+      - "3333:3333"
+    depends:
+      - mysql
+
+      
+  java:
+    container_name: beatwiseSite
+    image: nsei
+    build: 
+      context: .
+    restart: always
+    ports: 
+      - "3333:3333"
+    depends:
+      - mysql
