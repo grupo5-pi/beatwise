@@ -241,3 +241,11 @@ body {
     margin-top: 0;
     margin-bottom: 36px;
 }
+
+
+/* MUDOU: 5º cartão (Alertas) */
+@media (min-width: 1001px) {
+    .container-filho {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
