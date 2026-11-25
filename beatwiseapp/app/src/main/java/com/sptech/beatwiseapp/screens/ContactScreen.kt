@@ -38,9 +38,8 @@ import com.sptech.beatwiseapp.components.Card
 import com.sptech.beatwiseapp.components.Title
 import com.sptech.beatwiseapp.ui.theme.LightPurple
 
-const val EMAIL_CONTATO = "contato@beatwise.com"
+const val EMAIL_CONTATO = "beatwise26@gmail.com"
 
-// Abre o app de e-mail já com destinatário e assunto preenchidos
 fun abrirEmail(context: Context, assunto: String) {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = ("mailto:${EMAIL_CONTATO}?subject=" + Uri.encode(assunto)).toUri()

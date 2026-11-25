@@ -63,7 +63,6 @@ fun HomeScreen(abrirAba: (Aba) -> Unit) {
     }
 }
 
-// Uma linha clicável que leva para outra aba
 @Composable
 private fun Atalho(titulo: String, subtitulo: String, icone: ImageVector, aoClicar: () -> Unit) {
     Row(
