@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -94,6 +96,66 @@ public class EmailService {
             Se você não esperava este e-mail, pode ignorá-lo.
             """;
 
+    private record Alerta(String tipo, String texto) {
+    }
+
+    private static final String MODELO_HTML_ALERTAS = """
+            <div style="background-color:#0A0A0A;padding:30px 0;font-family:Arial,Helvetica,sans-serif;color:#e5e7eb;">
+              <table align="center" border="0" cellpadding="0" cellspacing="0" width="600"
+                     style="max-width:100%;background-color:#130a24;border:1px solid #3b2a63;border-radius:12px;overflow:hidden;">
+
+                <!-- CABEÇALHO -->
+                <tr>
+                  <td align="center" style="background-color:#0e0221;padding:26px 20px;border-bottom:3px solid #A855F7;">
+                    {{cabecalho}}
+                  </td>
+                </tr>
+
+                <!-- CONTEÚDO -->
+                <tr>
+                  <td style="padding:36px 30px;text-align:center;">
+                    <h2 style="color:#ffffff;font-size:21px;margin:0 0 12px;">{{titulo}}</h2>
+                    <p style="color:#c4b5fd;font-size:15px;line-height:1.6;margin:0 0 22px;">{{introducao}}</p>
+
+                    <!-- ALERTAS -->
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:separate;border-spacing:0 8px;">
+                      {{alertas}}
+                    </table>
+
+                    <p style="margin:26px 0 0;">
+                      <a href="{{link}}" style="background-color:#7C3AED;color:#ffffff;text-decoration:none;font-weight:bold;padding:13px 28px;border-radius:8px;display:inline-block;">{{botao}}</a>
+                    </p>
+
+                    <p style="color:#8b7bb8;font-size:13px;line-height:1.5;margin:26px 0 0;">Você recebe este e-mail porque ativou os alertas na tela de Notificações do BeatWise. Para mudar o que recebe, acesse essa tela.</p>
+                  </td>
+                </tr>
+
+                <!-- RODAPÉ -->
+                <tr>
+                  <td align="center" style="background-color:#0e0221;padding:18px;border-top:1px solid #3b2a63;">
+                    <p style="margin:0;color:#7c6aa8;font-size:12px;">© {{ano}} BeatWise. Todos os direitos reservados.</p>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            """;
+
+    private static final String MODELO_TEXTO_ALERTAS = """
+            BeatWise
+
+            {{titulo}}
+
+            {{introducao}}
+
+            {{alertas}}
+
+            {{botao}}: {{link}}
+
+            Você recebe este e-mail porque ativou os alertas na tela de Notificações do BeatWise.
+            """;
+
+    private final String linkDashboard;
+
     private final Session sessao;
     private final String remetente;
     private final String linkPrimeiroAcesso;
@@ -138,6 +200,7 @@ public class EmailService {
             enderecoSite = enderecoSite.substring(0, enderecoSite.length() - 1);
         }
         this.linkPrimeiroAcesso = enderecoSite + "/primeiroAcesso.html";
+        this.linkDashboard = enderecoSite + "/dashboardProdutor.html";
         this.logo = carregarLogo();
     }
 
@@ -198,6 +261,95 @@ public class EmailService {
         mensagem.setContent(logo != null ? comLogo(conteudo) : conteudo);
 
         Transport.send(mensagem);
+    }
+
+    public void enviarAlerta(AlertaPendente pedido) throws MessagingException {
+        List<Alerta> alertas = lerAlertas(pedido.conteudo());
+        if (alertas.isEmpty()) {
+            return;
+        }
+
+        String nome = primeiroNome(pedido.nome());
+        String saudacao = nome.isEmpty() ? "Olá!" : "Olá, " + nome + "!";
+
+        String assunto = alertas.size() == 1
+                ? "BeatWise: 1 novo alerta na sua dashboard"
+                : "BeatWise: " + alertas.size() + " novos alertas na sua dashboard";
+        String titulo = "Novos alertas na dashboard";
+        String introducao = saudacao + " A base de dados do BeatWise foi atualizada e surgiram alertas para você:";
+        String botao = "Abrir a dashboard";
+
+        StringBuilder linhasHtml = new StringBuilder();
+        StringBuilder linhasTexto = new StringBuilder();
+        for (Alerta alerta : alertas) {
+            boolean positivo = "positivo".equals(alerta.tipo());
+            String cor = positivo ? "#22c55e" : "#ef4444";
+            String seta = positivo ? "▲" : "▼";
+
+            linhasHtml.append("<tr><td style=\"padding:12px 14px;background-color:#1a0f2e;border-left:4px solid ")
+                    .append(cor)
+                    .append(";border-radius:6px;text-align:left;font-size:14px;line-height:1.5;color:#e5e7eb;\">")
+                    .append("<span style=\"color:").append(cor).append(";font-weight:bold;\">").append(seta).append("</span> ")
+                    .append(escapar(alerta.texto()))
+                    .append("</td></tr>");
+            linhasTexto.append(positivo ? "(+) " : "(-) ").append(alerta.texto()).append("\n");
+        }
+
+        Map<String, String> html = Map.of(
+                "titulo", escapar(titulo),
+                "introducao", escapar(introducao),
+                "alertas", linhasHtml.toString(),
+                "link", escapar(linkDashboard),
+                "botao", escapar(botao),
+                "ano", String.valueOf(Year.now().getValue()),
+                "cabecalho", logo != null ? CABECALHO_COM_LOGO : CABECALHO_SEM_LOGO
+        );
+        Map<String, String> texto = Map.of(
+                "titulo", titulo,
+                "introducao", introducao,
+                "alertas", linhasTexto.toString().stripTrailing(),
+                "link", linkDashboard,
+                "botao", botao
+        );
+
+        MimeBodyPart parteTexto = new MimeBodyPart();
+        parteTexto.setText(preencher(MODELO_TEXTO_ALERTAS, texto), "UTF-8");
+
+        MimeBodyPart parteHtml = new MimeBodyPart();
+        parteHtml.setContent(preencher(MODELO_HTML_ALERTAS, html), "text/html; charset=utf-8");
+
+        MimeMultipart conteudo = new MimeMultipart("alternative");
+        conteudo.addBodyPart(parteTexto);
+        conteudo.addBodyPart(parteHtml);
+
+        MimeMessage mensagem = new MimeMessage(sessao);
+        try {
+            mensagem.setFrom(new InternetAddress(remetente, "BeatWise", "UTF-8"));
+        } catch (UnsupportedEncodingException erro) {
+            throw new MessagingException("Nome do remetente inválido", erro);
+        }
+        mensagem.setRecipient(Message.RecipientType.TO, validarDestinatario(pedido.email()));
+        mensagem.setSubject(assunto, "UTF-8");
+        mensagem.setContent(logo != null ? comLogo(conteudo) : conteudo);
+
+        Transport.send(mensagem);
+    }
+
+    private List<Alerta> lerAlertas(String conteudo) {
+        List<Alerta> alertas = new ArrayList<>();
+        if (conteudo == null) {
+            return alertas;
+        }
+        for (String linha : conteudo.split("\\R")) {
+            if (linha.isBlank()) {
+                continue;
+            }
+            String[] partes = linha.split("\t", 2);
+            if (partes.length == 2 && !partes[1].isBlank()) {
+                alertas.add(new Alerta(partes[0].trim(), partes[1].trim()));
+            }
+        }
+        return alertas;
     }
 
     private MimeMultipart comLogo(MimeMultipart alternativas) throws MessagingException {
