@@ -7,7 +7,20 @@
     <option name="selectedModelId" value="auto" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="99bc27e1-cd52-4c39-ae94-ea96e52a34b0" name="Changes" comment="" />
+=======
+    <list default="true" id="99bc27e1-cd52-4c39-ae94-ea96e52a34b0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/beatwise-email/src/main/java/com/beatwise/mail/EmailDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/beatwise-email/src/main/java/com/beatwise/mail/EmailDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/beatwise-email/src/main/java/com/beatwise/mail/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/beatwise-email/src/main/java/com/beatwise/mail/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/beatwise-email/src/main/java/com/beatwise/mail/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/beatwise-email/src/main/java/com/beatwise/mail/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../public/css/tela-notificacao.css" beforeDir="false" afterPath="$PROJECT_DIR$/../public/css/tela-notificacao.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../public/js/tela-notificacao.js" beforeDir="false" afterPath="$PROJECT_DIR$/../public/js/tela-notificacao.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/controllers/dashboardProdutorController.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/controllers/dashboardProdutorController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/database/script-tabelas.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../src/database/script-tabelas.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/models/notificacaoModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/models/notificacaoModel.js" afterDir="false" />
+    </list>
+>>>>>>> develop
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,11 +85,19 @@
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "copilot.chat.legacySessionMetadata.migrated": "true",
+<<<<<<< HEAD
     "git-widget-placeholder": "feat/dockerfile",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/nicol/OneDrive/Desktop/beatwise/Java",
+=======
+    "git-widget-placeholder": "develop",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/user/Desktop/Yasmin SPTECH/beatwise/Java",
+>>>>>>> develop
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.jshint": "true",
     "node.js.detected.package.tslint": "true",

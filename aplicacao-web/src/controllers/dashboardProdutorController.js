@@ -1,4 +1,5 @@
 var model = require("../models/dashboardProdutorModel");
+var alertaEmail = require("../models/alertaEmailModel");
 
 
 var LIMITE_VARIACAO = 5;
@@ -39,15 +40,43 @@ function baseMudou(atuais, ultimo) {
 var verificacaoEmAndamento = null;
 
 
-function verificarAtualizacao() {
+var leituraAnterior = null;
+
+function verificarAtualizacao(exigirEstabilidade) {
     if (!verificacaoEmAndamento) {
         verificacaoEmAndamento = (async function () {
             var atuais = normalizar(await model.totaisPorGenero());
             if (atuais.length == 0) return;   // ainda sem gênero na base: nada a comparar
 
             var ultimo = normalizar(await model.ultimoSnapshot());
-            if (ultimo.length == 0 || baseMudou(atuais, ultimo)) {
+            if (ultimo.length == 0) {
                 await model.salvarSnapshot(atuais);
+                return;
+            }
+
+            if (!baseMudou(atuais, ultimo)) {
+                leituraAnterior = null;
+                return;
+            }
+
+            if (exigirEstabilidade) {
+                var chave = JSON.stringify(atuais);
+                if (chave !== leituraAnterior) {
+                    leituraAnterior = chave;   // espera a próxima verificação para confirmar
+                    return;
+                }
+            }
+            leituraAnterior = null;
+
+            await model.salvarSnapshot(atuais);
+
+            try {
+                var variacoes = calcularVariacoes(atuais, ultimo).filter(function (v) {
+                    return v.percentual >= LIMITE_VARIACAO;
+                });
+                await alertaEmail.enfileirarAlertas(variacoes);
+            } catch (erro) {
+                console.log("Erro ao colocar os e-mails de alertas na fila:", erro);
             }
         })().finally(function () {
             verificacaoEmAndamento = null;
@@ -62,7 +91,9 @@ var METRICAS = [
     { campo: "streams", rotulo: "streams" }
 ];
 
-function montarAlertas(novo, antigo) {
+// MUDOU: calcula TODAS as variações entre as duas fotos (antes já cortava no limite e no máximo de alertas).
+// A dashboard usa as maiores; o e-mail usa as que cada pessoa escolheu na tela de notificações.
+function calcularVariacoes(novo, antigo) {
     var anterior = {};
     for (var i = 0; i < antigo.length; i++) {
         anterior[antigo[i].genero] = antigo[i];
@@ -71,7 +102,7 @@ function montarAlertas(novo, antigo) {
     var porStreams = novo.slice().sort(function (x, y) { return y.streams - x.streams; });
     var top5 = porStreams.slice(0, 5).map(function (g) { return g.genero; });
 
-    var alertas = [];
+    var variacoes = [];
     for (var j = 0; j < novo.length; j++) {
         var g = novo[j];
         var a = anterior[g.genero];
@@ -82,7 +113,7 @@ function montarAlertas(novo, antigo) {
             if (a[campo] <= 0) continue;
 
             var variacao = (g[campo] - a[campo]) / a[campo] * 100;
-            if (Math.abs(variacao) < LIMITE_VARIACAO) continue;
+            if (variacao == 0) continue;
 
             var texto = (variacao > 0 ? "Aumento" : "Queda") + " de " + Math.round(Math.abs(variacao)) +
                 "% de " + METRICAS[k].rotulo + " no gênero " + g.genero + " desde a última atualização";
@@ -90,23 +121,29 @@ function montarAlertas(novo, antigo) {
                 texto += " - (Gênero top 5 mais escutados) - Spotify";
             }
 
-            alertas.push({
+            variacoes.push({
                 tipo: variacao > 0 ? "positivo" : "negativo",
-                texto: texto,
-                peso: Math.abs(variacao)
+                metrica: campo,
+                genero: g.genero,
+                percentual: Math.abs(variacao),
+                texto: texto
             });
         }
     }
+    return variacoes;
+}
 
-    alertas.sort(function (x, y) { return y.peso - x.peso; });
-    return alertas.slice(0, MAX_ALERTAS).map(function (a) {
-        return { tipo: a.tipo, texto: a.texto };
-    });
+function montarAlertas(novo, antigo) {
+    return calcularVariacoes(novo, antigo)
+        .filter(function (v) { return v.percentual >= LIMITE_VARIACAO; })
+        .sort(function (x, y) { return y.percentual - x.percentual; })
+        .slice(0, MAX_ALERTAS)
+        .map(function (v) { return { tipo: v.tipo, texto: v.texto }; });
 }
 
 async function alertas(req, res) {
     try {
-        await verificarAtualizacao();
+        await verificarAtualizacao(false);
 
         var antigo = normalizar(await model.snapshotAnterior());
         if (antigo.length == 0) {
@@ -339,7 +376,6 @@ async function dispersao(req, res) {
     }
 }
 
-// ---------- Filtro vindo da query string (?anoInicio=&anoFim=&generos=Pop,Rock) ----------
 
 function lerFiltroQuery(query) {
     var anoInicio = parseInt(query.anoInicio);
@@ -360,7 +396,6 @@ function nomeDosGeneros(filtro) {
     return filtro.generos.length ? filtro.generos.join(" / ") : "Todos os gêneros";
 }
 
-// ---------- KPI: Total de streams por gênero ----------
 
 async function streamsPorGenero(req, res) {
     try {
@@ -460,7 +495,18 @@ async function radar(req, res) {
     }
 }
 
+var MINUTOS_ENTRE_VERIFICACOES = 10;
+
+function verificarEmSegundoPlano() {
+    verificarAtualizacao(true).catch(function (erro) {
+        console.log("Erro na verificação da base:", erro);
+    });
+}
+
+setTimeout(verificarEmSegundoPlano, 5000);
+setInterval(verificarEmSegundoPlano, MINUTOS_ENTRE_VERIFICACOES * 60 * 1000);
+
 module.exports = {
     alertas, fatorDecisivo, generos, viewsPorBpm, duracaoIdeal, dispersao,
-    radar, streamsPorGenero
+    radar, streamsPorGenero, verificarAtualizacao   // MUDOU: verificarAtualizacao exportada
 };

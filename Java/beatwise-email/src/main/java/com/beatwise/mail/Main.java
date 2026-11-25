@@ -29,7 +29,10 @@ public class Main {
         Runtime.getRuntime().addShutdownHook(new Thread(agendador::shutdown));
 
         agendador.scheduleWithFixedDelay(
-                () -> processarFila(dao, servico),
+                () -> {
+                    processarFila(dao, servico);
+                    processarAlertas(dao, servico);
+                },
                 0, intervaloSegundos, TimeUnit.SECONDS
         );
 
@@ -57,6 +60,34 @@ public class Main {
             }
         } catch (Exception erro) {
             log("Erro ao consultar a fila: " + erro.getMessage());
+        }
+    }
+
+    private static void processarAlertas(EmailDao dao, EmailService servico) {
+        try {
+            List<AlertaPendente> pendentes = dao.buscarAlertasPendentes();
+
+            for (AlertaPendente pedido : pendentes) {
+                try {
+                    servico.enviarAlerta(pedido);
+                    dao.marcarAlertaComoEnviado(pedido.id());
+                    log("E-mail de alertas enviado para " + pedido.email() + " (alerta " + pedido.id() + ")");
+                } catch (Exception erro) {
+                    log("Falha ao enviar alertas para " + pedido.email() + " (alerta " + pedido.id() + "): " + erro.getMessage());
+
+                    if (erroDoEndereco(erro)) {
+                        try {
+                            dao.registrarFalhaAlerta(pedido.id());
+                        } catch (Exception erroAoRegistrar) {
+                            log("Não foi possível registrar a falha do alerta " + pedido.id() + ": " + erroAoRegistrar.getMessage());
+                        }
+                    } else {
+                        log("  (problema de conexão ou de login: o alerta continua na fila)");
+                    }
+                }
+            }
+        } catch (Exception erro) {
+            log("Erro ao consultar a fila de alertas: " + erro.getMessage());
         }
     }
 

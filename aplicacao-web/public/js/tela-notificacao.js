@@ -1,31 +1,34 @@
-let titulos = ["Acessos", "Atualizações", "Frequência", "Informativas"];
+let titulos = ["Acessos", "Atualizações", "Frequência", "Informativas", "Alertas"];
 
 let subtitulos = [
     "Notificar acessos da sua empresa",
     "Notificar atualizações do sistema",
     "Definir a frequência dos avisos",
-    "Receber avisos e comunicados gerais"
+    "Receber avisos e comunicados gerais",
+    "Receber os alertas da dashboard por e-mail"
 ];
 
 let opcoes = [
     ["Usuário", "Data", "Horário", "Páginas"],
     ["Novas funcionalidades", "Correções", "Manutenções", "Versões"],
     ["Diária", "Semanal", "Mensal"],
-    ["Novidades", "Dicas", "Comunicados", "Eventos"]
+    ["Novidades", "Dicas", "Comunicados", "Eventos"],
+    ["Aumentos", "Quedas", "Visualizações", "Curtidas", "Streams"]
 ];
 
 let marcadas = [
     [false, false, false, false],
     [false, false, false, false],
     [false, false, false],
-    [false, false, false, false]
+    [false, false, false, false],
+    [true, true, true, true, true]
 ];
 
-let aberta = [false, false, false, false];
+let aberta = [false, false, false, false, false];
 
-let salvo = [false, false, false, false];
+let salvo = [false, false, false, false, false];
 
-let chavesTemas = ["acesso", "atualizacoes", "frequencia", "informativas"];
+let chavesTemas = ["acesso", "atualizacoes", "frequencia", "informativas", "alertas"];
 
 let chaveConfig = "notificacaoConfig_" + sessionStorage.getItem('ID_FUNCIONARIO');
 
@@ -100,7 +103,7 @@ function htmlColunaAberta(i) {
 function desenharColunas() {
     let html = "";
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < titulos.length; i++) {
         if (aberta[i]) {
             html += htmlColunaAberta(i);
         } else {
@@ -130,7 +133,7 @@ function limparColunaLocal(i) {
     salvo[i] = false;
 
     for (let j = 0; j < opcoes[i].length; j++) {
-        marcadas[i][j] = false;
+        marcadas[i][j] = (i == 4);   // MUDOU: o tema Alertas volta com tudo marcado
     }
 
     desenharColunas();

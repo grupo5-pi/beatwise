@@ -275,3 +275,25 @@ CREATE TABLE snapshotGenero (
   curtidas BIGINT NOT NULL,
   streams BIGINT NOT NULL
 );
+
+CREATE TABLE notificacao_alertas (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  aumentos TINYINT,
+  quedas TINYINT,
+  visualizacoes TINYINT,
+  curtidas TINYINT,
+  streams TINYINT,
+  fkNotificacao INT NOT NULL,
+  CONSTRAINT fk_notificacao_alertas_notificacao1 FOREIGN KEY (fkNotificacao) REFERENCES notificacao (id)
+);
+
+CREATE TABLE emailAlerta (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  fkFuncionario INT NOT NULL,
+  conteudo TEXT NOT NULL,
+  enviarApos DATETIME NOT NULL,
+  statusEnviado TINYINT NOT NULL DEFAULT 0,
+  falhasEnvio INT NOT NULL DEFAULT 0,
+  criadoEm DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_emailAlerta_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id) ON DELETE CASCADE
+);

@@ -4,7 +4,8 @@ var temas = [
     { chave: "acesso", tabela: "notificacao_acesso", colunas: ["usuario", "data", "horario", "paginas"] },
     { chave: "atualizacoes", tabela: "notificacao_atualizacoes", colunas: ["novas_funcionalidades", "correcoes", "manutencoes", "versoes"] },
     { chave: "frequencia", tabela: "notificacao_frequencia", colunas: ["diaria", "semanal", "mensal"] },
-    { chave: "informativas", tabela: "notificacao_informativas", colunas: ["novidades", "dicas", "comunicados", "eventos"] }
+    { chave: "informativas", tabela: "notificacao_informativas", colunas: ["novidades", "dicas", "comunicados", "eventos"] },
+    { chave: "alertas", tabela: "notificacao_alertas", colunas: ["aumentos", "quedas", "visualizacoes", "curtidas", "streams"] }
 ];
 
 function buscarTema(chave) {
