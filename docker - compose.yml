@@ -47,7 +47,7 @@ services:
       DB_DATABASE: beatwise
       DB_URL: jdbc:mysql://mysql:3306/beatwise
       DB_USER: root
-      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DB_PASSWORD: beatwise05
     depends_on:
       mysql:
         condition: service_healthy
