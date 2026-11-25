@@ -2,46 +2,40 @@ package logs;
 
 import repository.LogRepository;
 
-import java.time.format.DateTimeFormatter;
-
-public class LogSite extends Log{
-    private Integer idUsuario;
+public class LogSite extends Log {
+    private Usuario usuario; // agregação: o log TEM um usuário (null = visitante)
     private String origem;
     private final LogRepository repository;
 
-    public LogSite(String nivel, String mensagem, Integer idUsuario, String origem, LogRepository repository) {
+    public LogSite(String nivel, String mensagem, Usuario usuario, String origem, LogRepository repository) {
         super(nivel, mensagem);
-        this.idUsuario = idUsuario;
+        this.usuario = usuario;
         this.origem = origem;
         this.repository = repository;
     }
 
     public void registrarLog() {
-        if (this.getNivel() != null && this.getMensagem() != null || idUsuario != null || origem != null) {
-
+        if (getNivel() != null && getMensagem() != null && origem != null) {
             repository.saveSite(this);
-            System.out.println(this.exibirLog());
+            System.out.println(exibirLog());
         }
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
     }
 
     public String getOrigem() {
         return origem;
     }
 
-    public void setOrigem(String origem) {
-        this.origem = origem;
-    }
-
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
     @Override
     public String exibirLog() {
-        return super.exibirLog() + " - [Página: " + getOrigem() + "] - {Usuário: " + getIdUsuario() + "}";
+        String quem = "visitante";
+        if (usuario != null) {
+            quem = (usuario.getNome() != null) ? usuario.getNome() : usuario.getEmail();
+            if (usuario.getCargo() != null) quem += " (" + usuario.getCargo() + ")";
+        }
+        return super.exibirLog() + " - [Página: " + origem + "] - {Usuário: " + quem + "}";
     }
 }

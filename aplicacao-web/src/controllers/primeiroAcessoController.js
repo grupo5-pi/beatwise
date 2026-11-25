@@ -1,4 +1,5 @@
 var primeiroAcessoModel = require("../models/primeiroAcessoModel");
+var { Usuario, LogSite } = require("../logs/logSite");
 
 var MAXIMO_TENTATIVAS = 5;
 var MENSAGEM_CODIGO_INVALIDO = "Código inválido ou expirado.";
@@ -41,6 +42,7 @@ async function definirSenha(req, res) {
         }
         if (token[0].codigo.toUpperCase() != codigo) {
             await primeiroAcessoModel.registrarTentativaErrada(token[0].id);
+            new LogSite("WARN", "Código de primeiro acesso incorreto", new Usuario(token[0].fkFuncionario, null, email, null), "primeiroAcesso").registrarLog();
             return res.status(400).json({ mensagem: MENSAGEM_CODIGO_INVALIDO });
         }
 
@@ -58,6 +60,8 @@ async function definirSenha(req, res) {
         }
 
         await primeiroAcessoModel.invalidarTokens(token[0].fkFuncionario);
+
+        new LogSite("INFO", "Definiu a senha no primeiro acesso", new Usuario(token[0].fkFuncionario, null, email, null), "primeiroAcesso").registrarLog();
 
         res.json({ ok: true });
     } catch (erro) {
