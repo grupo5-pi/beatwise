@@ -7,6 +7,9 @@
     <option name="selectedModelId" value="auto" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
+    <list default="true" id="99bc27e1-cd52-4c39-ae94-ea96e52a34b0" name="Changes" comment="" />
+=======
     <list default="true" id="99bc27e1-cd52-4c39-ae94-ea96e52a34b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/beatwise-email/src/main/java/com/beatwise/mail/EmailDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/beatwise-email/src/main/java/com/beatwise/mail/EmailDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/beatwise-email/src/main/java/com/beatwise/mail/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/beatwise-email/src/main/java/com/beatwise/mail/EmailService.java" afterDir="false" />
@@ -17,6 +20,7 @@
       <change beforePath="$PROJECT_DIR$/../src/database/script-tabelas.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../src/database/script-tabelas.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/models/notificacaoModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/models/notificacaoModel.js" afterDir="false" />
     </list>
+>>>>>>> develop
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,6 +39,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "PedroLima7011"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/grupo5-pi/beatwise.git",
+    "accountId": "2d53994a-6e69-4898-a128-5b62e97e25de"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 2
@@ -69,11 +85,19 @@
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "copilot.chat.legacySessionMetadata.migrated": "true",
+<<<<<<< HEAD
+    "git-widget-placeholder": "feat/dockerfile",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/nicol/OneDrive/Desktop/beatwise/Java",
+=======
     "git-widget-placeholder": "develop",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/user/Desktop/Yasmin SPTECH/beatwise/Java",
+>>>>>>> develop
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.jshint": "true",
     "node.js.detected.package.tslint": "true",

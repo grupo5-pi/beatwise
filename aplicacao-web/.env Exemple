@@ -1,0 +1,23 @@
+.env.dev
+AMBIENTE_PROCESSO=desenvolvimento
+
+# Configurações de conexão com o banco de dados
+DB_HOST=localhost
+DB_DATABASE=beatwise
+DB_USER="Pedrão"
+DB_PASSWORD="Phal1726#"
+DB_PORT=3306
+
+# Configurações do servidor de aplicação
+APP_PORT=3333
+APP_HOST=localhost
+
+.env = container
+AMBIENTE_PROCESSO=producao
+DB_HOST=mysql
+DB_DATABASE=beatwise
+DB_USER=root
+DB_PASSWORD=<mesma senha de MYSQL_ROOT_PASSWORD>
+DB_PORT=3306
+APP_PORT=3333
+APP_HOST=localhost
