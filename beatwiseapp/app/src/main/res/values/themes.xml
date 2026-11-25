@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.Beatwiseapp" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Tema exibido ao abrir o app: fundo preto com o logo B da Beatwise -->
+    <style name="Theme.Beatwiseapp.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/beatwise_black</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Beatwiseapp</item>
+    </style>
 </resources>

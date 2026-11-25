@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ícone da splash screen: o logo B dentro do círculo visível (2/3 do tamanho) -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/logo_b"
+    android:inset="24dp" />
