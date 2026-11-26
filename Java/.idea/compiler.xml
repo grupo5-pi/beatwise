@@ -7,7 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Java" />
+        <module name="beatwise-email" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="leitura-arquivos-excel" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -62,12 +62,6 @@ function lerAnalise(body, generosValidos) {
     return { analise: lido.filtros };
 }
 
-function paraBanco(analise) {
-    return Object.assign({}, analise, {
-        generos: analise.generos.length ? analise.generos.join(",") : null
-    });
-}
-
 function formatar(linha) {
     return {
         id: linha.id,
@@ -206,7 +200,7 @@ async function cadastrar(req, res) {
         if (lido.erro) return res.status(400).json({ mensagem: lido.erro });
 
         lido.analise.totalMusicas = await contar(lido.analise);
-        var resultado = await model.cadastrar(paraBanco(lido.analise), idFuncionario);
+        var resultado = await model.cadastrar(lido.analise, idFuncionario);
         res.status(201).json({ id: resultado.insertId, totalMusicas: lido.analise.totalMusicas });
     } catch (erro) {
         console.log(erro);
@@ -224,7 +218,7 @@ async function atualizar(req, res) {
         if (lido.erro) return res.status(400).json({ mensagem: lido.erro });
 
         lido.analise.totalMusicas = await contar(lido.analise);
-        var resultado = await model.atualizar(id, paraBanco(lido.analise), idFuncionario);
+        var resultado = await model.atualizar(id, lido.analise, idFuncionario);
         if (resultado.affectedRows == 0) return res.status(404).json({ mensagem: "Análise não encontrada." });
         res.json({ ok: true, totalMusicas: lido.analise.totalMusicas });
     } catch (erro) {

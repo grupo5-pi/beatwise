@@ -29,11 +29,12 @@ function buscarPorId(id) {
 
 function generosDoArtista(id) {
     var instrucaoSql = `
-        SELECT m.generoPadrao AS genero, COUNT(*) AS qtd
+        SELECT g.nome AS genero, COUNT(*) AS qtd
         FROM musicaArtistaBD ma
         JOIN musicaBD m ON m.id = ma.fkMusicaBD
-        WHERE ma.fkArtistaBD = ? AND m.generoPadrao IS NOT NULL
-        GROUP BY m.generoPadrao
+        JOIN genero g ON g.id = m.fkGenero
+        WHERE ma.fkArtistaBD = ?
+        GROUP BY g.id, g.nome
         ORDER BY qtd DESC;
     `;
     return database.executar(instrucaoSql, [id]);

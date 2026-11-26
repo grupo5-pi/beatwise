@@ -34,6 +34,76 @@ function executar(instrucao, valores) {
     });
 }
 
+function executarTransacao(consultas) {
+    if (process.env.AMBIENTE_PROCESSO !== "producao" && process.env.AMBIENTE_PROCESSO !== "desenvolvimento") {
+        return Promise.reject("AMBIENTE NÃO CONFIGURADO EM .env");
+    }
+
+    return new Promise(function (resolve, reject) {
+        var conexao = mysql.createConnection(mySqlConfig);
+
+        conexao.connect(function (erroConexao) {
+            if (erroConexao) {
+                conexao.destroy();
+                reject(erroConexao);
+                return;
+            }
+
+            conexao.beginTransaction(function (erroTransacao) {
+                if (erroTransacao) {
+                    conexao.end();
+                    reject(erroTransacao);
+                    return;
+                }
+
+                var resultados = [];
+
+                function rollback(erro) {
+                    conexao.rollback(function () {
+                        conexao.end();
+                        reject(erro);
+                    });
+                }
+
+                function confirmar() {
+                    conexao.commit(function (erroCommit) {
+                        if (erroCommit) {
+                            rollback(erroCommit);
+                            return;
+                        }
+                        conexao.end();
+                        resolve(resultados);
+                    });
+                }
+
+                function executarProxima(indice) {
+                    if (indice === consultas.length) {
+                        confirmar();
+                        return;
+                    }
+
+                    var consulta = consultas[indice];
+                    conexao.query(consulta.instrucao, consulta.valores || [], function (erro, resultado) {
+                        if (erro) {
+                            rollback(erro);
+                            return;
+                        }
+                        resultados.push(resultado);
+                        if (consulta.pararSe && consulta.pararSe(resultado)) {
+                            confirmar();
+                            return;
+                        }
+                        executarProxima(indice + 1);
+                    });
+                }
+
+                executarProxima(0);
+            });
+        });
+    });
+}
+
 module.exports = {
-    executar
+    executar,
+    executarTransacao
 };

@@ -89,22 +89,23 @@ function perfisDosArtistas() {
 
 function generosDosArtistas() {
     var instrucaoSql = `
-        SELECT ma.fkArtistaBD AS idArtista, m.generoPadrao AS genero, COUNT(*) AS qtd
+        SELECT ma.fkArtistaBD AS idArtista, g.nome AS genero, COUNT(*) AS qtd
         FROM musicaArtistaBD ma
         JOIN musicaBD m ON m.id = ma.fkMusicaBD
-        WHERE m.generoPadrao IS NOT NULL
-        GROUP BY ma.fkArtistaBD, m.generoPadrao;
+        JOIN genero g ON g.id = m.fkGenero
+        GROUP BY ma.fkArtistaBD, g.id, g.nome;
     `;
     return database.executar(instrucaoSql);
 }
 
 function listarGeneros() {
     var instrucaoSql = `
-        SELECT generoPadrao AS genero, COUNT(*) AS qtd
-        FROM musicaBD
-        WHERE generoPadrao IS NOT NULL AND generoPadrao <> 'Outros'
-        GROUP BY generoPadrao
-        ORDER BY generoPadrao;
+        SELECT g.nome AS genero, COUNT(m.id) AS qtd
+        FROM genero g
+        JOIN musicaBD m ON m.fkGenero = g.id
+        WHERE g.nome <> 'Outros'
+        GROUP BY g.id, g.nome
+        ORDER BY g.nome;
     `;
     return database.executar(instrucaoSql);
 }
@@ -150,11 +151,13 @@ async function recomendar(f) {
 
 function listar(idFuncionario) {
     var instrucaoSql = `
-        SELECT id, nome, genero, energia, dancabilidade, bpmMin, bpmMax,
-               tonalidade, intervaloAnos, featUm, featDois, featTres
-        FROM sugestaoFeat
-        WHERE fkFuncionario = ?
-        ORDER BY id DESC;
+        SELECT sf.id, sf.nome, g.nome AS genero, sf.energia, sf.dancabilidade,
+               sf.bpmMin, sf.bpmMax, sf.tonalidade, sf.intervaloAnos,
+               sf.featUm, sf.featDois, sf.featTres
+        FROM sugestaoFeat sf
+        LEFT JOIN genero g ON g.id = sf.fkGenero
+        WHERE sf.fkFuncionario = ?
+        ORDER BY sf.id DESC;
     `;
     return database.executar(instrucaoSql, [idFuncionario]);
 }
@@ -172,9 +175,9 @@ function cadastrar(nome, f, nomes, idFuncionario) {
     nomes = tresNomes(nomes);
     var instrucaoSql = `
         INSERT INTO sugestaoFeat
-            (nome, genero, energia, dancabilidade, bpmMin, bpmMax, tonalidade, intervaloAnos,
+            (nome, fkGenero, energia, dancabilidade, bpmMin, bpmMax, tonalidade, intervaloAnos,
              featUm, featDois, featTres, fkFuncionario)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        VALUES (?, (SELECT id FROM genero WHERE nome = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
     return database.executar(instrucaoSql, [
         nome, f.genero, f.energia, f.dancabilidade, f.bpmMin, f.bpmMax, f.tonalidade, f.intervaloAnos,
@@ -186,7 +189,8 @@ function atualizar(id, nome, f, nomes, idFuncionario) {
     nomes = tresNomes(nomes);
     var instrucaoSql = `
         UPDATE sugestaoFeat SET
-            nome = ?, genero = ?, energia = ?, dancabilidade = ?, bpmMin = ?, bpmMax = ?,
+            nome = ?, fkGenero = (SELECT id FROM genero WHERE nome = ?),
+            energia = ?, dancabilidade = ?, bpmMin = ?, bpmMax = ?,
             tonalidade = ?, intervaloAnos = ?,
             featUm = ?, featDois = ?, featTres = ?
         WHERE id = ? AND fkFuncionario = ?;

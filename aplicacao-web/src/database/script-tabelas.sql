@@ -173,13 +173,19 @@ CREATE TABLE metricaDash (
   periodo VARCHAR(20) NOT NULL DEFAULT 'todos',
   anoInicio INT NULL,
   anoFim INT NULL,
-  fkGenero INT NOT NULL,
   caracteristicas TEXT NULL,
   totalMusicas INT NOT NULL DEFAULT 0,
   dataCriacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   fkFuncionario INT NOT NULL,
-  CONSTRAINT fk_metricaDash_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id) ON DELETE CASCADE,
-  CONSTRAINT fk_metricaDash_genero1 FOREIGN KEY (fkGenero) REFERENCES genero (id)
+  CONSTRAINT fk_metricaDash_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id) ON DELETE CASCADE
+);
+
+CREATE TABLE metricaDashGenero (
+  fkMetricaDash INT NOT NULL,
+  fkGenero INT NOT NULL,
+  PRIMARY KEY (fkMetricaDash, fkGenero),
+  CONSTRAINT fk_metricaDashGenero_metricaDash1 FOREIGN KEY (fkMetricaDash) REFERENCES metricaDash (id) ON DELETE CASCADE,
+  CONSTRAINT fk_metricaDashGenero_genero1 FOREIGN KEY (fkGenero) REFERENCES genero (id)
 );
 
 CREATE TABLE notificacao (
