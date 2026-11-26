@@ -55,5 +55,5 @@ services:
 
 volumes:
   mysql_data:
-    external: true
-    name: 55c7522b811489427d6f2e4d02d92b289249817cd3a61236e7044aed4a9165b2
+    # external: true
+    # name: 55c7522b811489427d6f2e4d02d92b289249817cd3a61236e7044aed4a9165b2
