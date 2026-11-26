@@ -3,9 +3,10 @@ var router = express.Router();
 var controller = require("../controllers/dashboardProdutorController");
 
 router.get("/alertas", controller.alertas);
+router.get("/atualizacao", controller.atualizacao);
 router.get("/fatorDecisivo", controller.fatorDecisivo);
 router.get("/generos", controller.generos);
-router.get("/viewsPorBpm", controller.viewsPorBpm);   // ?genero=Pop
+router.get("/viewsPorBpm", controller.viewsPorBpm)
 router.get("/duracaoIdeal", controller.duracaoIdeal);
 router.get("/dispersao", controller.dispersao);
 router.get("/radar", controller.radar);

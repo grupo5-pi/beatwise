@@ -94,8 +94,6 @@
             </div>
         </div>
 
-        <div class="dash-alertas" id="lista_alertas"></div>
-
         <div class="kpis-desempenho" id="lista_kpis"></div>
 
         <div class="graficos">
@@ -117,27 +115,6 @@
     </main>
 
     <script>
-        /* ---------- ALERTAS ---------- */
-        let dadosAlertas = [
-            { tipo: "positivo", texto: "Importação de músicas realizada com sucesso." },
-            { tipo: "negativo", texto: "Existem músicas sem informações completas." },
-        ];
-
-        function carregarAlertas() {
-            lista_alertas.innerHTML = '';
-
-            for (let i = 0; i < dadosAlertas.length; i++) {
-                let tipo = dadosAlertas[i].tipo;
-                let icone = tipo == 'positivo' ? '✓' : '✗';
-
-                lista_alertas.innerHTML += `
-                    <div class="dash-alerta dash-alerta-${tipo}">
-                        <span class="dash-alerta-icone">${icone}</span>
-                        <span>${dadosAlertas[i].texto}</span>
-                    </div>`;
-            }
-        }
-
         let dadosKpis = [];
 
         async function dadosDiferencaClipe() {
@@ -365,7 +342,6 @@
         }
 
         function iniciar() {
-            carregarAlertas();
             carregarKpis();
             carregarGraficos();
             carregarGraficoTipoAlbum();

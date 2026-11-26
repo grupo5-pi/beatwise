@@ -91,8 +91,6 @@ var METRICAS = [
     { campo: "streams", rotulo: "streams" }
 ];
 
-// MUDOU: calcula TODAS as variações entre as duas fotos (antes já cortava no limite e no máximo de alertas).
-// A dashboard usa as maiores; o e-mail usa as que cada pessoa escolheu na tela de notificações.
 function calcularVariacoes(novo, antigo) {
     var anterior = {};
     for (var i = 0; i < antigo.length; i++) {
@@ -154,6 +152,20 @@ async function alertas(req, res) {
     } catch (erro) {
         console.log(erro);
         res.status(500).json({ mensagem: "Erro ao carregar os alertas." });
+    }
+}
+
+// MUDOU: diz se a base já foi atualizada (existem duas "fotos" em snapshotGenero). As telas de Marketing e da
+// Gravadora usam isso para só mostrar os alertas depois de uma atualização, igual à dashboard do Produtor.
+async function atualizacao(req, res) {
+    try {
+        await verificarAtualizacao(false);
+
+        var antigo = await model.snapshotAnterior();
+        res.json({ atualizou: antigo.length > 0 });
+    } catch (erro) {
+        console.log(erro);
+        res.status(500).json({ mensagem: "Erro ao verificar a atualização da base." });
     }
 }
 
@@ -238,7 +250,6 @@ function montarFaixas(genero, linhas, mediaGenero) {
         porFaixa[numero(linhas[i].faixa)] = linhas[i];
     }
 
-    // vai da primeira à última faixa que existe, preenchendo com 0 as faixas sem música
     var primeira = numero(linhas[0].faixa);
     var ultima = numero(linhas[linhas.length - 1].faixa);
 
@@ -507,6 +518,6 @@ setTimeout(verificarEmSegundoPlano, 5000);
 setInterval(verificarEmSegundoPlano, MINUTOS_ENTRE_VERIFICACOES * 60 * 1000);
 
 module.exports = {
-    alertas, fatorDecisivo, generos, viewsPorBpm, duracaoIdeal, dispersao,
+    alertas, atualizacao, fatorDecisivo, generos, viewsPorBpm, duracaoIdeal, dispersao,
     radar, streamsPorGenero, verificarAtualizacao   // MUDOU: verificarAtualizacao exportada
 };

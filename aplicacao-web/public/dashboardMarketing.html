@@ -152,6 +152,24 @@
         }
 
         function carregarAlertas(dados) {
+            fetch('/dashboardProdutor/atualizacao').then(function (resposta) {
+                if (!resposta.ok) {
+                    throw new Error('Erro ao verificar a atualização');
+                }
+                return resposta.json();
+            }).then(function (info) {
+                if (info.atualizou) {
+                    montarAlertas(dados);
+                } else {
+                    lista_alertas.innerHTML = '';
+                }
+            }).catch(function (erro) {
+                console.log(erro);
+                lista_alertas.innerHTML = '';
+            });
+        }
+
+        function montarAlertas(dados) {
             dadosAlertas = [];
 
             // Alerta positivo: engajamento acima da média da base (likes ÷ views)
