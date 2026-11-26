@@ -158,6 +158,8 @@
         /* ---------- KPIs vindas do banco ---------- */
         async function dadosMelhorGenero() {
             let dados = await retornarMelhorGenero();
+            if (!dados || !dados[0]) return;
+
             let genero = dados[0].genero;
             let porcentagem = Number(dados[0].porcentagem || 0);
 
