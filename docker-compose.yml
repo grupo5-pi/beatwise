@@ -43,6 +43,7 @@ services:
     image: img-java
     restart: always
     environment:
+      LOG_URL: http://ContainerJava:8081/log
       DB_HOST: mysql
       DB_PORT: 3306
       DB_DATABASE: beatwise
