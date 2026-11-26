@@ -7,6 +7,7 @@ var caminho_env = path.join(__dirname, ambiente_processo === "producao" ? ".env"
 require("dotenv").config({ path: caminho_env });
 
 var express = require("express");
+var { LogSite } = require("./src/logs/logSite");
 var cors = require("cors");
 var PORTA_APP = process.env.APP_PORT;
 var HOST_APP = process.env.APP_HOST;
@@ -26,11 +27,20 @@ var artistaRouter = require("./src/routes/artistaRoutes");
 var musicaRouter = require("./src/routes/musicaRoutes");
 var dashGravadoraRouter = require("./src/routes/dashGravadoraRoutes");
 var dashboardMarketingRouter = require("./src/routes/dashboardMarketingRoutes");
+var logRouter = require("./src/routes/logRoutes");
 
 
 
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: false }));
+// Log de acesso às páginas de cadastro e login
+app.use(function (req, res, next) {
+    if (req.path == "/cadastro.html" || req.path == "/login.html") {
+        new LogSite("INFO", "Acessou a página", null, req.path.replace("/", "").replace(".html", "")).registrarLog();
+    }
+    next();
+});
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors());
@@ -48,6 +58,7 @@ app.use("/artistas", artistaRouter);
 app.use("/musicas", musicaRouter);
 app.use("/dashGravadora", dashGravadoraRouter);
 app.use("/dashboard", dashboardMarketingRouter);
+app.use("/logs", logRouter);
 
 
 app.listen(PORTA_APP, function () {

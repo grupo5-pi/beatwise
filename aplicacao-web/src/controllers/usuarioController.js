@@ -1,4 +1,5 @@
 var usuarioModel = require("../models/usuarioModel");
+var { Usuario, LogSite } = require("../logs/logSite");
 
 function autenticar(req, res) {
     var email = req.body.emailServer;
@@ -18,6 +19,7 @@ function autenticar(req, res) {
 
                     if (resultadoAutenticar.length == 1) {
                         console.log(resultadoAutenticar);
+                        new LogSite("INFO", "Login realizado", new Usuario(resultadoAutenticar[0].id, resultadoAutenticar[0].nome, resultadoAutenticar[0].email, resultadoAutenticar[0].fkCargo), "login").registrarLog();
                                 res.json({
                                         id: resultadoAutenticar[0].id,
                                         nome: resultadoAutenticar[0].nome,
@@ -26,6 +28,7 @@ function autenticar(req, res) {
                                         fkCargo: resultadoAutenticar[0].fkCargo,
                                    });
                     } else if (resultadoAutenticar.length == 0) {
+                        new LogSite("WARN", "Login falhou para o email " + email, null, "login").registrarLog();
                         res.status(403).send("Email e/ou senha inválido(s)");
                     } else {
                         res.status(403).send("Mais de um usuário com o mesmo login e senha!");
@@ -73,6 +76,7 @@ function cadastrar(req, res) {
         usuarioModel.cadastrar(nome, email, senha, razaoSocial, emailEmpresa, cnpj, telefone)
             .then(
                 function (resultado) {
+                    new LogSite("INFO", "Cadastro realizado", new Usuario(resultado[1].insertId, nome, email, 2), "cadastro").registrarLog();
                     res.json(resultado);
                 }
             ).catch(
@@ -82,6 +86,7 @@ function cadastrar(req, res) {
                         "\nHouve um erro ao realizar o cadastro! Erro: ",
                         erro.sqlMessage
                     );
+                    new LogSite("ERROR", "Erro no cadastro: " + erro.sqlMessage, null, "cadastro").registrarLog();
                     res.status(500).json(erro.sqlMessage);
                 }
             );

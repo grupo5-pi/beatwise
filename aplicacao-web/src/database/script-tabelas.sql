@@ -61,7 +61,7 @@ CREATE TABLE log_site (
   descricao VARCHAR(255),
   pagina VARCHAR(45),
   data DATETIME,
-  fkFuncionario INT NOT NULL,
+  fkFuncionario INT,
   CONSTRAINT fk_log_site_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id)
 );
 
