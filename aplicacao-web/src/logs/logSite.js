@@ -40,21 +40,21 @@ class LogSite extends Log {
     registrarLog() {
         console.log(this.exibirLog());
 
-        var u = this.usuario;
+        var u = this.usuario || {}; // sem usuário = objeto vazio (visitante)
         var urlJava = process.env.LOG_URL || "http://localhost:8081/log";
 
-        // Envia o log em tempo real para o Java, que salva no banco
+        // Envia o log em tempo real para o Java, em formato JSON
         return fetch(urlJava, {
             method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
                 nivel: this.nivel,
                 mensagem: this.mensagem,
                 pagina: this.pagina,
-                idUsuario: String(u && u.id != null ? u.id : ""),
-                nome: String(u && u.nome ? u.nome : ""),
-                email: String(u && u.email ? u.email : ""),
-                cargo: String(u && u.cargo ? u.cargo : "")
+                idUsuario: u.id,
+                nome: u.nome,
+                email: u.email,
+                cargo: u.cargo
             })
         }).catch(function (erro) {
             console.log("Não consegui enviar o log pro Java:", erro.message);
