@@ -7,6 +7,31 @@ CREATE TABLE cargo (
   nome VARCHAR(45)
 );
 
+CREATE TABLE genero (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  nome VARCHAR(45) NOT NULL UNIQUE
+);
+
+INSERT INTO genero (nome) VALUES
+('Afrobeats'),
+('Brasileiro'),
+('Clássica'),
+('Country'),
+('Eletrônica'),
+('Folk'),
+('Funk'),
+('Gospel/Religioso'),
+('Indiano'),
+('Jazz'),
+('Latino'),
+('Outros'),
+('Pop'),
+('R&B/Soul'),
+('Rap'),
+('Reggae'),
+('Rock'),
+('Sertanejo');
+
 CREATE TABLE empresa (
   id INT PRIMARY KEY AUTO_INCREMENT,
   razaoSocial VARCHAR(45),
@@ -44,8 +69,8 @@ CREATE TABLE tokenAcesso (
     CONSTRAINT fk_token_funcionario FOREIGN KEY (fkFuncionario) REFERENCES funcionario(id)
 );
 
-ALTER TABLE funcionario 
-ADD CONSTRAINT fk_funcionario_tokenAcesso1 
+ALTER TABLE funcionario
+ADD CONSTRAINT fk_funcionario_tokenAcesso1
 FOREIGN KEY (tokenAcesso_id) REFERENCES tokenAcesso (id);
 
 CREATE TABLE log_apache (
@@ -148,12 +173,13 @@ CREATE TABLE metricaDash (
   periodo VARCHAR(20) NOT NULL DEFAULT 'todos',
   anoInicio INT NULL,
   anoFim INT NULL,
-  generos VARCHAR(500) NULL,
+  fkGenero INT NOT NULL,
   caracteristicas TEXT NULL,
   totalMusicas INT NOT NULL DEFAULT 0,
   dataCriacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   fkFuncionario INT NOT NULL,
-  CONSTRAINT fk_metricaDash_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id) ON DELETE CASCADE
+  CONSTRAINT fk_metricaDash_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id) ON DELETE CASCADE,
+  CONSTRAINT fk_metricaDash_genero1 FOREIGN KEY (fkGenero) REFERENCES genero (id)
 );
 
 CREATE TABLE notificacao (
@@ -207,8 +233,6 @@ INSERT INTO cargo (nome) VALUES
 ('Produtor'),
 ('Marketing');
 
-SELECT * FROM musicaBD LIMIT 100;
-
 INSERT INTO empresa (razaoSocial, email, cnpj, telefone)
 VALUES ('BeatWise', 'contato@beatwise.com',
         '12.345.678/0001-90', '(11) 98765-4321');
@@ -221,59 +245,34 @@ VALUES
     ('Produtor', 'produtor@beatwise.com', 'Produtor123#', 1, 3, 2),
     ('Marketing', 'marketing@beatwise.com', 'Marketing123#', 1, 4, 2);
 
-
 ALTER TABLE sugestaoFeat
-  ADD COLUMN genero VARCHAR(45) NULL,
+  ADD COLUMN fkGenero INT NULL,
   ADD COLUMN energia INT NULL,
   ADD COLUMN dancabilidade INT NULL,
   ADD COLUMN bpmMin INT NULL,
   ADD COLUMN bpmMax INT NULL,
   ADD COLUMN tonalidade INT NULL,
-  ADD COLUMN intervaloAnos INT NULL;
+  ADD COLUMN intervaloAnos INT NULL,
+  ADD CONSTRAINT fk_sugestaoFeat_genero1 FOREIGN KEY (fkGenero) REFERENCES genero (id);
 
 ALTER TABLE musicaBD
-  ADD COLUMN genero VARCHAR(45) NULL,
   ADD COLUMN statusItunes TINYINT NOT NULL DEFAULT 0;
-  
-  ALTER TABLE musicaBD
+
+ALTER TABLE musicaBD
   ADD COLUMN anoLancamento INT NULL;
 
 ALTER TABLE musicaBD
-  ADD COLUMN generoPadrao VARCHAR(45) NULL;
-
-
-UPDATE musicaBD SET generoPadrao = CASE
-    WHEN genero IS NULL THEN NULL
-    WHEN genero LIKE '%christmas%' OR genero LIKE '%holiday%' OR genero LIKE '%children%' OR genero IN ('Soundtrack', 'Original Score', 'TV Soundtrack', 'Video Game', 'Musicals', 'Comedy', 'Spoken Word', 'Sound Effects', 'Worldwide', 'Arabesque', 'Halk', 'Turkish', 'Modern Era', 'Instrumental', 'New Age') THEN 'Outros'
-    WHEN genero LIKE '%brazil%' OR genero IN ('MPB', 'Pagode', 'Samba', 'Forró', 'Axé', 'Bossa Nova') THEN 'Brasileiro'
-    WHEN genero LIKE '%sertanej%' THEN 'Sertanejo'
-    WHEN genero LIKE '%funk%' THEN 'Funk'
-    WHEN genero LIKE '%indian%' OR genero LIKE '%bollywood%' OR genero LIKE '%punjabi%' OR genero IN ('Tamil', 'Telugu', 'Hindi', 'Malayalam', 'Indo Pop') THEN 'Indiano'
-    WHEN genero LIKE '%afro%' OR genero LIKE '%amapiano%' OR genero LIKE '%african%' OR genero IN ('Alte') THEN 'Afrobeats'
-    WHEN genero LIKE '%latin%' OR genero LIKE '%tropical%' OR genero LIKE '%mexican%' OR genero LIKE '%reggaeton%' OR genero IN ('Flamenco', 'Baladas y Boleros', 'Bolero', 'Raíces', 'Iberia', 'Tex-Mex', 'Rock y Alternativo') THEN 'Latino'
-    WHEN genero LIKE '%reggae%' OR genero LIKE '%dancehall%' OR genero IN ('Ska') THEN 'Reggae'
-    WHEN genero LIKE '%hip-hop%' OR genero LIKE '%rap%' OR genero IN ('Dirty South') THEN 'Rap'
-    WHEN genero LIKE '%r&b%' OR genero LIKE '%soul%' THEN 'R&B/Soul'
-    WHEN genero LIKE '%electro%' OR genero LIKE '%dance%' OR genero LIKE '%house%' OR genero LIKE '%techno%' OR genero LIKE '%dubstep%' OR genero LIKE '%drum%' OR genero IN ('Disco', 'Ambient') THEN 'Eletrônica'
-    WHEN genero LIKE '%country%' OR genero IN ('Urban Cowboy') THEN 'Country'
-    WHEN genero LIKE '%jazz%' OR genero IN ('Blues', 'Standards', 'Vocal', 'Fusion') THEN 'Jazz'
-    WHEN genero LIKE '%classical%' OR genero LIKE '%orchestral%' OR genero LIKE '%opera%' THEN 'Clássica'
-    WHEN genero LIKE '%christian%' OR genero LIKE '%gospel%' OR genero LIKE '%devotional%' OR genero LIKE '%islamic%' OR genero IN ('CCM', 'Inspirational') THEN 'Gospel/Religioso'
-    WHEN genero LIKE '%folk%' OR genero IN ('Singer/Songwriter') THEN 'Folk'
-    WHEN genero IN ('Pop/Rock') THEN 'Pop'
-    WHEN genero LIKE '%rock%' OR genero LIKE '%metal%' OR genero LIKE '%punk%' OR genero LIKE '%grunge%' OR genero IN ('Alternative', 'Adult Alternative', 'Britpop', 'British Invasion') THEN 'Rock'
-    WHEN genero LIKE '%pop%' OR genero IN ('Adult Contemporary', 'Easy Listening', 'Oldies') THEN 'Pop'
-    ELSE 'Outros'
-END
-WHERE id > 0 AND statusItunes = 1;
+  ADD COLUMN fkGenero INT NULL,
+  ADD CONSTRAINT fk_musicaBD_genero1 FOREIGN KEY (fkGenero) REFERENCES genero (id);
 
 CREATE TABLE snapshotGenero (
   id INT PRIMARY KEY AUTO_INCREMENT,
   dataAtualizacao DATETIME NOT NULL,
-  genero VARCHAR(45) NOT NULL,
+  fkGenero INT NOT NULL,
   views BIGINT NOT NULL,
   curtidas BIGINT NOT NULL,
-  streams BIGINT NOT NULL
+  streams BIGINT NOT NULL,
+  CONSTRAINT fk_snapshotGenero_genero1 FOREIGN KEY (fkGenero) REFERENCES genero (id)
 );
 
 CREATE TABLE notificacao_alertas (
@@ -297,3 +296,8 @@ CREATE TABLE emailAlerta (
   criadoEm DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_emailAlerta_funcionario1 FOREIGN KEY (fkFuncionario) REFERENCES funcionario (id) ON DELETE CASCADE
 );
+
+ALTER TABLE log_site
+  ADD COLUMN nomeUsuario VARCHAR(45) NULL,
+  ADD COLUMN emailUsuario VARCHAR(45) NULL,
+  ADD COLUMN cargoUsuario VARCHAR(45) NULL;
